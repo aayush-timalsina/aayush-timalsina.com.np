@@ -1093,17 +1093,113 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
 // ============================================
 const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, setVolume, currentWallpaper, setCurrentWallpaper }: any) => {
   const [activeTab, setActiveTab] = useState("general");
-  const tabs = [{ id: "general", label: "General", icon: <Settings className="w-4 h-4" /> }, { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> }, { id: "wallpaper", label: "Wallpaper", icon: <Image className="w-4 h-4" /> }, { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> }];
+  const tabs = [
+    { id: "general", label: "General", icon: <Settings className="w-4 h-4" /> },
+    { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> },
+    { id: "wallpaper", label: "Wallpaper", icon: <Image className="w-4 h-4" /> },
+    { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> }
+  ];
+
+  const getVolumeIcon = () => {
+    if (volume === 0) return <VolumeX className={isDark ? "text-pink-400" : "text-pink-600"} />;
+    if (volume < 50) return <Volume1 className={isDark ? "text-pink-400" : "text-pink-600"} />;
+    return <Volume2 className={isDark ? "text-pink-400" : "text-pink-600"} />;
+  };
+
   return (
     <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
       <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
-        <div className="space-y-1">{tabs.map((tab) => <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={cn("w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors", activeTab === tab.id ? (isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white") : (isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"))}>{tab.icon}{tab.label}</button>)}</div>
+        <div className="space-y-1">
+          {tabs.map((tab) => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={cn("w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors", activeTab === tab.id ? (isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white") : (isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"))}>
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="flex-1 p-6 overflow-auto">
-        {activeTab === "general" && <div className="max-w-xl"><h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>General Settings</h2><div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}><div className="flex items-center justify-between"><div className="flex items-center gap-4"><div className={cn("p-3 rounded-lg", isDark ? "bg-purple-500/20" : "bg-purple-100")}>{isDark ? <Moon className="text-purple-400" /> : <Sun className="text-purple-600" />}</div><div><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Appearance</p><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{isDark ? "Dark mode" : "Light mode"}</p></div></div><button onClick={() => setIsDark(!isDark)} className={cn("w-14 h-8 rounded-full p-1 transition-colors", isDark ? "bg-blue-600" : "bg-gray-300")}><motion.div animate={{ x: isDark ? 24 : 0 }} className="w-6 h-6 rounded-full bg-white shadow-md" /></button></div></div><div className={cn("p-4 rounded-xl mt-4", isDark ? "bg-gray-800" : "bg-white")}><div className="flex items-center gap-4"><div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}><Info className={isDark ? "text-green-400" : "text-green-600"} /></div><div><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>About System</p><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>CyberOS v3.0 - Built by Aayush Timalsina</p></div></div></div></div>}
-        {activeTab === "display" && <div className="max-w-xl"><h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Display Settings</h2><div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}><div className="flex items-center gap-4 mb-4"><div className={cn("p-3 rounded-lg", isDark ? "bg-yellow-500/20" : "bg-yellow-100")}><Sun className={isDark ? "text-yellow-400" : "text-yellow-600"} /></div><div><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Brightness</p><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{brightness}%</p></div></div><input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" /></div></div>}
-        {activeTab === "wallpaper" && <div className="max-w-4xl"><h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-4">{WALLPAPERS.map((wallpaper) => <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-blue-500" : "")}><img src={wallpaper.thumbnail} alt={wallpaper.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" /><div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-white font-medium">{wallpaper.name}</span></div></button>)}</div></div>}
-        {activeTab === "sound" && <div className="max-w-xl"><h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Sound Settings</h2><div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}><div className="flex items-center gap-4 mb-4"><div className={cn("p-3 rounded-lg", isDark ? "bg-pink-500/20" : "bg-pink-100")}>{volume === 0 ? <VolumeX className={isDark ? "text-pink-400" : "text-pink-600" /> : volume < 50 ? <Volume1 className={isDark ? "text-pink-400" : "text-pink-600" /> : <Volume2 className={isDark ? "text-pink-400" : "text-pink-600" />}</div><div><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>System Volume</p><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{volume}%</p></div></div><input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full" /></div></div>}
+        {activeTab === "general" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>General Settings</h2>
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className={cn("p-3 rounded-lg", isDark ? "bg-purple-500/20" : "bg-purple-100")}>
+                    {isDark ? <Moon className="text-purple-400" /> : <Sun className="text-purple-600" />}
+                  </div>
+                  <div>
+                    <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Appearance</p>
+                    <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{isDark ? "Dark mode" : "Light mode"}</p>
+                  </div>
+                </div>
+                <button onClick={() => setIsDark(!isDark)} className={cn("w-14 h-8 rounded-full p-1 transition-colors", isDark ? "bg-blue-600" : "bg-gray-300")}>
+                  <motion.div animate={{ x: isDark ? 24 : 0 }} className="w-6 h-6 rounded-full bg-white shadow-md" />
+                </button>
+              </div>
+            </div>
+            <div className={cn("p-4 rounded-xl mt-4", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center gap-4">
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}>
+                  <Info className={isDark ? "text-green-400" : "text-green-600"} />
+                </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>About System</p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>CyberOS v3.0 - Built by Aayush Timalsina</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === "display" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Display Settings</h2>
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-yellow-500/20" : "bg-yellow-100")}>
+                  <Sun className={isDark ? "text-yellow-400" : "text-yellow-600"} />
+                </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Brightness</p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{brightness}%</p>
+                </div>
+              </div>
+              <input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" />
+            </div>
+          </div>
+        )}
+        {activeTab === "wallpaper" && (
+          <div className="max-w-4xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {WALLPAPERS.map((wallpaper) => (
+                <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-blue-500" : "")}>
+                  <img src={wallpaper.thumbnail} alt={wallpaper.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-white font-medium">{wallpaper.name}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {activeTab === "sound" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Sound Settings</h2>
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-pink-500/20" : "bg-pink-100")}>
+                  {getVolumeIcon()}
+                </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>System Volume</p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{volume}%</p>
+                </div>
+              </div>
+              <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
