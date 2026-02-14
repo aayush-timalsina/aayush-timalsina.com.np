@@ -1,0 +1,2784 @@
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Terminal,
+  User,
+  FolderOpen,
+  Mail,
+  Settings,
+  Moon,
+  Sun,
+  X,
+  Minimize2,
+  Maximize2,
+  Shield,
+  Eye,
+  Code,
+  Volume2,
+  Volume1,
+  VolumeX,
+  Battery,
+  WifiIcon,
+  WifiOff,
+  LayoutGrid,
+  MapPin,
+  Phone,
+  Send,
+  CheckCircle,
+  RefreshCw,
+  Github,
+  Linkedin,
+  Instagram,
+  Facebook,
+  Target,
+  Scan,
+  Bug,
+  Activity,
+  Zap,
+  TerminalSquare,
+  Monitor,
+  Info,
+  Image,
+  Music,
+  Video,
+  Download,
+  FileText,
+  GraduationCap,
+  Bluetooth,
+  Wifi,
+  Calendar,
+  Clock,
+  Calculator,
+  Edit3,
+  Plus,
+  Lock,
+  Unlock,
+} from "lucide-react";
+import { format } from "date-fns";
+
+// Types
+interface WindowState {
+  id: string;
+  title: string;
+  type: "terminal" | "about" | "projects" | "skills" | "contact" | "settings" | "finder" | "calculator" | "calendar" | "notes" | "help" | "shortcuts" | "about-os";
+  isOpen: boolean;
+  isMinimized: boolean;
+  isMaximized: boolean;
+  zIndex: number;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+}
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  skills: string[];
+  category: string;
+}
+
+interface Skill {
+  name: string;
+  icon: React.ReactNode;
+  level: number;
+  category: string;
+}
+
+interface Wallpaper {
+  id: string;
+  name: string;
+  url: string;
+  thumbnail: string;
+}
+
+// Constants
+const PROFILE_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/480347813_569555419398127_972680757615671058_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=dziFfm82pYkQ7kNvwFJNyrU&_nc_oc=AdnGHiO7a2zVBYjBJNqNjwdAmxJa8Syn2St16y5usHBzsh6hhgvTd1Yg4qxx6kf9fDM&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=FIRXfGn4xwDZQGPIbVzwwg&oh=00_AfsukNJBBKGMIFTH-ZlQhrHQLb0LIO1onoB49G1RljLQBA&oe=69960C19";
+const ABOUT_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/565717911_757399067280427_4804829451481773559_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wEZv58m8FD4Q7kNvwEBMUTM&_nc_oc=AdkvSmFOG6aDRZETa-P6EXC0c45-KP1UsQjPZ_R2eXPjZ1fzPcX1QNNiZmwHBFTzhZ0&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=NvsFZTZD3mElNoPgjO-DFA&oh=00_AfvOGPieAs-JcBHNTg-khTk1ISyQaRklAW-Rv7Kr4e35vA&oe=6995FF4B";
+const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80";
+
+const WALLPAPERS: Wallpaper[] = [
+  {
+    id: "dark-abstract",
+    name: "Dark Abstract",
+    url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60",
+  },
+  {
+    id: "dark-gradient",
+    name: "Dark Gradient",
+    url: "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1557683316-973673baf926?w=200&q=60",
+  },
+  {
+    id: "dark-mountain",
+    name: "Dark Mountain",
+    url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60",
+  },
+  {
+    id: "hack1",
+    name: "Hacker Terminal",
+    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200&q=60",
+  },
+  {
+    id: "hack3",
+    name: "Server Room",
+    url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=60",
+  },
+  {
+    id: "hack5",
+    name: "Network Security",
+    url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=200&q=60",
+  },
+  {
+    id: "hack6",
+    name: "Dark Code",
+    url: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=200&q=60",
+  },
+  {
+    id: "hack7",
+    name: "Binary Rain",
+    url: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=200&q=60",
+  },
+  {
+    id: "hack8",
+    name: "Circuit Board",
+    url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=60",
+  },
+  {
+    id: "cyber1",
+    name: "Cyber Grid",
+    url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=200&q=60",
+  },
+  {
+    id: "cyber3",
+    name: "Northern Lights",
+    url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=200&q=60",
+  },
+  {
+    id: "dark-space",
+    name: "Deep Space",
+    url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=200&q=60",
+  },
+];
+
+const PROJECTS: Project[] = [
+  {
+    id: "1",
+    title: "Network Security Lab",
+    description: "Configured firewalls and intrusion detection systems in a simulated environment to learn about network protection and threat detection.",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
+    skills: ["Firewall Configuration", "IDS/IPS Setup", "Vulnerability Scanning"],
+    category: "Security",
+  },
+  {
+    id: "2",
+    title: "Web Application Penetration Testing",
+    description: "Conducted security assessments on web applications to identify vulnerabilities such as SQL injection, XSS, and CSRF.",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80",
+    skills: ["OWASP Testing", "Burp Suite", "Vulnerability Reporting"],
+    category: "Web Security",
+  },
+  {
+    id: "3",
+    title: "Network Traffic Analysis",
+    description: "Analyzed network traffic to detect suspicious activities and potential security threats using Wireshark.",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
+    skills: ["Wireshark Analysis", "Intrusion Detection", "Threat Hunting"],
+    category: "Analysis",
+  },
+  {
+    id: "4",
+    title: "Price Tampering Vulnerability",
+    description: "Identified and exploited price tampering vulnerabilities in e-commerce platforms and implemented security measures.",
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
+    skills: ["Vulnerability Assessment", "Penetration Testing", "Security Implementation"],
+    category: "Vulnerability",
+  },
+];
+
+const SKILLS: Skill[] = [
+  { name: "Penetration Testing", icon: <Target className="w-5 h-5" />, level: 85, category: "Core" },
+  { name: "Threat Detection", icon: <Eye className="w-5 h-5" />, level: 80, category: "Core" },
+  { name: "NMAP", icon: <Scan className="w-5 h-5" />, level: 90, category: "Tools" },
+  { name: "Wireshark", icon: <Activity className="w-5 h-5" />, level: 75, category: "Tools" },
+  { name: "Burp Suite", icon: <Bug className="w-5 h-5" />, level: 70, category: "Tools" },
+  { name: "Python", icon: <Code className="w-5 h-5" />, level: 65, category: "Languages" },
+  { name: "Bash", icon: <Terminal className="w-5 h-5" />, level: 70, category: "Languages" },
+  { name: "Linux", icon: <TerminalSquare className="w-5 h-5" />, level: 85, category: "Systems" },
+  { name: "Kali Linux", icon: <Shield className="w-5 h-5" />, level: 80, category: "Systems" },
+  { name: "Metasploit", icon: <Zap className="w-5 h-5" />, level: 60, category: "Tools" },
+];
+
+// Utility functions
+const cn = (...classes: (string | boolean | undefined)[]) => {
+  return classes.filter(Boolean).join(" ");
+};
+
+// Profile Image Component with fallback
+const ProfileImage = ({ src, size, rounded, fallbackSize }: { src: string; size: string; rounded: string; fallbackSize: string }) => {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className={cn(size, rounded, "overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center")}>
+      {!failed ? (
+        <img 
+          src={src} 
+          alt="Aayush Timalsina" 
+          className="w-full h-full object-cover"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <User className={cn(fallbackSize, "text-white")} />
+      )}
+    </div>
+  );
+};
+
+// Components
+const DockItem = ({
+  icon,
+  label,
+  isActive,
+  onClick,
+  isDark,
+  badge,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  isDark: boolean;
+  badge?: number;
+}) => {
+  return (
+    <motion.button
+      whileHover={{ scale: 1.2, y: -8 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+      className="group relative flex flex-col items-center"
+    >
+      <div
+        className={cn(
+          "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg relative",
+          isActive
+            ? isDark
+              ? "bg-gradient-to-br from-blue-600 to-purple-600"
+              : "bg-gradient-to-br from-blue-500 to-purple-500"
+            : isDark
+            ? "bg-white/10 backdrop-blur-xl"
+            : "bg-white/80 backdrop-blur-xl"
+        )}
+      >
+        <div className={isActive ? "text-white" : isDark ? "text-gray-300" : "text-gray-700"}>
+          {icon}
+        </div>
+        {badge && (
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+            {badge}
+          </div>
+        )}
+      </div>
+      <span
+        className={cn(
+          "absolute -top-10 px-3 py-1 rounded-lg text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap pointer-events-none",
+          isDark ? "bg-gray-800 text-white" : "bg-white text-gray-800 shadow-lg"
+        )}
+      >
+        {label}
+      </span>
+      {isActive && (
+        <motion.div
+          layoutId="dock-indicator"
+          className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-blue-500"
+        />
+      )}
+    </motion.button>
+  );
+};
+
+const Window = ({
+  window: win,
+  isActive,
+  onClose,
+  onMinimize,
+  onMaximize,
+  onClick,
+  children,
+  isDark,
+  brightness,
+}: {
+  window: WindowState;
+  isActive: boolean;
+  onClose: () => void;
+  onMinimize: () => void;
+  onMaximize: () => void;
+  onClick: () => void;
+  children: React.ReactNode;
+  isDark: boolean;
+  brightness: number;
+}) => {
+  const windowRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!win.isMaximized && (e.target as HTMLElement).closest(".window-header")) {
+      setIsDragging(true);
+      const rect = windowRef.current?.getBoundingClientRect();
+      if (rect) {
+        setDragOffset({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        });
+      }
+    }
+    onClick();
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging && windowRef.current) {
+        const newX = e.clientX - dragOffset.x;
+        const newY = e.clientY - dragOffset.y;
+        windowRef.current.style.left = `${Math.max(0, newX)}px`;
+        windowRef.current.style.top = `${Math.max(32, newY)}px`;
+      }
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, dragOffset]);
+
+  return (
+    <motion.div
+      ref={windowRef}
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{
+        opacity: win.isMinimized ? 0 : 1,
+        scale: win.isMinimized ? 0.9 : 1,
+        y: win.isMinimized ? 20 : 0,
+      }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      className={cn(
+        "absolute rounded-xl overflow-hidden shadow-2xl",
+        isActive ? "z-50" : "z-10",
+        isDark ? "bg-gray-900/95 border border-gray-700" : "bg-white/95 border border-gray-200"
+      )}
+      style={{
+        zIndex: win.zIndex,
+        width: win.isMaximized ? "100vw" : win.size.width,
+        height: win.isMaximized ? "calc(100vh - 32px)" : win.size.height,
+        left: win.isMaximized ? 0 : win.position.x,
+        top: win.isMaximized ? 32 : win.position.y,
+        filter: `brightness(${brightness}%)`,
+      }}
+      onMouseDown={handleMouseDown}
+    >
+      {/* Window Header */}
+      <div
+        className={cn(
+          "window-header flex items-center justify-between px-4 py-3 cursor-default select-none",
+          isDark ? "bg-gray-800/50 border-b border-gray-700" : "bg-gray-50/80 border-b border-gray-200"
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onClose}
+            className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors flex items-center justify-center group"
+          >
+            <X className="w-2 h-2 text-red-900 opacity-0 group-hover:opacity-100" />
+          </button>
+          <button
+            onClick={onMinimize}
+            className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors flex items-center justify-center group"
+          >
+            <Minimize2 className="w-2 h-2 text-yellow-900 opacity-0 group-hover:opacity-100" />
+          </button>
+          <button
+            onClick={onMaximize}
+            className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors flex items-center justify-center group"
+          >
+            <Maximize2 className="w-2 h-2 text-green-900 opacity-0 group-hover:opacity-100" />
+          </button>
+        </div>
+        <span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>
+          {win.title}
+        </span>
+        <div className="w-16" />
+      </div>
+
+      {/* Window Content */}
+      <div className="overflow-auto" style={{ height: "calc(100% - 48px)" }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
+// Window Content Components
+const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
+  const [commands, setCommands] = useState<string[]>([
+    "Welcome to Aayush's Portfolio Terminal v3.0",
+    "Type 'help' to see available commands",
+    "",
+  ]);
+  const [input, setInput] = useState("");
+  const terminalRef = useRef<HTMLDivElement>(null);
+
+  const handleCommand = (cmd: string) => {
+    const newCommands = [...commands, `aayush@portfolio:~$ ${cmd}`];
+    
+    switch (cmd.toLowerCase().trim()) {
+      case "help":
+        newCommands.push(
+          "Available commands:",
+          "  about     - Display information about me",
+          "  skills    - List my technical skills",
+          "  projects  - View my projects",
+          "  contact   - Get contact information",
+          "  clear     - Clear the terminal",
+          "  whoami    - Display current user",
+          "  pwd       - Print working directory",
+          "  ls        - List files",
+          "  date      - Display current date and time",
+          "  neofetch  - Display system information",
+          "  hack      - Simulate a hacking sequence"
+        );
+        break;
+      case "about":
+        newCommands.push(
+          "Name: Aayush Timalsina",
+          "Role: Cybersecurity Student",
+          "Location: Chitwan, Nepal",
+          "Education: Class 12, Skyrider College",
+          "Passion: Protecting digital assets and learning new security techniques"
+        );
+        break;
+      case "skills":
+        newCommands.push(
+          "Technical Skills:",
+          "  • Penetration Testing & Ethical Hacking",
+          "  • Threat Detection & Monitoring",
+          "  • NMAP, Wireshark, Burp Suite",
+          "  • Python & Bash Scripting",
+          "  • Linux System Administration",
+          "  • Vulnerability Assessment"
+        );
+        break;
+      case "projects":
+        newCommands.push(
+          "Projects:",
+          "  1. Network Security Lab",
+          "  2. Web Application Penetration Testing",
+          "  3. Network Traffic Analysis",
+          "  4. Price Tampering Vulnerability Research",
+          "",
+          "Type 'open projects' to view in GUI mode"
+        );
+        break;
+      case "contact":
+        newCommands.push(
+          "Contact Information:",
+          "  Email: aayushtimalsina789@gmail.com",
+          "  Phone: +977 9845242492",
+          "  Location: Ratnanagar-10, Shanti Tole, Chitwan, Nepal",
+          "",
+          "Social Media:",
+          "  GitHub: github.com/aayush-timalsina",
+          "  LinkedIn: linkedin.com/in/aayush-timalsina",
+          "  Instagram: @t_y_p_e_c"
+        );
+        break;
+      case "clear":
+        setCommands([]);
+        return;
+      case "whoami":
+        newCommands.push("aayush");
+        break;
+      case "pwd":
+        newCommands.push("/home/aayush/portfolio");
+        break;
+      case "ls":
+        newCommands.push(
+          "about.md  contact.txt  projects/  skills.json  resume.pdf  README.md"
+        );
+        break;
+      case "date":
+        newCommands.push(new Date().toString());
+        break;
+      case "neofetch":
+        newCommands.push(
+          "       .---.        aayush@portfolio",
+          "      /     \\       ----------------",
+          "      \\.@-@./       OS: CyberOS 3.0",
+          "      /`\\_/`\\       Kernel: Security-First",
+          "     //  _  \\\\      Uptime: Always Learning",
+          "    | \\     )|_     Shell: zsh",
+          "   /`\\_`>  <_/ \\    DE: ReactOS",
+          "   \\__/'---'\\__/    WM: Framer Motion",
+          "                    Theme: Cyberpunk",
+          "                    CPU: Brain v2.0",
+          "                    GPU: Imagination",
+          "                    Memory: Unlimited Curiosity"
+        );
+        break;
+      case "hack":
+        newCommands.push(
+          "[+] Initializing penetration testing sequence...",
+          "[+] Scanning target...",
+          "[+] Found 3 open ports",
+          "[+] Exploiting vulnerability...",
+          "[+] Access granted!",
+          "[+] Just kidding! This is a simulation.",
+          "[+] Remember: Ethical hacking only!"
+        );
+        break;
+      default:
+        if (cmd.trim()) {
+          newCommands.push(`Command not found: ${cmd}. Type 'help' for available commands.`);
+        }
+    }
+    
+    newCommands.push("");
+    setCommands(newCommands);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input.trim()) {
+      handleCommand(input);
+      setInput("");
+    }
+  };
+
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [commands]);
+
+  return (
+    <div
+      className={cn(
+        "h-full p-4 font-mono text-sm",
+        isDark ? "bg-gray-950 text-green-400" : "bg-gray-900 text-green-400"
+      )}
+    >
+      <div ref={terminalRef} className="h-full overflow-auto pb-8">
+        {commands.map((line, i) => (
+          <div key={i} className="whitespace-pre-wrap">
+            {line.startsWith("aayush@portfolio") ? (
+              <span>
+                <span className="text-blue-400">aayush@portfolio</span>
+                <span className="text-white">:</span>
+                <span className="text-blue-400">~</span>
+                <span className="text-white">$</span>
+                <span className="text-gray-300"> {line.split("$ ")[1]}</span>
+              </span>
+            ) : line.startsWith("[") ? (
+              <span className="text-yellow-400">{line}</span>
+            ) : (
+              line
+            )}
+          </div>
+        ))}
+        <form onSubmit={handleSubmit} className="flex items-center mt-2">
+          <span className="text-blue-400">aayush@portfolio</span>
+          <span className="text-white">:</span>
+          <span className="text-blue-400">~</span>
+          <span className="text-white">$</span>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1 bg-transparent border-none outline-none text-gray-300 ml-2"
+            autoFocus
+            spellCheck={false}
+          />
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const AboutWindow = ({ isDark }: { isDark: boolean }) => {
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center gap-6 mb-8">
+          <ProfileImage src={ABOUT_IMAGE} size="w-32 h-32" rounded="rounded-2xl" fallbackSize="w-16 h-16" />
+          <div>
+            <h1 className={cn("text-3xl font-bold mb-2", isDark ? "text-white" : "text-gray-900")}>
+              Aayush Timalsina
+            </h1>
+            <p className={cn("text-lg mb-2", isDark ? "text-blue-400" : "text-blue-600")}>
+              Cybersecurity Student
+            </p>
+            <div className="flex items-center gap-2 text-sm">
+              <MapPin className="w-4 h-4" />
+              <span className={isDark ? "text-gray-400" : "text-gray-600"}>
+                Chitwan, Nepal
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className={cn("rounded-xl p-6 mb-6", isDark ? "bg-gray-800" : "bg-white")}>
+          <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>
+            About Me
+          </h2>
+          <p className={cn("leading-relaxed mb-4", isDark ? "text-gray-300" : "text-gray-600")}>
+            Hi! I'm Aayush Timalsina, currently studying in class 12 at Skyrider College, Nepal. 
+            I'm passionate about cybersecurity, especially penetration testing, threat detection and monitoring, 
+            and scripting and automation.
+          </p>
+          <p className={cn("leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>
+            I enjoy learning new ways to protect digital assets and help organizations stay secure 
+            in an ever-evolving cyber landscape. My goal is to become a skilled cybersecurity professional 
+            who can make the digital world a safer place.
+          </p>
+        </div>
+
+        <div className={cn("rounded-xl p-6 mb-6", isDark ? "bg-gray-800" : "bg-white")}>
+          <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>
+            Education
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <div className={cn("p-3 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
+                <GraduationCap className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                  Class 12 (Science)
+                </h3>
+                <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-600")}>
+                  Skyrider College, Chitwan, Nepal
+                </p>
+                <p className={cn("text-sm", isDark ? "text-gray-500" : "text-gray-500")}>
+                  2023 - Present
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={cn("rounded-xl p-6", isDark ? "bg-gray-800" : "bg-white")}>
+          <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>
+            Quick Stats
+          </h2>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { label: "Projects", value: "4+", icon: <FolderOpen className="w-5 h-5" /> },
+              { label: "Skills", value: "10+", icon: <Code className="w-5 h-5" /> },
+              { label: "Experience", value: "2+ yrs", icon: <Clock className="w-5 h-5" /> },
+            ].map((stat) => (
+              <div key={stat.label} className={cn("text-center p-4 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
+                <div className={cn("flex justify-center mb-2", isDark ? "text-blue-400" : "text-blue-600")}>
+                  {stat.icon}
+                </div>
+                <div className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>
+                  {stat.value}
+                </div>
+                <div className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-600")}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProjectsWindow = ({ isDark }: { isDark: boolean }) => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const categories = ["All", ...Array.from(new Set(PROJECTS.map((p) => p.category)))];
+  const filteredProjects = selectedCategory === "All" 
+    ? PROJECTS 
+    : PROJECTS.filter((p) => p.category === selectedCategory);
+
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-4xl mx-auto">
+        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>
+          My Projects
+        </h1>
+
+        {/* Category Filter */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                selectedCategory === cat
+                  ? "bg-blue-500 text-white"
+                  : isDark
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              )}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredProjects.map((project) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={cn(
+                "rounded-xl overflow-hidden group cursor-pointer",
+                isDark ? "bg-gray-800" : "bg-white shadow-lg"
+              )}
+            >
+              <div className="h-40 overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-4">
+                <span className={cn("text-xs font-medium px-2 py-1 rounded-full", isDark ? "bg-blue-500/20 text-blue-400" : "bg-blue-100 text-blue-600")}>
+                  {project.category}
+                </span>
+                <h3 className={cn("font-semibold mt-2 mb-2", isDark ? "text-white" : "text-gray-900")}>
+                  {project.title}
+                </h3>
+                <p className={cn("text-sm mb-3 line-clamp-2", isDark ? "text-gray-400" : "text-gray-600")}>
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {project.skills.slice(0, 3).map((skill) => (
+                    <span
+                      key={skill}
+                      className={cn(
+                        "text-xs px-2 py-1 rounded",
+                        isDark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-600"
+                      )}
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SkillsWindow = ({ isDark }: { isDark: boolean }) => {
+  const categories = Array.from(new Set(SKILLS.map((s) => s.category)));
+
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-4xl mx-auto">
+        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>
+          Technical Skills
+        </h1>
+
+        <div className="space-y-6">
+          {categories.map((category) => (
+            <div key={category}>
+              <h2 className={cn("text-lg font-semibold mb-4", isDark ? "text-gray-300" : "text-gray-700")}>
+                {category}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {SKILLS.filter((s) => s.category === category).map((skill) => (
+                  <div
+                    key={skill.name}
+                    className={cn(
+                      "p-4 rounded-xl flex items-center gap-4",
+                      isDark ? "bg-gray-800" : "bg-white shadow-sm"
+                    )}
+                  >
+                    <div className={cn("p-3 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
+                      {skill.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                          {skill.name}
+                        </span>
+                        <span className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                          {skill.level}%
+                        </span>
+                      </div>
+                      <div className={cn("h-2 rounded-full overflow-hidden", isDark ? "bg-gray-700" : "bg-gray-200")}>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${skill.level}%` }}
+                          transition={{ duration: 1, delay: 0.2 }}
+                          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ContactWindow = ({ isDark }: { isDark: boolean }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsSubmitting(false);
+    setSubmitted(true);
+    setFormData({ name: "", email: "", message: "" });
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-2xl mx-auto">
+        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>
+          Get In Touch
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <a
+            href="mailto:aayushtimalsina789@gmail.com"
+            className={cn(
+              "p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105",
+              isDark ? "bg-gray-800" : "bg-white shadow-sm"
+            )}
+          >
+            <div className={cn("p-3 rounded-lg", isDark ? "bg-blue-500/20" : "bg-blue-100")}>
+              <Mail className={isDark ? "text-blue-400" : "text-blue-600"} />
+            </div>
+            <div>
+              <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email</p>
+              <p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>
+                aayushtimalsina789@gmail.com
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="tel:+9779845242492"
+            className={cn(
+              "p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105",
+              isDark ? "bg-gray-800" : "bg-white shadow-sm"
+            )}
+          >
+            <div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}>
+              <Phone className={isDark ? "text-green-400" : "text-green-600"} />
+            </div>
+            <div>
+              <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Phone</p>
+              <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                +977 9845242492
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <div className={cn("rounded-xl p-6", isDark ? "bg-gray-800" : "bg-white shadow-lg")}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>
+                Name
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className={cn(
+                  "w-full px-4 py-3 rounded-lg outline-none transition-all",
+                  isDark
+                    ? "bg-gray-700 text-white border border-gray-600 focus:border-blue-500"
+                    : "bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500"
+                )}
+                placeholder="Your name"
+                required
+              />
+            </div>
+
+            <div>
+              <label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>
+                Email
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={cn(
+                  "w-full px-4 py-3 rounded-lg outline-none transition-all",
+                  isDark
+                    ? "bg-gray-700 text-white border border-gray-600 focus:border-blue-500"
+                    : "bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500"
+                )}
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>
+                Message
+              </label>
+              <textarea
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                rows={4}
+                className={cn(
+                  "w-full px-4 py-3 rounded-lg outline-none transition-all resize-none",
+                  isDark
+                    ? "bg-gray-700 text-white border border-gray-600 focus:border-blue-500"
+                    : "bg-gray-50 text-gray-900 border border-gray-200 focus:border-blue-500"
+                )}
+                placeholder="Your message..."
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={cn(
+                "w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-all",
+                isSubmitting
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:opacity-90",
+                isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
+              )}
+            >
+              {isSubmitting ? (
+                <RefreshCw className="w-5 h-5 animate-spin" />
+              ) : submitted ? (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  Sent!
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5" />
+                  Send Message
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Social Links */}
+        <div className="flex justify-center gap-4 mt-8">
+          {[
+            { icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" },
+            { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" },
+            { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" },
+            { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" },
+          ].map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "p-3 rounded-xl transition-all hover:scale-110",
+                isDark ? "bg-gray-800 text-gray-400 hover:text-white" : "bg-white text-gray-600 hover:text-gray-900 shadow-sm"
+              )}
+              title={social.label}
+            >
+              {social.icon}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SettingsWindow = ({ 
+  isDark, 
+  setIsDark, 
+  brightness, 
+  setBrightness, 
+  volume, 
+  setVolume,
+  currentWallpaper,
+  setCurrentWallpaper,
+}: { 
+  isDark: boolean; 
+  setIsDark: (v: boolean) => void;
+  brightness: number;
+  setBrightness: (v: number) => void;
+  volume: number;
+  setVolume: (v: number) => void;
+  currentWallpaper: string;
+  setCurrentWallpaper: (v: string) => void;
+}) => {
+  const [activeTab, setActiveTab] = useState("general");
+  const [customWallpapers, setCustomWallpapers] = useState<{id: string, name: string, url: string, thumbnail: string}[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCustomWallpaperUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const url = event.target?.result as string;
+        const newWallpaper = {
+          id: `custom-${Date.now()}`,
+          name: file.name.split('.')[0],
+          url,
+          thumbnail: url,
+        };
+        setCustomWallpapers([...customWallpapers, newWallpaper]);
+        setCurrentWallpaper(url);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const allWallpapers = [...WALLPAPERS, ...customWallpapers];
+
+  const tabs = [
+    { id: "general", label: "General", icon: <Settings className="w-4 h-4" /> },
+    { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> },
+    { id: "wallpaper", label: "Wallpaper", icon: <Image className="w-4 h-4" /> },
+    { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> },
+  ];
+
+  return (
+    <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      {/* Sidebar */}
+      <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+        <div className="space-y-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                activeTab === tab.id
+                  ? isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
+                  : isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"
+              )}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-6 overflow-auto">
+        {activeTab === "general" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>
+              General Settings
+            </h2>
+
+            <div className="space-y-4">
+              {/* Appearance */}
+              <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={cn("p-3 rounded-lg", isDark ? "bg-purple-500/20" : "bg-purple-100")}>
+                      {isDark ? <Moon className="text-purple-400" /> : <Sun className="text-purple-600" />}
+                    </div>
+                    <div>
+                      <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                        Appearance
+                      </p>
+                      <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                        {isDark ? "Dark mode" : "Light mode"}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsDark(!isDark)}
+                    className={cn(
+                      "w-14 h-8 rounded-full p-1 transition-colors",
+                      isDark ? "bg-blue-600" : "bg-gray-300"
+                    )}
+                  >
+                    <motion.div
+                      animate={{ x: isDark ? 24 : 0 }}
+                      className="w-6 h-6 rounded-full bg-white shadow-md"
+                    />
+                  </button>
+                </div>
+              </div>
+
+              {/* About */}
+              <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+                <div className="flex items-center gap-4">
+                  <div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}>
+                    <Info className={isDark ? "text-green-400" : "text-green-600"} />
+                  </div>
+                  <div>
+                    <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                      About System
+                    </p>
+                    <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                      CyberOS v3.0 - Portfolio Edition
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "display" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>
+              Display Settings
+            </h2>
+
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-yellow-500/20" : "bg-yellow-100")}>
+                  <Sun className={isDark ? "text-yellow-400" : "text-yellow-600"} />
+                </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                    Brightness
+                  </p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                    {brightness}%
+                  </p>
+                </div>
+              </div>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="20"
+                  max="100"
+                  value={brightness}
+                  onChange={(e) => setBrightness(Number(e.target.value))}
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #3b82f6 ${((brightness - 20) / 80) * 100}%, ${isDark ? '#4b5563' : '#d1d5db'} ${((brightness - 20) / 80) * 100}%)`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "wallpaper" && (
+          <div className="max-w-4xl">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>
+                Wallpaper
+              </h2>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors",
+                  isDark ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
+                )}
+              >
+                <Plus className="w-4 h-4" />
+                Upload Custom
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleCustomWallpaperUpload}
+                className="hidden"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {allWallpapers.map((wallpaper) => (
+                <button
+                  key={wallpaper.id}
+                  onClick={() => setCurrentWallpaper(wallpaper.url)}
+                  className={cn(
+                    "relative rounded-xl overflow-hidden aspect-video group",
+                    currentWallpaper === wallpaper.url ? "ring-2 ring-blue-500" : ""
+                  )}
+                >
+                  <img
+                    src={wallpaper.thumbnail}
+                    alt={wallpaper.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-white font-medium">{wallpaper.name}</span>
+                  </div>
+                  {currentWallpaper === wallpaper.url && (
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "sound" && (
+          <div className="max-w-xl">
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>
+              Sound Settings
+            </h2>
+
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-pink-500/20" : "bg-pink-100")}>
+                  {volume === 0 ? <VolumeX className={isDark ? "text-pink-400" : "text-pink-600"} /> : volume < 50 ? <Volume1 className={isDark ? "text-pink-400" : "text-pink-600"} /> : <Volume2 className={isDark ? "text-pink-400" : "text-pink-600"} />}
+                </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>
+                    System Volume
+                  </p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                    {volume}%
+                  </p>
+                </div>
+              </div>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(Number(e.target.value))}
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #ec4899 ${volume}%, ${isDark ? '#4b5563' : '#d1d5db'} ${volume}%)`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const FinderWindow = ({ isDark }: { isDark: boolean }) => {
+  const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
+  
+  const folders = [
+    { name: "Documents", icon: <FileText className="w-8 h-8 text-blue-500" />, items: 12 },
+    { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: 4 },
+    { name: "Images", icon: <Image className="w-8 h-8 text-purple-500" />, items: 8 },
+    { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: 24 },
+    { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: 6 },
+    { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: 15 },
+  ];
+
+  return (
+    <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      {/* Sidebar */}
+      <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+        <div className="space-y-1">
+          <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-gray-500" : "text-gray-400")}>
+            Favorites
+          </p>
+          {["Desktop", "Documents", "Downloads", "Projects"].map((item) => (
+            <button
+              key={item}
+              onClick={() => setSelectedFolder(item)}
+              className={cn(
+                "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
+                selectedFolder === item
+                  ? isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
+                  : isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"
+              )}
+            >
+              <FolderOpen className="w-4 h-4" />
+              {item}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-6">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {folders.map((folder) => (
+            <motion.button
+              key={folder.name}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"
+            >
+              <div className="mb-2">{folder.icon}</div>
+              <span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>
+                {folder.name}
+              </span>
+              <span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>
+                {folder.items} items
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CalculatorWindow = ({ isDark }: { isDark: boolean }) => {
+  const [display, setDisplay] = useState("0");
+  const [previousValue, setPreviousValue] = useState<number | null>(null);
+  const [operation, setOperation] = useState<string | null>(null);
+  const [waitingForOperand, setWaitingForOperand] = useState(false);
+
+  const inputNumber = (num: string) => {
+    if (waitingForOperand) {
+      setDisplay(num);
+      setWaitingForOperand(false);
+    } else {
+      setDisplay(display === "0" ? num : display + num);
+    }
+  };
+
+  const inputOperation = (op: string) => {
+    const inputValue = parseFloat(display);
+
+    if (previousValue === null) {
+      setPreviousValue(inputValue);
+    } else if (operation) {
+      const currentValue = previousValue || 0;
+      const newValue = calculate(currentValue, inputValue, operation);
+      setPreviousValue(newValue);
+      setDisplay(String(newValue));
+    }
+
+    setWaitingForOperand(true);
+    setOperation(op);
+  };
+
+  const calculate = (firstValue: number, secondValue: number, op: string) => {
+    switch (op) {
+      case "+": return firstValue + secondValue;
+      case "-": return firstValue - secondValue;
+      case "×": return firstValue * secondValue;
+      case "÷": return firstValue / secondValue;
+      default: return secondValue;
+    }
+  };
+
+  const performCalculation = () => {
+    const inputValue = parseFloat(display);
+
+    if (previousValue !== null && operation) {
+      const newValue = calculate(previousValue, inputValue, operation);
+      setDisplay(String(newValue));
+      setPreviousValue(null);
+      setOperation(null);
+      setWaitingForOperand(true);
+    }
+  };
+
+  const clear = () => {
+    setDisplay("0");
+    setPreviousValue(null);
+    setOperation(null);
+    setWaitingForOperand(false);
+  };
+
+  const buttons = [
+    { label: "C", onClick: clear, className: "bg-red-500 text-white" },
+    { label: "±", onClick: () => setDisplay(String(parseFloat(display) * -1)), className: isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-900" },
+    { label: "%", onClick: () => setDisplay(String(parseFloat(display) / 100)), className: isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-900" },
+    { label: "÷", onClick: () => inputOperation("÷"), className: "bg-orange-500 text-white" },
+    { label: "7", onClick: () => inputNumber("7"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "8", onClick: () => inputNumber("8"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "9", onClick: () => inputNumber("9"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "×", onClick: () => inputOperation("×"), className: "bg-orange-500 text-white" },
+    { label: "4", onClick: () => inputNumber("4"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "5", onClick: () => inputNumber("5"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "6", onClick: () => inputNumber("6"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "-", onClick: () => inputOperation("-"), className: "bg-orange-500 text-white" },
+    { label: "1", onClick: () => inputNumber("1"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "2", onClick: () => inputNumber("2"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "3", onClick: () => inputNumber("3"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "+", onClick: () => inputOperation("+"), className: "bg-orange-500 text-white" },
+    { label: "0", onClick: () => inputNumber("0"), className: isDark ? "bg-gray-800 text-white col-span-2" : "bg-white text-gray-900 col-span-2" },
+    { label: ".", onClick: () => inputNumber("."), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
+    { label: "=", onClick: performCalculation, className: "bg-orange-500 text-white" },
+  ];
+
+  return (
+    <div className={cn("h-full flex items-center justify-center p-6", isDark ? "bg-gray-900" : "bg-gray-100")}>
+      <div className={cn("w-72 rounded-2xl overflow-hidden shadow-2xl", isDark ? "bg-gray-800" : "bg-gray-200")}>
+        <div className={cn("p-4 text-right text-4xl font-light", isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900")}>
+          {display}
+        </div>
+        <div className="grid grid-cols-4 gap-px">
+          {buttons.map((btn) => (
+            <button
+              key={btn.label}
+              onClick={btn.onClick}
+              className={cn(
+                "h-16 text-xl font-medium transition-all hover:opacity-80 active:scale-95",
+                btn.className,
+                btn.label === "0" ? "col-span-2" : ""
+              )}
+            >
+              {btn.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
+  const [currentDate] = useState(new Date());
+  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-md mx-auto">
+        <div className={cn("rounded-2xl overflow-hidden shadow-lg", isDark ? "bg-gray-800" : "bg-white")}>
+          <div className={cn("p-6 text-center", isDark ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-gradient-to-r from-blue-500 to-purple-500")}>
+            <h2 className="text-white text-2xl font-bold">
+              {format(currentDate, "MMMM yyyy")}
+            </h2>
+          </div>
+          <div className="p-4">
+            <div className="grid grid-cols-7 gap-1 mb-2">
+              {weekDays.map((day) => (
+                <div key={day} className={cn("text-center text-sm font-medium py-2", isDark ? "text-gray-400" : "text-gray-600")}>
+                  {day}
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 gap-1">
+              {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                <div key={`empty-${i}`} />
+              ))}
+              {days.map((day) => {
+                const isToday = day === new Date().getDate() && 
+                  currentDate.getMonth() === new Date().getMonth() &&
+                  currentDate.getFullYear() === new Date().getFullYear();
+                return (
+                  <div
+                    key={day}
+                    className={cn(
+                      "aspect-square flex items-center justify-center rounded-lg text-sm cursor-pointer transition-all",
+                      isToday
+                        ? "bg-blue-500 text-white font-bold"
+                        : isDark
+                        ? "text-gray-300 hover:bg-gray-700"
+                        : "text-gray-700 hover:bg-gray-100"
+                    )}
+                  >
+                    {day}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const NotesWindow = ({ isDark }: { isDark: boolean }) => {
+  const [notes, setNotes] = useState([
+    { id: "1", title: "Project Ideas", content: "1. Network Security Scanner\n2. Password Manager\n3. Vulnerability Assessment Tool", date: "2024-01-15" },
+    { id: "2", title: "Learning Goals", content: "- Complete CEH certification\n- Learn Rust programming\n- Master cloud security", date: "2024-01-14" },
+    { id: "3", title: "Meeting Notes", content: "Discussed penetration testing methodologies and tools. Key takeaways: Always document findings, use proper channels for disclosure.", date: "2024-01-13" },
+  ]);
+  const [selectedNote, setSelectedNote] = useState(notes[0]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(selectedNote.content);
+
+  const handleSave = () => {
+    setNotes(notes.map(n => n.id === selectedNote.id ? { ...n, content: editContent } : n));
+    setSelectedNote({ ...selectedNote, content: editContent });
+    setIsEditing(false);
+  };
+
+  return (
+    <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      {/* Sidebar */}
+      <div className={cn("w-64 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+        <div className="p-4">
+          <button
+            onClick={() => {
+              const newNote = { id: Date.now().toString(), title: "New Note", content: "", date: new Date().toISOString().split("T")[0] };
+              setNotes([newNote, ...notes]);
+              setSelectedNote(newNote);
+              setEditContent("");
+              setIsEditing(true);
+            }}
+            className={cn(
+              "w-full py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors",
+              isDark ? "bg-yellow-500 hover:bg-yellow-600 text-gray-900" : "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
+            )}
+          >
+            <Plus className="w-4 h-4" />
+            New Note
+          </button>
+        </div>
+        <div className="overflow-auto" style={{ maxHeight: "calc(100% - 80px)" }}>
+          {notes.map((note) => (
+            <button
+              key={note.id}
+              onClick={() => {
+                setSelectedNote(note);
+                setEditContent(note.content);
+                setIsEditing(false);
+              }}
+              className={cn(
+                "w-full text-left p-4 border-b transition-colors",
+                selectedNote.id === note.id
+                  ? isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
+                  : isDark ? "border-gray-700 hover:bg-gray-700/50" : "border-gray-200 hover:bg-gray-50"
+              )}
+            >
+              <h3 className={cn("font-medium truncate", isDark ? "text-white" : "text-gray-900")}>
+                {note.title}
+              </h3>
+              <p className={cn("text-sm truncate mt-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                {note.content || "No additional text"}
+              </p>
+              <p className={cn("text-xs mt-2", isDark ? "text-gray-500" : "text-gray-400")}>
+                {note.date}
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>
+            {selectedNote.title}
+          </h2>
+          <div className="flex gap-2">
+            {isEditing ? (
+              <>
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setEditContent(selectedNote.content);
+                    setIsEditing(false);
+                  }}
+                  className={cn("px-4 py-2 rounded-lg transition-colors", isDark ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-gray-200 text-gray-700 hover:bg-gray-300")}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => setIsEditing(true)}
+                className={cn("p-2 rounded-lg transition-colors", isDark ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-gray-200 text-gray-700 hover:bg-gray-300")}
+              >
+                <Edit3 className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
+        {isEditing ? (
+          <textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            className={cn(
+              "w-full h-full p-4 rounded-lg resize-none outline-none",
+              isDark ? "bg-gray-800 text-white border border-gray-700" : "bg-white text-gray-900 border border-gray-200"
+            )}
+            style={{ minHeight: "400px" }}
+          />
+        ) : (
+          <div className={cn("whitespace-pre-wrap", isDark ? "text-gray-300" : "text-gray-700")}>
+            {selectedNote.content || "No content"}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Help Window Component
+const HelpWindow = ({ isDark }: { isDark: boolean }) => {
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-2xl mx-auto">
+        <div className={cn("rounded-2xl overflow-hidden shadow-xl", isDark ? "bg-gray-800" : "bg-white")}>
+          <div className={cn("p-6 text-center", isDark ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-gradient-to-r from-blue-500 to-purple-500")}>
+            <h1 className="text-2xl font-bold text-white">CyberOS Help</h1>
+            <p className="text-white/80 mt-2">Your guide to using CyberOS</p>
+          </div>
+          <div className="p-6 space-y-6">
+            <section>
+              <h2 className={cn("text-lg font-semibold mb-3", isDark ? "text-white" : "text-gray-900")}>Quick Start</h2>
+              <p className={cn("text-sm leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>
+                Welcome to CyberOS, a fully functional OS-style portfolio. Use the Dock at the bottom to open applications, 
+                or click the Finder icon to access the Launchpad. The menu bar at the top provides quick access to system functions.
+              </p>
+            </section>
+            
+            <section>
+              <h2 className={cn("text-lg font-semibold mb-3", isDark ? "text-white" : "text-gray-900")}>Applications</h2>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { name: "Terminal", desc: "Command line interface" },
+                  { name: "Finder", desc: "File management" },
+                  { name: "Settings", desc: "System preferences" },
+                  { name: "Calculator", desc: "Basic calculations" },
+                  { name: "Calendar", desc: "View dates" },
+                  { name: "Notes", desc: "Take notes" },
+                ].map((app) => (
+                  <div key={app.name} className={cn("p-3 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
+                    <p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>{app.name}</p>
+                    <p className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>{app.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h2 className={cn("text-lg font-semibold mb-3", isDark ? "text-white" : "text-gray-900")}>System Features</h2>
+              <ul className={cn("space-y-2 text-sm", isDark ? "text-gray-300" : "text-gray-600")}>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 bg-blue-500 rounded-full" /> Control Center - Access Wi-Fi, Bluetooth, Brightness, Volume</li>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full" /> Dark/Light Mode - Toggle appearance in Settings</li>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 bg-purple-500 rounded-full" /> Custom Wallpapers - Upload your own background</li>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 bg-yellow-500 rounded-full" /> Window Management - Drag, minimize, maximize windows</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Keyboard Shortcuts Window Component
+const ShortcutsWindow = ({ isDark }: { isDark: boolean }) => {
+  const shortcuts = [
+    { category: "File", items: [
+      { key: "⌘N", action: "New Terminal" },
+      { key: "⌘O", action: "Open Launchpad" },
+      { key: "⌘W", action: "Close Window" },
+      { key: "⌘Q", action: "Exit" },
+    ]},
+    { category: "Edit", items: [
+      { key: "⌘Z", action: "Undo" },
+      { key: "⌘⇧Z", action: "Redo" },
+      { key: "⌘X", action: "Cut" },
+      { key: "⌘C", action: "Copy" },
+      { key: "⌘V", action: "Paste" },
+      { key: "⌘A", action: "Select All" },
+      { key: "⌘,", action: "Preferences" },
+    ]},
+    { category: "View", items: [
+      { key: "F4", action: "Show Launchpad" },
+      { key: "⌃⌘F", action: "Enter Full Screen" },
+      { key: "F3", action: "Show All Windows" },
+      { key: "⌘⌥D", action: "Toggle Dark Mode" },
+    ]},
+    { category: "Window", items: [
+      { key: "⌘M", action: "Minimize Window" },
+      { key: "⌘⇧M", action: "Maximize Window" },
+      { key: "⌘⇧]", action: "Next Window" },
+    ]},
+  ];
+
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-2xl mx-auto">
+        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>Keyboard Shortcuts</h1>
+        <div className="space-y-6">
+          {shortcuts.map((category) => (
+            <div key={category.category} className={cn("rounded-xl overflow-hidden", isDark ? "bg-gray-800" : "bg-white shadow-sm")}>
+              <div className={cn("px-4 py-3 font-semibold", isDark ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900")}>
+                {category.category}
+              </div>
+              <div className="divide-y divide-gray-700/10">
+                {category.items.map((item, idx) => (
+                  <div key={idx} className={cn("flex items-center justify-between px-4 py-3", isDark ? "text-gray-300" : "text-gray-700")}>
+                    <span className="text-sm">{item.action}</span>
+                    <kbd className={cn("px-2 py-1 rounded text-xs font-mono", isDark ? "bg-gray-700 text-gray-300" : "bg-gray-200 text-gray-700")}>
+                      {item.key}
+                    </kbd>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// About CyberOS Window Component
+const AboutOSWindow = ({ isDark }: { isDark: boolean }) => {
+  return (
+    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      <div className="max-w-xl mx-auto">
+        <div className={cn("rounded-2xl overflow-hidden shadow-xl", isDark ? "bg-gray-800" : "bg-white")}>
+          <div className={cn("p-8 text-center", isDark ? "bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600" : "bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500")}>
+            <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center">
+              <Shield className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-1">CyberOS</h1>
+            <p className="text-white/80 text-sm">Version 3.0 Portfolio Edition</p>
+          </div>
+          <div className="p-6 space-y-4">
+            <p className={cn("text-sm text-center", isDark ? "text-gray-400" : "text-gray-600")}>
+              A fully functional OS-style portfolio for Aayush Timalsina, a cybersecurity student.
+            </p>
+            
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-700/50" : "bg-gray-100")}>
+              <h3 className={cn("font-semibold mb-2", isDark ? "text-white" : "text-gray-900")}>Developer</h3>
+              <p className={cn("text-sm", isDark ? "text-gray-300" : "text-gray-600")}>Aayush Timalsina</p>
+              <p className={cn("text-xs mt-1", isDark ? "text-gray-400" : "text-gray-500")}>Cybersecurity Student, Nepal</p>
+            </div>
+
+            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-700/50" : "bg-gray-100")}>
+              <h3 className={cn("font-semibold mb-2", isDark ? "text-white" : "text-gray-900")}>Technologies</h3>
+              <div className="flex flex-wrap gap-2">
+                {["React", "TypeScript", "Tailwind CSS", "Framer Motion"].map((tech) => (
+                  <span key={tech} className={cn("px-2 py-1 rounded text-xs", isDark ? "bg-blue-500/20 text-blue-400" : "bg-blue-100 text-blue-600")}>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className={cn("text-center text-xs pt-4 border-t", isDark ? "text-gray-500 border-gray-700" : "text-gray-400 border-gray-200")}>
+              © 2024 CyberOS. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Control Center Component
+const ControlCenter = ({
+  isOpen,
+  onClose,
+  isDark,
+  setIsDark,
+  brightness,
+  setBrightness,
+  volume,
+  setVolume,
+  wifiEnabled,
+  setWifiEnabled,
+  bluetoothEnabled,
+  setBluetoothEnabled,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  isDark: boolean;
+  setIsDark: (v: boolean) => void;
+  brightness: number;
+  setBrightness: (v: number) => void;
+  volume: number;
+  setVolume: (v: number) => void;
+  wifiEnabled: boolean;
+  setWifiEnabled: (v: boolean) => void;
+  bluetoothEnabled: boolean;
+  setBluetoothEnabled: (v: boolean) => void;
+}) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[150]"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            className={cn(
+              "fixed top-10 right-4 w-80 rounded-2xl p-4 z-[160] shadow-2xl",
+              isDark ? "bg-gray-800/95 backdrop-blur-xl" : "bg-white/95 backdrop-blur-xl"
+            )}
+          >
+            {/* Connectivity */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <button
+                onClick={() => setWifiEnabled(!wifiEnabled)}
+                className={cn(
+                  "p-4 rounded-xl flex flex-col items-center gap-2 transition-all",
+                  wifiEnabled ? "bg-blue-500 text-white" : isDark ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-600"
+                )}
+              >
+                {wifiEnabled ? <Wifi className="w-6 h-6" /> : <WifiOff className="w-6 h-6" />}
+                <span className="text-sm font-medium">{wifiEnabled ? "Wi-Fi On" : "Wi-Fi Off"}</span>
+              </button>
+              <button
+                onClick={() => setBluetoothEnabled(!bluetoothEnabled)}
+                className={cn(
+                  "p-4 rounded-xl flex flex-col items-center gap-2 transition-all",
+                  bluetoothEnabled ? "bg-blue-500 text-white" : isDark ? "bg-gray-700 text-gray-400" : "bg-gray-200 text-gray-600"
+                )}
+              >
+                <Bluetooth className="w-6 h-6" />
+                <span className="text-sm font-medium">{bluetoothEnabled ? "Bluetooth On" : "Bluetooth Off"}</span>
+              </button>
+            </div>
+
+            {/* Brightness */}
+            <div className={cn("p-4 rounded-xl mb-4", isDark ? "bg-gray-700" : "bg-gray-100")}>
+              <div className="flex items-center gap-3 mb-3">
+                <Sun className="w-5 h-5" />
+                <span className={cn("text-sm font-medium flex-1", isDark ? "text-white" : "text-gray-900")}>
+                  Brightness
+                </span>
+                <span className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>{brightness}%</span>
+              </div>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="20"
+                  max="100"
+                  value={brightness}
+                  onChange={(e) => setBrightness(Number(e.target.value))}
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #3b82f6 ${((brightness - 20) / 80) * 100}%, ${isDark ? '#4b5563' : '#d1d5db'} ${((brightness - 20) / 80) * 100}%)`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Volume */}
+            <div className={cn("p-4 rounded-xl mb-4", isDark ? "bg-gray-700" : "bg-gray-100")}>
+              <div className="flex items-center gap-3 mb-3">
+                {volume === 0 ? <VolumeX className="w-5 h-5" /> : volume < 50 ? <Volume1 className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                <span className={cn("text-sm font-medium flex-1", isDark ? "text-white" : "text-gray-900")}>
+                  Volume
+                </span>
+                <span className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>{volume}%</span>
+              </div>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(Number(e.target.value))}
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #ec4899 ${volume}%, ${isDark ? '#4b5563' : '#d1d5db'} ${volume}%)`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Dark Mode */}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className={cn(
+                "w-full p-4 rounded-xl flex items-center justify-between transition-all",
+                isDark ? "bg-gray-700" : "bg-gray-100"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                {isDark ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                <span className={cn("text-sm font-medium", isDark ? "text-white" : "text-gray-900")}>
+                  {isDark ? "Dark Mode" : "Light Mode"}
+                </span>
+              </div>
+              <div className={cn("w-12 h-6 rounded-full p-1", isDark ? "bg-blue-500" : "bg-gray-300")}>
+                <motion.div
+                  animate={{ x: isDark ? 24 : 0 }}
+                  className="w-4 h-4 rounded-full bg-white"
+                />
+              </div>
+            </button>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Menu Dropdown Component
+const MenuDropdown = ({
+  isOpen,
+  onClose,
+  items,
+  isDark,
+  position,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  items: { label: string; shortcut?: string; action: () => void; separator?: boolean }[];
+  isDark: boolean;
+  position: { x: number; y: number };
+}) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110]"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -5 }}
+            transition={{ duration: 0.1 }}
+            className={cn(
+              "fixed rounded-lg py-1 min-w-[200px] z-[120] shadow-2xl",
+              isDark ? "bg-gray-800/95 backdrop-blur-xl border border-gray-700" : "bg-white/95 backdrop-blur-xl border border-gray-200"
+            )}
+            style={{ left: position.x, top: position.y }}
+          >
+            {items.map((item, index) => (
+              item.separator ? (
+                <div key={index} className={cn("h-px mx-2 my-1", isDark ? "bg-gray-700" : "bg-gray-200")} />
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => {
+                    item.action();
+                    onClose();
+                  }}
+                  className={cn(
+                    "w-full px-4 py-1.5 text-left text-sm flex items-center justify-between transition-colors",
+                    isDark ? "text-gray-200 hover:bg-blue-600 hover:text-white" : "text-gray-800 hover:bg-blue-500 hover:text-white"
+                  )}
+                >
+                  <span>{item.label}</span>
+                  {item.shortcut && (
+                    <span className={cn("text-xs ml-4", isDark ? "text-gray-500" : "text-gray-400")}>
+                      {item.shortcut}
+                    </span>
+                  )}
+                </button>
+              )
+            ))}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Login Screen Component
+const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "TYPE-C") {
+      setIsUnlocking(true);
+      setTimeout(() => {
+        onLogin();
+      }, 800);
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 1000);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 30%, #111127 60%, #0a0a14 100%)",
+      }}
+    >
+      {/* Subtle animated background particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Faint grid lines */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
+        />
+        <motion.div
+          animate={{ 
+            opacity: [0.05, 0.12, 0.05],
+          }}
+          transition={{ 
+            duration: 6, repeat: Infinity, ease: "easeInOut"
+          }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+        <motion.div
+          animate={{ 
+            opacity: [0.08, 0.15, 0.08],
+          }}
+          transition={{ 
+            duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2
+          }}
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
+      </div>
+
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        transition={{ type: "spring", damping: 20, stiffness: 100 }}
+        className="relative z-10 p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4"
+        style={{
+          background: isDark 
+            ? "rgba(15, 15, 25, 0.85)"
+            : "rgba(255, 255, 255, 0.08)",
+          backdropFilter: "blur(24px)",
+          border: "1px solid rgba(99, 102, 241, 0.15)",
+          boxShadow: "0 0 80px rgba(59, 130, 246, 0.06), 0 25px 60px rgba(0,0,0,0.5)",
+        }}
+      >
+        {/* User Avatar */}
+        <div className="flex flex-col items-center mb-8">
+          <motion.div
+            animate={isUnlocking ? { scale: 0.8, opacity: 0 } : { scale: 1, opacity: 1 }}
+            className="w-28 h-28 rounded-full flex items-center justify-center mb-4 relative overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3))",
+              border: "2px solid rgba(99,102,241,0.3)",
+              boxShadow: "0 0 30px rgba(59,130,246,0.15)",
+            }}
+          >
+            <ProfileImage src={PROFILE_IMAGE} size="w-full h-full" rounded="rounded-full" fallbackSize="w-12 h-12" />
+          </motion.div>
+          <motion.h2
+            animate={isUnlocking ? { y: -20, opacity: 0 } : { y: 0, opacity: 1 }}
+            className="text-2xl font-bold text-white"
+          >
+            Aayush Timalsina
+          </motion.h2>
+          <p className="text-sm mt-1 text-gray-500">
+            Cybersecurity Student
+          </p>
+        </div>
+
+        {/* Password Display */}
+        <motion.div
+          animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
+          className="mb-6 p-4 rounded-xl text-center"
+          style={{
+            background: "rgba(99,102,241,0.06)",
+            border: "1px solid rgba(99,102,241,0.12)",
+          }}
+        >
+          <p className="text-xs uppercase tracking-wider mb-2 text-gray-600">
+            Password Hint
+          </p>
+          <div className="flex items-center justify-center gap-2">
+            <Lock className="w-4 h-4 text-blue-400" />
+            <code className="text-lg font-mono font-bold tracking-wider text-blue-400">
+              TYPE-C
+            </code>
+          </div>
+          <p className="text-xs mt-2 text-gray-600">
+            Enter this password to unlock
+          </p>
+        </motion.div>
+
+        {/* Login Form */}
+        <motion.form
+          animate={isUnlocking ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
+          onSubmit={handleLogin}
+          className="space-y-4"
+        >
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password..."
+              className={cn(
+                "w-full px-4 py-3 pr-12 rounded-xl outline-none transition-all text-center font-mono tracking-wider text-white placeholder-gray-600",
+                error 
+                  ? "animate-shake border-2 border-red-500/50 bg-red-500/5"
+                  : "border border-gray-700/50 focus:border-blue-500/50"
+              )}
+              style={{
+                background: error ? "rgba(239,68,68,0.05)" : "rgba(255,255,255,0.03)",
+              }}
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-colors text-gray-500 hover:text-white"
+            >
+              {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {error && (
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-sm text-center"
+            >
+              Incorrect password. Try again.
+            </motion.p>
+          )}
+
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-white"
+            style={{
+              background: "linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4))",
+              border: "1px solid rgba(99,102,241,0.25)",
+              boxShadow: "0 0 20px rgba(59,130,246,0.1)",
+            }}
+          >
+            <Shield className="w-5 h-5" />
+            Unlock System
+          </motion.button>
+        </motion.form>
+
+        {/* Unlock Animation Overlay */}
+        <AnimatePresence>
+          {isUnlocking && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center rounded-3xl"
+              style={{ background: "rgba(15,15,25,0.9)" }}
+            >
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.5, 2],
+                  opacity: [1, 0.5, 0],
+                }}
+                transition={{ duration: 0.8 }}
+                className="w-20 h-20 rounded-full flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(135deg, rgba(59,130,246,0.5), rgba(139,92,246,0.5))",
+                }}
+              >
+                <Unlock className="w-10 h-10 text-white" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Footer */}
+      <motion.div
+        animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
+        className="absolute bottom-8 text-center"
+      >
+        <p className="text-sm text-gray-700">
+          CyberOS v3.0 Portfolio Edition
+        </p>
+      </motion.div>
+
+      {/* CSS for shake animation */}
+      <style>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+          animation: shake 0.5s ease-in-out;
+        }
+      `}</style>
+    </motion.div>
+  );
+};
+
+// Main App Component
+function App() {
+  const [isDark, setIsDark] = useState(true);
+  const [brightness, setBrightness] = useState(100);
+  const [volume, setVolume] = useState(70);
+  const [wifiEnabled, setWifiEnabled] = useState(true);
+  const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
+  const [currentWallpaper, setCurrentWallpaper] = useState(DEFAULT_WALLPAPER);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
+  const [showControlCenter, setShowControlCenter] = useState(false);
+  const [windows, setWindows] = useState<WindowState[]>([
+    {
+      id: "terminal",
+      title: "Terminal",
+      type: "terminal",
+      isOpen: true,
+      isMinimized: false,
+      isMaximized: false,
+      zIndex: 1,
+      position: { x: 100, y: 50 },
+      size: { width: 800, height: 500 },
+    },
+  ]);
+  const [showLaunchpad, setShowLaunchpad] = useState(false);
+  const [zIndexCounter, setZIndexCounter] = useState(2);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Menu bar state
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 32 });
+
+  // Menu configurations
+  const getMenuItems = (menuName: string) => {
+    switch (menuName) {
+      case "File":
+        return [
+          { label: "New Terminal", shortcut: "⌘N", action: () => openWindow("terminal", "Terminal") },
+          { label: "New Finder Window", shortcut: "⌘⇧N", action: () => openWindow("finder", "Finder") },
+          { label: "New Note", shortcut: "⌘⌥N", action: () => openWindow("notes", "Notes") },
+          { separator: true, label: "", action: () => {} },
+          { label: "Open...", shortcut: "⌘O", action: () => setShowLaunchpad(true) },
+          { separator: true, label: "", action: () => {} },
+          { label: "Close Window", shortcut: "⌘W", action: () => activeWindow && closeWindow(activeWindow) },
+          { separator: true, label: "", action: () => {} },
+          { label: "Exit", shortcut: "⌘Q", action: () => window.location.reload() },
+        ];
+      case "Edit":
+        return [
+          { label: "Undo", shortcut: "⌘Z", action: () => {} },
+          { label: "Redo", shortcut: "⌘⇧Z", action: () => {} },
+          { separator: true, label: "", action: () => {} },
+          { label: "Cut", shortcut: "⌘X", action: () => {} },
+          { label: "Copy", shortcut: "⌘C", action: () => {} },
+          { label: "Paste", shortcut: "⌘V", action: () => {} },
+          { separator: true, label: "", action: () => {} },
+          { label: "Select All", shortcut: "⌘A", action: () => {} },
+          { separator: true, label: "", action: () => {} },
+          { label: "Preferences...", shortcut: "⌘,", action: () => openWindow("settings", "Settings") },
+        ];
+      case "View":
+        return [
+          { label: "Show Launchpad", shortcut: "F4", action: () => setShowLaunchpad(true) },
+          { separator: true, label: "", action: () => {} },
+          { label: "Enter Full Screen", shortcut: "⌃⌘F", action: () => activeWindow && maximizeWindow(activeWindow) },
+          { separator: true, label: "", action: () => {} },
+          { label: "Show All Windows", shortcut: "F3", action: () => {} },
+          { separator: true, label: "", action: () => {} },
+          { label: "Dark Mode", shortcut: "⌘⌥D", action: () => setIsDark(!isDark) },
+        ];
+      case "Window":
+        return [
+          { label: "Minimize", shortcut: "⌘M", action: () => activeWindow && minimizeWindow(activeWindow) },
+          { label: "Zoom", shortcut: "⌘⌥M", action: () => activeWindow && maximizeWindow(activeWindow) },
+          { separator: true, label: "", action: () => {} },
+          { label: "Show Previous Tab", shortcut: "⌃⇧⇥", action: () => {} },
+          { label: "Show Next Tab", shortcut: "⌃⇥", action: () => {} },
+          { separator: true, label: "", action: () => {} },
+          { label: "Bring All to Front", shortcut: "", action: () => {
+            windows.forEach(w => bringToFront(w.id));
+          }},
+          { separator: true, label: "", action: () => {} },
+          ...windows.filter(w => !w.isMinimized).map(w => ({
+            label: w.title,
+            shortcut: "",
+            action: () => bringToFront(w.id),
+          })),
+        ];
+      case "Help":
+        return [
+          { label: "CyberOS Help", shortcut: "", action: () => openWindow("help", "CyberOS Help") },
+          { separator: true, label: "", action: () => {} },
+          { label: "Keyboard Shortcuts", shortcut: "", action: () => openWindow("shortcuts", "Keyboard Shortcuts") },
+          { separator: true, label: "", action: () => {} },
+          { label: "About CyberOS", shortcut: "", action: () => openWindow("about-os", "About CyberOS") },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const handleMenuClick = (menuName: string, event: React.MouseEvent) => {
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    setMenuPosition({ x: rect.left, y: 32 });
+    setActiveMenu(activeMenu === menuName ? null : menuName);
+  };
+
+  // Update time
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Window management functions
+  const openWindow = (type: WindowState["type"], title: string) => {
+    const existingWindow = windows.find((w) => w.type === type);
+    if (existingWindow) {
+      if (existingWindow.isMinimized) {
+        setWindows((prev) =>
+          prev.map((w) =>
+            w.type === type ? { ...w, isMinimized: false, zIndex: zIndexCounter } : w
+          )
+        );
+        setZIndexCounter((prev) => prev + 1);
+      }
+      setActiveWindow(existingWindow.id);
+    } else {
+      const newWindow: WindowState = {
+        id: `${type}-${Date.now()}`,
+        title,
+        type,
+        isOpen: true,
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: zIndexCounter,
+        position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
+        size: { width: 800, height: 500 },
+      };
+      setWindows((prev) => [...prev, newWindow]);
+      setZIndexCounter((prev) => prev + 1);
+      setActiveWindow(newWindow.id);
+    }
+    setShowLaunchpad(false);
+  };
+
+  const closeWindow = (id: string) => {
+    setWindows((prev) => prev.filter((w) => w.id !== id));
+    if (activeWindow === id) {
+      setActiveWindow(null);
+    }
+  };
+
+  const minimizeWindow = (id: string) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, isMinimized: true } : w))
+    );
+    setActiveWindow(null);
+  };
+
+  const maximizeWindow = (id: string) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, isMaximized: !w.isMaximized } : w))
+    );
+  };
+
+  const bringToFront = (id: string) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, zIndex: zIndexCounter } : w))
+    );
+    setZIndexCounter((prev) => prev + 1);
+    setActiveWindow(id);
+  };
+
+  const getWindowContent = (win: WindowState) => {
+    switch (win.type) {
+      case "terminal":
+        return <TerminalWindow isDark={isDark} />;
+      case "about":
+        return <AboutWindow isDark={isDark} />;
+      case "projects":
+        return <ProjectsWindow isDark={isDark} />;
+      case "skills":
+        return <SkillsWindow isDark={isDark} />;
+      case "contact":
+        return <ContactWindow isDark={isDark} />;
+      case "settings":
+        return (
+          <SettingsWindow
+            isDark={isDark}
+            setIsDark={setIsDark}
+            brightness={brightness}
+            setBrightness={setBrightness}
+            volume={volume}
+            setVolume={setVolume}
+            currentWallpaper={currentWallpaper}
+            setCurrentWallpaper={setCurrentWallpaper}
+          />
+        );
+      case "finder":
+        return <FinderWindow isDark={isDark} />;
+      case "calculator":
+        return <CalculatorWindow isDark={isDark} />;
+      case "calendar":
+        return <CalendarWindow isDark={isDark} />;
+      case "notes":
+        return <NotesWindow isDark={isDark} />;
+      case "help":
+        return <HelpWindow isDark={isDark} />;
+      case "shortcuts":
+        return <ShortcutsWindow isDark={isDark} />;
+      case "about-os":
+        return <AboutOSWindow isDark={isDark} />;
+      default:
+        return null;
+    }
+  };
+
+  const dockItems = [
+    { id: "finder", icon: <LayoutGrid className="w-6 h-6" />, label: "Finder" },
+    { id: "terminal", icon: <Terminal className="w-6 h-6" />, label: "Terminal" },
+    { id: "about", icon: <User className="w-6 h-6" />, label: "About" },
+    { id: "projects", icon: <FolderOpen className="w-6 h-6" />, label: "Projects" },
+    { id: "skills", icon: <Code className="w-6 h-6" />, label: "Skills" },
+    { id: "contact", icon: <Mail className="w-6 h-6" />, label: "Contact" },
+    { id: "settings", icon: <Settings className="w-6 h-6" />, label: "Settings" },
+  ];
+
+  const launchpadItems = [
+    { id: "finder", icon: <LayoutGrid className="w-8 h-8" />, label: "Finder", color: "from-blue-500 to-blue-600" },
+    { id: "terminal", icon: <Terminal className="w-8 h-8" />, label: "Terminal", color: "from-gray-700 to-gray-800" },
+    { id: "about", icon: <User className="w-8 h-8" />, label: "About", color: "from-purple-500 to-purple-600" },
+    { id: "projects", icon: <FolderOpen className="w-8 h-8" />, label: "Projects", color: "from-yellow-500 to-orange-500" },
+    { id: "skills", icon: <Code className="w-8 h-8" />, label: "Skills", color: "from-green-500 to-emerald-600" },
+    { id: "contact", icon: <Mail className="w-8 h-8" />, label: "Contact", color: "from-red-500 to-pink-600" },
+    { id: "settings", icon: <Settings className="w-8 h-8" />, label: "Settings", color: "from-gray-500 to-gray-600" },
+    { id: "calculator", icon: <Calculator className="w-8 h-8" />, label: "Calculator", color: "from-orange-500 to-red-500" },
+    { id: "calendar", icon: <Calendar className="w-8 h-8" />, label: "Calendar", color: "from-red-500 to-red-600" },
+    { id: "notes", icon: <FileText className="w-8 h-8" />, label: "Notes", color: "from-yellow-400 to-yellow-500" },
+  ];
+
+  return (
+    <>
+      <style>{`
+        .slider-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        
+        .cyber-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          height: 6px;
+          border-radius: 3px;
+          outline: none;
+          background: #374151;
+          position: relative;
+        }
+        
+        .cyber-slider::-webkit-slider-runnable-track {
+          height: 6px;
+          border-radius: 3px;
+        }
+        
+        .cyber-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: white;
+          border: none;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+          cursor: pointer;
+          margin-top: -6px;
+          position: relative;
+          z-index: 2;
+        }
+        
+        .cyber-slider::-moz-range-track {
+          height: 6px;
+          border-radius: 3px;
+          background: #374151;
+        }
+        
+        .cyber-slider::-moz-range-thumb {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: white;
+          border: none;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+          cursor: pointer;
+        }
+        
+        .cyber-slider::-moz-range-progress {
+          height: 6px;
+          border-radius: 3px;
+          background: #3b82f6;
+        }
+        
+        .volume-slider::-moz-range-progress {
+          background: #ec4899;
+        }
+      `}</style>
+      
+      {/* Login Screen */}
+      <AnimatePresence>
+        {!isLoggedIn && (
+          <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
+        )}
+      </AnimatePresence>
+
+      {/* Main Desktop */}
+      <div
+        className={cn(
+          "min-h-screen w-full overflow-hidden transition-opacity duration-500",
+          isLoggedIn ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        style={{
+          filter: `brightness(${brightness}%)`,
+        }}
+      >
+        {/* Desktop Background */}
+        <div
+          className="fixed inset-0 bg-cover bg-center transition-all duration-700"
+          style={{
+            backgroundImage: `url(${currentWallpaper})`,
+          }}
+        />
+        <div
+          className={cn(
+            "fixed inset-0 transition-opacity duration-500",
+            isDark ? "bg-black/40" : "bg-white/20"
+          )}
+        />
+
+        {/* Menu Bar */}
+        <div
+          className={cn(
+            "fixed top-0 left-0 right-0 h-8 flex items-center justify-between px-4 z-[100] backdrop-blur-md",
+            isDark ? "bg-gray-900/80 text-white" : "bg-white/80 text-gray-900"
+          )}
+        >
+          <div className="flex items-center gap-4">
+            <Shield className="w-4 h-4 text-blue-500" />
+            <span className="font-semibold text-sm">CyberOS</span>
+            <div className="hidden md:flex items-center gap-3 text-sm">
+              {["File", "Edit", "View", "Window", "Help"].map((menuName) => (
+                <button
+                  key={menuName}
+                  onClick={(e) => handleMenuClick(menuName, e)}
+                  className={cn(
+                    "hover:opacity-70 transition-opacity px-2 py-1 rounded",
+                    activeMenu === menuName && (isDark ? "bg-white/20" : "bg-black/10"),
+                    menuName === "File" && "font-medium"
+                  )}
+                >
+                  {menuName}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowControlCenter(!showControlCenter)}
+                className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+              >
+                {wifiEnabled ? <WifiIcon className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+                {volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+              <Battery className="w-4 h-4" />
+            </div>
+            <span className="font-medium">
+              {format(currentTime, "EEE MMM d")}
+            </span>
+            <span className="font-medium">
+              {format(currentTime, "h:mm a")}
+            </span>
+          </div>
+        </div>
+
+        {/* Menu Dropdown */}
+        {activeMenu && (
+          <MenuDropdown
+            isOpen={!!activeMenu}
+            onClose={() => setActiveMenu(null)}
+            items={getMenuItems(activeMenu)}
+            isDark={isDark}
+            position={menuPosition}
+          />
+        )}
+
+        {/* Control Center */}
+        <ControlCenter
+          isOpen={showControlCenter}
+          onClose={() => setShowControlCenter(false)}
+          isDark={isDark}
+          setIsDark={setIsDark}
+          brightness={brightness}
+          setBrightness={setBrightness}
+          volume={volume}
+          setVolume={setVolume}
+          wifiEnabled={wifiEnabled}
+          setWifiEnabled={setWifiEnabled}
+          bluetoothEnabled={bluetoothEnabled}
+          setBluetoothEnabled={setBluetoothEnabled}
+        />
+
+        {/* Desktop Area */}
+        <div className="pt-8 h-screen relative">
+          {/* Windows */}
+          <AnimatePresence>
+            {windows.map((win) => (
+              !win.isMinimized && (
+                <Window
+                  key={win.id}
+                  window={win}
+                  isActive={activeWindow === win.id}
+                  onClose={() => closeWindow(win.id)}
+                  onMinimize={() => minimizeWindow(win.id)}
+                  onMaximize={() => maximizeWindow(win.id)}
+                  onClick={() => bringToFront(win.id)}
+                  isDark={isDark}
+                  brightness={brightness}
+                >
+                  {getWindowContent(win)}
+                </Window>
+              )
+            ))}
+          </AnimatePresence>
+
+          {/* Launchpad */}
+          <AnimatePresence>
+            {showLaunchpad && (
+              <motion.div
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.1 }}
+                className={cn(
+                  "fixed inset-0 z-[90] flex items-center justify-center backdrop-blur-xl",
+                  isDark ? "bg-gray-950/90" : "bg-white/90"
+                )}
+                onClick={() => setShowLaunchpad(false)}
+              >
+                <div className="grid grid-cols-4 md:grid-cols-5 gap-8 p-8">
+                  {launchpadItems.map((item) => (
+                    <motion.button
+                      key={item.id}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openWindow(item.id as WindowState["type"], item.label);
+                      }}
+                      className="flex flex-col items-center gap-3"
+                    >
+                      <div
+                        className={cn(
+                          "w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-br",
+                          item.color
+                        )}
+                      >
+                        <div className="text-white">{item.icon}</div>
+                      </div>
+                      <span
+                        className={cn(
+                          "text-sm font-medium",
+                          isDark ? "text-white" : "text-gray-900"
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Dock */}
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]">
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className={cn(
+              "flex items-end gap-2 px-4 py-3 rounded-2xl backdrop-blur-xl",
+              isDark
+                ? "bg-gray-900/60 border border-gray-700/50"
+                : "bg-white/60 border border-white/50 shadow-xl"
+            )}
+          >
+            {dockItems.map((item) => {
+              const isActive = activeWindow?.startsWith(item.id);
+              
+              return (
+                <DockItem
+                  key={item.id}
+                  icon={item.icon}
+                  label={item.label}
+                  isActive={isActive || false}
+                  onClick={() =>
+                    item.id === "finder"
+                      ? setShowLaunchpad(true)
+                      : openWindow(item.id as WindowState["type"], item.label)
+                  }
+                  isDark={isDark}
+                />
+              );
+            })}
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default App;
