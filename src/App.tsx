@@ -225,6 +225,25 @@ const cn = (...classes: (string | boolean | undefined)[]) => {
   return classes.filter(Boolean).join(" ");
 };
 
+// Profile Image Component with fallback
+const ProfileImage = ({ src, size, rounded, fallbackSize }: { src: string; size: string; rounded: string; fallbackSize: string }) => {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className={cn(size, rounded, "overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center")}>
+      {!failed ? (
+        <img 
+          src={src} 
+          alt="Aayush Timalsina" 
+          className="w-full h-full object-cover"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <User className={cn(fallbackSize, "text-white")} />
+      )}
+    </div>
+  );
+};
+
 // Components
 const DockItem = ({
   icon,
@@ -339,13 +358,13 @@ const Window = ({
     const handleMouseUp = () => setIsDragging(false);
 
     if (isDragging) {
-      globalThis.window.addEventListener("mousemove", handleMouseMove);
-      globalThis.window.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      globalThis.window.removeEventListener("mousemove", handleMouseMove);
-      globalThis.window.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging, dragOffset]);
 
@@ -606,18 +625,7 @@ const AboutWindow = ({ isDark }: { isDark: boolean }) => {
     <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-6 mb-8">
-          <div className="w-32 h-32 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-            <img 
-              src={ABOUT_IMAGE} 
-              alt="Aayush Timalsina" 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-                (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-              }}
-            />
-            <User className="w-16 h-16 text-white hidden" />
-          </div>
+          <ProfileImage src={ABOUT_IMAGE} size="w-32 h-32" rounded="rounded-2xl" fallbackSize="w-16 h-16" />
           <div>
             <h1 className={cn("text-3xl font-bold mb-2", isDark ? "text-white" : "text-gray-900")}>
               Aayush Timalsina
@@ -1186,6 +1194,9 @@ const SettingsWindow = ({
                   value={brightness}
                   onChange={(e) => setBrightness(Number(e.target.value))}
                   className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #3b82f6 ${((brightness - 20) / 80) * 100}%, ${isDark ? '#4b5563' : '#d1d5db'} ${((brightness - 20) / 80) * 100}%)`,
+                  }}
                 />
               </div>
             </div>
@@ -1273,7 +1284,10 @@ const SettingsWindow = ({
                   max="100"
                   value={volume}
                   onChange={(e) => setVolume(Number(e.target.value))}
-                  className="cyber-slider volume-slider w-full"
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #ec4899 ${volume}%, ${isDark ? '#4b5563' : '#d1d5db'} ${volume}%)`,
+                  }}
                 />
               </div>
             </div>
@@ -1881,6 +1895,9 @@ const ControlCenter = ({
                   value={brightness}
                   onChange={(e) => setBrightness(Number(e.target.value))}
                   className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #3b82f6 ${((brightness - 20) / 80) * 100}%, ${isDark ? '#4b5563' : '#d1d5db'} ${((brightness - 20) / 80) * 100}%)`,
+                  }}
                 />
               </div>
             </div>
@@ -1901,7 +1918,10 @@ const ControlCenter = ({
                   max="100"
                   value={volume}
                   onChange={(e) => setVolume(Number(e.target.value))}
-                  className="cyber-slider volume-slider w-full"
+                  className="cyber-slider w-full"
+                  style={{
+                    background: `linear-gradient(to right, #ec4899 ${volume}%, ${isDark ? '#4b5563' : '#d1d5db'} ${volume}%)`,
+                  }}
                 />
               </div>
             </div>
@@ -2094,19 +2114,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               boxShadow: "0 0 30px rgba(59,130,246,0.15)",
             }}
           >
-            <img 
-              src={PROFILE_IMAGE} 
-              alt="Aayush Timalsina" 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-                (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-              }}
-            />
-            <User className="w-12 h-12 text-blue-400 hidden absolute" />
-            <div className="absolute inset-0 rounded-full animate-pulse pointer-events-none" style={{
-              border: "1px solid rgba(99,102,241,0.2)",
-            }} />
+            <ProfileImage src={PROFILE_IMAGE} size="w-full h-full" rounded="rounded-full" fallbackSize="w-12 h-12" />
           </motion.div>
           <motion.h2
             animate={isUnlocking ? { y: -20, opacity: 0 } : { y: 0, opacity: 1 }}
