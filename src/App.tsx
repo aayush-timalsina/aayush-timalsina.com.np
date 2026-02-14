@@ -750,7 +750,36 @@ const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
         return terminalState.history.slice(-num).map((cmd, i) => `${(i + 1).toString().padStart(5)}  ${cmd}`); 
       }
       case 'echo': return [operands.join(' ')];
-      case 'help': return ['╔══════════════════════════════════════════════════════════════════╗', '║                    CyberOS Terminal Commands                     ║', '╠══════════════════════════════════════════════════════════════════╣', '║  NAVIGATION                                                      ║', '║    cd [dir]      Change directory        pwd      Print directory ║', '║    ls [options]  List files              ..       Parent dir (alias)║', '╠══════════════════════════════════════════════════════════════════╣', '║  FILE OPERATIONS                                                 ║', '║    cat [file]    Display contents        touch    Create empty file║', '║    head/tail     Show file start/end     less     Paged view       ║', '║    mkdir [-p]    Create directory        rm [-rf] Remove file/dir  ║', '║    cp [-r]       Copy files              mv       Move/rename      ║', '╠══════════════════════════════════════════════════════════════════╣', '║  EDITORS                                                         ║', '║    nano [file]   Full text editor with save/load capabilities      ║', '║    vim/vi [file] Vim-style editor (basic)                        ║', '╠══════════════════════════════════════════════════════════════════╣', '║  SEARCH & PROCESS                                                ║', '║    grep [opt]    Search text             find     Find files       ║', '║    ps/top        Process info            kill     Terminate process║', '╠══════════════════════════════════════════════════════════════════╣', '║  ENVIRONMENT                                                     ║', '║    env/export    Variables               alias    Command aliases  ║', '║    source/.      Execute script          uname    System info      ║', '╠══════════════════════════════════════════════════════════════════╣', '║  FEATURES: Pipes |  Redirection > >>  Variables $VAR  Tab complete ║', '╚══════════════════════════════════════════════════════════════════╝'];
+    case 'help':
+        return [
+          '┌────────────────────────────────────────────────────────────────────┐',
+          '│              CyberOS Terminal Commands                             │',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  NAVIGATION                                                        │',
+          '│    cd [dir]        Change directory      pwd    Print directory    │',
+          '│    ls [options]    List files            ..     Parent dir (alias) │',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  FILE OPERATIONS                                                   │',
+          '│    cat [file]      Display contents      touch  Create empty file  │',
+          '│    head/tail       Show file start/end   less   Paged view         │',
+          '│    mkdir [-p]      Create directory      rm     Remove file/dir    │',
+          '│    cp [-r]         Copy files            mv     Move/rename        │',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  EDITORS                                                           │',
+          '│    nano [file]     Full text editor with save/load capabilities    │',
+          '│    vim/vi [file]   Vim-style editor (basic)                        │',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  SEARCH & PROCESS                                                  │',
+          '│    grep [opt]      Search text           find   Find files         │',
+          '│    ps/top          Process info            kill   Terminate process│',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  ENVIRONMENT                                                       │',
+          '│    env/export      Variables             alias  Command aliases    │',
+          '│    source/.        Execute script        uname  System info        │',
+          '├────────────────────────────────────────────────────────────────────┤',
+          '│  FEATURES: Pipes | Redirection > >> | Variables $VAR | Tab complete│',
+          '└────────────────────────────────────────────────────────────────────┘'
+        ];
       case 'neofetch': return ['       .---.        aayush@cyberos-portfolio', '      /     \\       ------------------------', '      \\.@-@./       OS: CyberOS 3.0 Portfolio Edition', '      /`\\_/`\\       Kernel: Linux 5.15.0-cyberos', '     //  _  \\\\      Uptime: 3 days, 2:15', '    | \\     )|_     Shell: bash 5.1.16', '   /`\\_`>  <_/ \\    DE: ReactOS', '   \\__/\'---\'\\__/    WM: Framer Motion', '                    Theme: Cyberpunk Dark [Made by Aayush]', '                    CPU: AMD Ryzen 9 5900X [Handpicked by Me]', '                    GPU: NVIDIA RTX 3080 [My Gaming Beast]', '                    Memory: 16GB / 32GB [Upgraded by Yours Truly]', '                    ', '                    ✨ Crafted with passion by Aayush Timalsina ✨', '                    🔒 Cybersecurity Student | Nepal 🇳🇵', '                    💻 "Code is poetry, security is art"'];
       case 'hack': return ['[+] Initializing penetration testing sequence...', '[+] Loading exploit modules... [Aayush Custom Build]', '[+] Scanning target 192.168.1.0/24...', '    [>] Found 3 active hosts', '    [>] Port 22 open on 192.168.1.105', '    [>] Port 80 open on 192.168.1.110', '    [>] Port 443 open on 192.168.1.110', '[+] Running vulnerability scan...', '    [!] CVE-2021-44228 detected on 192.168.1.110', '[+] Attempting exploitation...', '    [>] Gaining shell access...', '    [>] Privilege escalation successful', '[+] ROOT ACCESS OBTAINED', '', '[!] SIMULATION COMPLETE - No actual systems were harmed', '[!] Remember: Always practice ethical hacking!', '[!] ~ Aayush "Type-C" Timalsina'];
       case 'nmap': { 
@@ -933,29 +962,41 @@ const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
     }
   };
 
-  return (
+    return (
     <>
-      <div className={cn("h-full p-4 font-mono text-sm relative", isDark ? "bg-gray-950 text-green-400" : "bg-gray-900 text-green-400")}>
+      <div className={cn("h-full p-4 font-mono text-sm relative", isDark ? "bg-[#0a0a0f] text-green-400" : "bg-gray-100 text-gray-900")}>
         <div ref={terminalRef} className="h-full overflow-auto pb-8">
           {commands.map((line, i) => (
-            <div key={i} className="whitespace-pre-wrap">
-              {line.startsWith(getPrompt()) ? 
-                <span><span className="text-blue-400">{getPrompt().split(':')[0]}</span><span className="text-white">:</span><span className="text-blue-400">{getPrompt().split(':')[1]?.replace('$', '')}</span><span className="text-white">$</span><span className="text-gray-300"> {line.slice(getPrompt().length + 1)}</span></span> : 
-                line.startsWith('bash:') || line.includes('No such file') || line.includes('not found') ? 
-                  <span className="text-red-400">{line}</span> : 
-                  line.startsWith('╔') || line.startsWith('╠') || line.startsWith('║') || line.startsWith('╚') ? 
-                    <span className="text-cyan-400">{line}</span> : 
-                    line.startsWith('[') || line.startsWith('Starting') ? 
-                      <span className="text-yellow-400">{line}</span> : 
-                      line}
+            <div key={i} className="whitespace-pre-wrap leading-relaxed">
+              {line.startsWith(getPrompt()) ? (
+                <span>
+                  <span className="text-green-500">aayush@cyberos-portfolio</span>
+                  <span className="text-gray-400">:</span>
+                  <span className="text-blue-400">{terminalState.currentPath === terminalState.environment.HOME ? '~' : terminalState.currentPath}</span>
+                  <span className="text-gray-400">$</span>
+                  <span className="text-gray-300"> {line.slice(getPrompt().length + 1)}</span>
+                </span>
+              ) : line.startsWith('bash:') || line.includes('No such file') || line.includes('not found') ? (
+                <span className="text-red-400">{line}</span>
+              ) : line.startsWith('╔') || line.startsWith('╠') || line.startsWith('║') || line.startsWith('╚') || line.startsWith('┌') || line.startsWith('├') || line.startsWith('│') || line.startsWith('└') || line.startsWith('─') || line.startsWith('┬') || line.startsWith('┴') || line.startsWith('┼') ? (
+                <span className="text-cyan-400">{line}</span>
+              ) : line.startsWith('Welcome') || line.startsWith('Type') ? (
+                <span className="text-green-400">{line}</span>
+              ) : line.startsWith('[') || line.startsWith('Starting') || line.startsWith('[+]') || line.startsWith('    [>]') || line.startsWith('[!]') ? (
+                <span className="text-yellow-400">{line}</span>
+              ) : line.includes('command not found') ? (
+                <span className="text-red-400">{line}</span>
+              ) : (
+                <span className="text-gray-300">{line}</span>
+              )}
             </div>
           ))}
           {!editor.isOpen && (
-            <form onSubmit={handleSubmit} className="flex items-center">
-              <span className="text-blue-400">{getPrompt().split(':')[0]}</span>
-              <span className="text-white">:</span>
-              <span className="text-blue-400">{getPrompt().split(':')[1]?.replace('$', '')}</span>
-              <span className="text-white">$</span>
+            <form onSubmit={handleSubmit} className="flex items-center mt-1">
+              <span className="text-green-500">aayush@cyberos-portfolio</span>
+              <span className="text-gray-400">:</span>
+              <span className="text-blue-400">{terminalState.currentPath === terminalState.environment.HOME ? '~' : terminalState.currentPath}</span>
+              <span className="text-gray-400">$</span>
               <input ref={inputRef} type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} className="flex-1 bg-transparent border-none outline-none text-gray-300 ml-2" spellCheck={false} autoComplete="off" />
             </form>
           )}
