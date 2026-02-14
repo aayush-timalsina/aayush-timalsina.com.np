@@ -1091,8 +1091,10 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
 // ============================================
 // PART 2 ENDS HERE - Continue to Part 3
 // ============================================
-const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, setVolume, currentWallpaper, setCurrentWallpaper }: any) => {
+const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, setVolume, currentWallpaper, setCurrentWallpaper, customWallpapers, setCustomWallpapers }: any) => {
   const [activeTab, setActiveTab] = useState("general");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const tabs = [
     { id: "general", label: "General", icon: <Settings className="w-4 h-4" /> },
     { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> },
@@ -1105,6 +1107,27 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
     if (volume < 50) return <Volume1 className={isDark ? "text-pink-400" : "text-pink-600"} />;
     return <Volume2 className={isDark ? "text-pink-400" : "text-pink-600"} />;
   };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const url = event.target?.result as string;
+        const newWallpaper = {
+          id: `custom-${Date.now()}`,
+          name: file.name.replace(/\.[^/.]+$/, ""),
+          url: url,
+          thumbnail: url
+        };
+        setCustomWallpapers([...customWallpapers, newWallpaper]);
+        setCurrentWallpaper(url);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const allWallpapers = [...WALLPAPERS, ...customWallpapers];
 
   return (
     <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
@@ -1170,14 +1193,35 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
         )}
         {activeTab === "wallpaper" && (
           <div className="max-w-4xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2>
+              <button 
+                onClick={() => fileInputRef.current?.click()} 
+                className={cn("px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors", isDark ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white")}
+              >
+                <Plus className="w-4 h-4" />
+                Upload Custom
+              </button>
+              <input 
+                ref={fileInputRef}
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageUpload} 
+                className="hidden" 
+              />
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {WALLPAPERS.map((wallpaper) => (
+              {allWallpapers.map((wallpaper: any) => (
                 <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-blue-500" : "")}>
                   <img src={wallpaper.thumbnail} alt={wallpaper.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white font-medium">{wallpaper.name}</span>
+                    <span className="text-white font-medium text-sm px-2 text-center">{wallpaper.name}</span>
                   </div>
+                  {currentWallpaper === wallpaper.url && (
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
@@ -1393,6 +1437,10 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
 // MAIN APP COMPONENT
 // ============================================
 
+// ============================================
+// MAIN APP COMPONENT
+// ============================================
+
 function App() {
   const [isDark, setIsDark] = useState(true);
   const [brightness, setBrightness] = useState(100);
@@ -1400,6 +1448,7 @@ function App() {
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
   const [currentWallpaper, setCurrentWallpaper] = useState(DEFAULT_WALLPAPER);
+  const [customWallpapers, setCustomWallpapers] = useState<Wallpaper[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [showControlCenter, setShowControlCenter] = useState(false);
@@ -1466,7 +1515,7 @@ function App() {
       case "projects": return <ProjectsWindow isDark={isDark} />;
       case "skills": return <SkillsWindow isDark={isDark} />;
       case "contact": return <ContactWindow isDark={isDark} />;
-      case "settings": return <SettingsWindow isDark={isDark} setIsDark={setIsDark} brightness={brightness} setBrightness={setBrightness} volume={volume} setVolume={setVolume} currentWallpaper={currentWallpaper} setCurrentWallpaper={setCurrentWallpaper} />;
+      case "settings": return <SettingsWindow isDark={isDark} setIsDark={setIsDark} brightness={brightness} setBrightness={setBrightness} volume={volume} setVolume={setVolume} currentWallpaper={currentWallpaper} setCurrentWallpaper={setCurrentWallpaper} customWallpapers={customWallpapers} setCustomWallpapers={setCustomWallpapers} />;
       case "finder": return <FinderWindow isDark={isDark} />;
       case "calculator": return <CalculatorWindow isDark={isDark} />;
       case "calendar": return <CalendarWindow isDark={isDark} />;
