@@ -98,29 +98,29 @@ const ABOUT_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/56571
 const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80";
 
 const WALLPAPERS: Wallpaper[] = [
-  { id: "dark-abstract", name: "Dark Abstract", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
-  { id: "hack1", name: "Hacker Terminal", url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200&q=60" },
-  { id: "hack3", name: "Server Room", url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=60" },
+  { id: "dark-abstract", name: "Midnight Coding", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
+  { id: "hack1", name: "My Hacker Setup", url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200&q=60" },
+  { id: "hack3", name: "Server Room Vibes", url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=60" },
 ];
 
 const PROJECTS: Project[] = [
-  { id: "1", title: "Network Security Lab", description: "Configured firewalls and intrusion detection systems.", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80", skills: ["Firewall Configuration", "IDS/IPS Setup", "Vulnerability Scanning"], category: "Security" },
-  { id: "2", title: "Web Application Penetration Testing", description: "Conducted security assessments on web applications.", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80", skills: ["OWASP Testing", "Burp Suite", "Vulnerability Reporting"], category: "Web Security" },
-  { id: "3", title: "Network Traffic Analysis", description: "Analyzed network traffic using Wireshark.", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80", skills: ["Wireshark Analysis", "Intrusion Detection", "Threat Hunting"], category: "Analysis" },
-  { id: "4", title: "Price Tampering Vulnerability", description: "Identified price tampering vulnerabilities in e-commerce.", image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80", skills: ["Vulnerability Assessment", "Penetration Testing", "Security Implementation"], category: "Vulnerability" },
+  { id: "1", title: "My First Security Lab", description: "Built this firewall setup myself. Learned IDS/IPS from scratch.", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80", skills: ["Firewall Config", "IDS/IPS", "Wireshark"], category: "Security" },
+  { id: "2", title: "Web App Pentest I Did", description: "Found SQLi and XSS bugs in test apps. Reported them ethically.", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80", skills: ["Burp Suite", "OWASP", "Report Writing"], category: "Web Security" },
+  { id: "3", title: "Network Traffic Analysis", description: "Spent nights analyzing packets. Found some weird stuff.", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80", skills: ["Wireshark", "TCPDump", "Analysis"], category: "Analysis" },
+  { id: "4", title: "Price Tampering Bug Hunt", description: "Found this bug in a local site. They fixed it and thanked me.", image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80", skills: ["Bug Bounty", "Ethical Disclosure", "Testing"], category: "Vulnerability" },
 ];
 
 const SKILLS: Skill[] = [
-  { name: "Penetration Testing", icon: <Target className="w-5 h-5" />, level: 85, category: "Core" },
-  { name: "Threat Detection", icon: <Eye className="w-5 h-5" />, level: 80, category: "Core" },
-  { name: "NMAP", icon: <Scan className="w-5 h-5" />, level: 90, category: "Tools" },
-  { name: "Wireshark", icon: <Activity className="w-5 h-5" />, level: 75, category: "Tools" },
-  { name: "Burp Suite", icon: <Bug className="w-5 h-5" />, level: 70, category: "Tools" },
-  { name: "Python", icon: <Code className="w-5 h-5" />, level: 65, category: "Languages" },
-  { name: "Bash", icon: <Terminal className="w-5 h-5" />, level: 70, category: "Languages" },
-  { name: "Linux", icon: <TerminalSquare className="w-5 h-5" />, level: 85, category: "Systems" },
-  { name: "Kali Linux", icon: <Shield className="w-5 h-5" />, level: 80, category: "Systems" },
-  { name: "Metasploit", icon: <Zap className="w-5 h-5" />, level: 60, category: "Tools" },
+  { name: "Breaking Stuff (Ethically)", icon: <Target className="w-5 h-5" />, level: 85, category: "What I Do" },
+  { name: "Finding Threats", icon: <Eye className="w-5 h-5" />, level: 80, category: "What I Do" },
+  { name: "NMAP (my go-to)", icon: <Scan className="w-5 h-5" />, level: 90, category: "Tools I Use" },
+  { name: "Wireshark (packet nerd)", icon: <Activity className="w-5 h-5" />, level: 75, category: "Tools I Use" },
+  { name: "Burp Suite (web stuff)", icon: <Bug className="w-5 h-5" />, level: 70, category: "Tools I Use" },
+  { name: "Python (scripting)", icon: <Code className="w-5 h-5" />, level: 65, category: "Languages" },
+  { name: "Bash (terminal life)", icon: <Terminal className="w-5 h-5" />, level: 70, category: "Languages" },
+  { name: "Linux (daily driver)", icon: <TerminalSquare className="w-5 h-5" />, level: 85, category: "Systems" },
+  { name: "Kali Linux (hacking)", icon: <Shield className="w-5 h-5" />, level: 80, category: "Systems" },
+  { name: "Metasploit (learning)", icon: <Zap className="w-5 h-5" />, level: 60, category: "Tools I Use" },
 ];
 
 const cn = (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(" ");
@@ -1033,15 +1033,42 @@ const AboutWindow = ({ isDark }: { isDark: boolean }) => (
       <div className="flex items-center gap-6 mb-8">
         <ProfileImage src={ABOUT_IMAGE} size="w-32 h-32" rounded="rounded-2xl" fallbackSize="w-16 h-16" />
         <div>
-          <h1 className={cn("text-3xl font-bold mb-2", isDark ? "text-white" : "text-gray-900")}>Aayush Timalsina</h1>
-          <p className={cn("text-lg mb-2", isDark ? "text-blue-400" : "text-blue-600")}>Cybersecurity Student | Built this OS myself 🔥</p>
-          <div className="flex items-center gap-2 text-sm"><MapPin className="w-4 h-4" /><span className={isDark ? "text-gray-400" : "text-gray-600"}>Chitwan, Nepal 🇳🇵</span></div>
+          <h1 className={cn("text-3xl font-bold mb-2", isDark ? "text-white" : "text-gray-900")}>Hey, I'm Aayush 👋</h1>
+          <p className={cn("text-lg mb-2", isDark ? "text-cyan-400" : "text-cyan-600")}>17 y/o cybersecurity nerd from Nepal 🇳🇵</p>
+          <div className="flex items-center gap-2 text-sm"><MapPin className="w-4 h-4" /><span className={isDark ? "text-gray-400" : "text-gray-600"}>Chitwan, Nepal • Available for gigs</span></div>
         </div>
       </div>
+      
+      <div className={cn("rounded-xl p-6 mb-6 border-l-4 border-cyan-500", isDark ? "bg-gray-800" : "bg-white")}>
+        <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>My Story</h2>
+        <p className={cn("leading-relaxed mb-4", isDark ? "text-gray-300" : "text-gray-600")}>
+          Started hacking (legally) when I was 15. Broke my own router first, then moved to CTFs. 
+          Now I'm building this OS portfolio because why not? If I can break systems, I can build them too.
+        </p>
+        <p className={cn("leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>
+          Currently in Class 12 at Skyrider College. Spending my nights learning Rust and doing HTB boxes. 
+          This entire OS? Coded it myself with React + TypeScript. No templates, no BS.
+        </p>
+      </div>
+
       <div className={cn("rounded-xl p-6 mb-6", isDark ? "bg-gray-800" : "bg-white")}>
-        <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>About Me</h2>
-        <p className={cn("leading-relaxed mb-4", isDark ? "text-gray-300" : "text-gray-600")}>Hi! I'm Aayush Timalsina, currently studying in class 12 at Skyrider College, Nepal. I'm passionate about cybersecurity, especially penetration testing, threat detection and monitoring, and scripting and automation. <strong>I built this entire CyberOS from scratch!</strong></p>
-        <p className={cn("leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>This portfolio you're experiencing? It's not just a website—it's a fully functional operating system simulation with a real file system, working terminal, nano editor, and window management. All coded by me with React, TypeScript, and passion. ✨</p>
+        <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>Quick Stats</h2>
+        <div className="grid grid-cols-3 gap-4">
+          {[{ label: "Projects", value: "4+", icon: <FolderOpen className="w-5 h-5" />, note: "Built" }, { label: "CTFs", value: "15+", icon: <Target className="w-5 h-5" />, note: "Played" }, { label: "Bugs", value: "7", icon: <Bug className="w-5 h-5" />, note: "Found" }].map((stat) => (
+            <div key={stat.label} className={cn("text-center p-4 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
+              <div className={cn("flex justify-center mb-2", isDark ? "text-cyan-400" : "text-cyan-600")}>{stat.icon}</div>
+              <div className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>{stat.value}</div>
+              <div className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{stat.label}</div>
+              <div className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-500")}>{stat.note}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={cn("rounded-xl p-4 text-center", isDark ? "bg-cyan-900/20 border border-cyan-800" : "bg-cyan-50 border border-cyan-200")}>
+        <p className={cn("text-sm italic", isDark ? "text-cyan-300" : "text-cyan-700")}>
+          "Break things to make them stronger" — my motto
+        </p>
       </div>
     </div>
   </div>
@@ -1050,13 +1077,16 @@ const AboutWindow = ({ isDark }: { isDark: boolean }) => (
 const ProjectsWindow = ({ isDark }: { isDark: boolean }) => (
   <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
     <div className="max-w-4xl mx-auto">
-      <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>My Projects <span className="text-sm font-normal opacity-60">- Built with my own hands</span></h1>
+      <div className="mb-6">
+        <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>Stuff I've Built 🛠️</h1>
+        <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Real projects, real learning, real mistakes.</p>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {PROJECTS.map((project) => (
           <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={cn("rounded-xl overflow-hidden group cursor-pointer", isDark ? "bg-gray-800" : "bg-white shadow-lg")}>
             <div className="h-40 overflow-hidden"><img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" /></div>
             <div className="p-4">
-              <span className={cn("text-xs font-medium px-2 py-1 rounded-full", isDark ? "bg-blue-500/20 text-blue-400" : "bg-blue-100 text-blue-600")}>{project.category}</span>
+              <span className={cn("text-xs font-medium px-2 py-1 rounded-full", isDark ? "bg-cyan-500/20 text-cyan-400" : "bg-cyan-100 text-cyan-700")}>{project.category}</span>
               <h3 className={cn("font-semibold mt-2 mb-2", isDark ? "text-white" : "text-gray-900")}>{project.title}</h3>
               <p className={cn("text-sm mb-3 line-clamp-2", isDark ? "text-gray-400" : "text-gray-600")}>{project.description}</p>
               <div className="flex flex-wrap gap-1">{project.skills.slice(0, 3).map((skill) => <span key={skill} className={cn("text-xs px-2 py-1 rounded", isDark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-600")}>{skill}</span>)}</div>
@@ -1071,18 +1101,21 @@ const ProjectsWindow = ({ isDark }: { isDark: boolean }) => (
 const SkillsWindow = ({ isDark }: { isDark: boolean }) => (
   <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
     <div className="max-w-4xl mx-auto">
-      <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>Technical Skills <span className="text-sm font-normal opacity-60">- Self-taught & practiced</span></h1>
+      <div className="mb-6">
+        <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>What I'm Good At 💪</h1>
+        <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Self-taught. Self-motivated. Still learning.</p>
+      </div>
       <div className="space-y-6">
         {Array.from(new Set(SKILLS.map(s => s.category))).map((category) => (
           <div key={category}>
-            <h2 className={cn("text-lg font-semibold mb-4", isDark ? "text-gray-300" : "text-gray-700")}>{category}</h2>
+            <h2 className={cn("text-lg font-semibold mb-4", isDark ? "text-cyan-400" : "text-cyan-700")}>{category}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {SKILLS.filter(s => s.category === category).map((skill) => (
                 <div key={skill.name} className={cn("p-4 rounded-xl flex items-center gap-4", isDark ? "bg-gray-800" : "bg-white shadow-sm")}>
                   <div className={cn("p-3 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>{skill.icon}</div>
                   <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2"><span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{skill.name}</span><span className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{skill.level}%</span></div>
-                    <div className={cn("h-2 rounded-full overflow-hidden", isDark ? "bg-gray-700" : "bg-gray-200")}><motion.div initial={{ width: 0 }} animate={{ width: `${skill.level}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" /></div>
+                    <div className="flex items-center justify-between mb-2"><span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{skill.name}</span><span className={cn("text-sm", isDark ? "text-cyan-400" : "text-cyan-600")}>{skill.level}%</span></div>
+                    <div className={cn("h-2 rounded-full overflow-hidden", isDark ? "bg-gray-700" : "bg-gray-200")}><motion.div initial={{ width: 0 }} animate={{ width: `${skill.level}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" /></div>
                   </div>
                 </div>
               ))}
@@ -1110,20 +1143,23 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
   return (
     <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
       <div className="max-w-2xl mx-auto">
-        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>Get In Touch <span className="text-sm font-normal opacity-60">- I built this contact form too!</span></h1>
+        <div className="mb-6">
+          <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>Hit Me Up 📩</h1>
+          <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Got a project? Want to collab? Just wanna say hi? I'm around.</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <a href="mailto:aayushtimalsina789@gmail.com" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-blue-500/20" : "bg-blue-100")}><Mail className={isDark ? "text-blue-400" : "text-blue-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email</p><p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>aayushtimalsina789@gmail.com</p></div></a>
-          <a href="tel:+9779845242492" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}><Phone className={isDark ? "text-green-400" : "text-green-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Phone</p><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>+977 9845242492</p></div></a>
+          <a href="mailto:aayushtimalsina789@gmail.com" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-cyan-500/20" : "bg-cyan-100")}><Mail className={isDark ? "text-cyan-400" : "text-cyan-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email me at</p><p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>aayushtimalsina789@gmail.com</p></div></a>
+          <a href="tel:+9779845242492" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}><Phone className={isDark ? "text-green-400" : "text-green-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Call/text me</p><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>+977 9845242492</p></div></a>
         </div>
         <div className={cn("rounded-xl p-6", isDark ? "bg-gray-800" : "bg-white shadow-lg")}>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Name</label><input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Your name" required /></div>
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Email</label><input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="your@email.com" required /></div>
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Message</label><textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={4} className={cn("w-full px-4 py-3 rounded-lg outline-none resize-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Your message..." required /></div>
-            <button type="submit" disabled={isSubmitting} className={cn("w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2", isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white")}>{isSubmitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : submitted ? <><CheckCircle className="w-5 h-5" /> Sent!</> : <><Send className="w-5 h-5" /> Send Message</>}</button>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Your Name</label><input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Who are you?" required /></div>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Your Email</label><input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="your@email.com" required /></div>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>What's up?</label><textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={4} className={cn("w-full px-4 py-3 rounded-lg outline-none resize-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Tell me about your project, idea, or just say hi..." required /></div>
+            <button type="submit" disabled={isSubmitting} className={cn("w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2", isDark ? "bg-cyan-600 text-white hover:bg-cyan-700" : "bg-cyan-500 text-white hover:bg-cyan-600")}>{isSubmitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : submitted ? <><CheckCircle className="w-5 h-5" /> Sent! I'll get back to you.</> : <><Send className="w-5 h-5" /> Send Message</>}</button>
           </form>
         </div>
-        <div className="flex justify-center gap-4 mt-8">{[{ icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" }, { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" }, { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" }, { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className={cn("p-3 rounded-xl transition-all hover:scale-110", isDark ? "bg-gray-800 text-gray-400 hover:text-white" : "bg-white text-gray-600 hover:text-gray-900 shadow-sm")} title={social.label}>{social.icon}</a>)}</div>
+        <div className="flex justify-center gap-4 mt-8">{[{ icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" }, { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" }, { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" }, { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className={cn("p-3 rounded-xl transition-all hover:scale-110", isDark ? "bg-gray-800 text-gray-400 hover:text-cyan-400" : "bg-white text-gray-600 hover:text-cyan-600 shadow-sm")} title={social.label}>{social.icon}</a>)}</div>
       </div>
     </div>
   );
@@ -1139,14 +1175,14 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
   const tabs = [
     { id: "general", label: "General", icon: <Settings className="w-4 h-4" /> },
     { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> },
-    { id: "wallpaper", label: "Wallpaper", icon: <Image className="w-4 h-4" /> },
+    { id: "wallpaper", label: "My Wallpapers", icon: <Image className="w-4 h-4" /> },
     { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> }
   ];
 
   const getVolumeIcon = () => {
-    if (volume === 0) return <VolumeX className={isDark ? "text-pink-400" : "text-pink-600"} />;
-    if (volume < 50) return <Volume1 className={isDark ? "text-pink-400" : "text-pink-600"} />;
-    return <Volume2 className={isDark ? "text-pink-400" : "text-pink-600"} />;
+    if (volume === 0) return <VolumeX className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
+    if (volume < 50) return <Volume1 className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
+    return <Volume2 className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1175,7 +1211,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
       <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
         <div className="space-y-1">
           {tabs.map((tab) => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={cn("w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors", activeTab === tab.id ? (isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white") : (isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"))}>
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={cn("w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors", activeTab === tab.id ? (isDark ? "bg-cyan-600 text-white" : "bg-cyan-500 text-white") : (isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"))}>
               {tab.icon}
               {tab.label}
             </button>
@@ -1185,7 +1221,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
       <div className="flex-1 p-6 overflow-auto">
         {activeTab === "general" && (
           <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>General Settings</h2>
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>System Settings</h2>
             <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -1194,22 +1230,23 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
                   </div>
                   <div>
                     <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Appearance</p>
-                    <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{isDark ? "Dark mode" : "Light mode"}</p>
+                    <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{isDark ? "Dark mode (my preference)" : "Light mode"}</p>
                   </div>
                 </div>
-                <button onClick={() => setIsDark(!isDark)} className={cn("w-14 h-8 rounded-full p-1 transition-colors", isDark ? "bg-blue-600" : "bg-gray-300")}>
+                <button onClick={() => setIsDark(!isDark)} className={cn("w-14 h-8 rounded-full p-1 transition-colors", isDark ? "bg-cyan-600" : "bg-gray-300")}>
                   <motion.div animate={{ x: isDark ? 24 : 0 }} className="w-6 h-6 rounded-full bg-white shadow-md" />
                 </button>
               </div>
             </div>
             <div className={cn("p-4 rounded-xl mt-4", isDark ? "bg-gray-800" : "bg-white")}>
               <div className="flex items-center gap-4">
-                <div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}>
-                  <Info className={isDark ? "text-green-400" : "text-green-600"} />
+                <div className={cn("p-3 rounded-lg", isDark ? "bg-cyan-500/20" : "bg-cyan-100")}>
+                  <Info className={isDark ? "text-cyan-400" : "text-cyan-600"} />
                 </div>
                 <div>
-                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>About System</p>
-                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>CyberOS v3.0 - Built by Aayush Timalsina</p>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>About This System</p>
+                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>CyberOS v3.0 — Handcrafted by Aayush Timalsina</p>
+                  <p className={cn("text-xs mt-1", isDark ? "text-gray-500" : "text-gray-400")}>Built with React, TypeScript, and too much coffee ☕</p>
                 </div>
               </div>
             </div>
@@ -1217,7 +1254,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
         )}
         {activeTab === "display" && (
           <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Display Settings</h2>
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Display</h2>
             <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
               <div className="flex items-center gap-4 mb-4">
                 <div className={cn("p-3 rounded-lg", isDark ? "bg-yellow-500/20" : "bg-yellow-100")}>
@@ -1228,20 +1265,23 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
                   <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{brightness}%</p>
                 </div>
               </div>
-              <input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" />
+              <input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full accent-cyan-500" />
             </div>
           </div>
         )}
         {activeTab === "wallpaper" && (
           <div className="max-w-4xl">
             <div className="flex items-center justify-between mb-6">
-              <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2>
+              <div>
+                <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>My Wallpapers</h2>
+                <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{allWallpapers.length} total • {customWallpapers.length} uploaded by me</p>
+              </div>
               <button 
                 onClick={() => fileInputRef.current?.click()} 
-                className={cn("px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors", isDark ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white")}
+                className={cn("px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors", isDark ? "bg-cyan-600 hover:bg-cyan-700 text-white" : "bg-cyan-500 hover:bg-cyan-600 text-white")}
               >
                 <Plus className="w-4 h-4" />
-                Upload Custom
+                Upload My Own
               </button>
               <input 
                 ref={fileInputRef}
@@ -1253,14 +1293,19 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {allWallpapers.map((wallpaper: any) => (
-                <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-blue-500" : "")}>
+                <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-cyan-500" : "")}>
                   <img src={wallpaper.thumbnail} alt={wallpaper.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <span className="text-white font-medium text-sm px-2 text-center">{wallpaper.name}</span>
                   </div>
                   {currentWallpaper === wallpaper.url && (
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                  {wallpaper.id.startsWith('custom-') && (
+                    <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-xs text-white">
+                      My Upload
                     </div>
                   )}
                 </button>
@@ -1270,7 +1315,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
         )}
         {activeTab === "sound" && (
           <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Sound Settings</h2>
+            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Sound</h2>
             <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
               <div className="flex items-center gap-4 mb-4">
                 <div className={cn("p-3 rounded-lg", isDark ? "bg-pink-500/20" : "bg-pink-100")}>
@@ -1281,7 +1326,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
                   <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{volume}%</p>
                 </div>
               </div>
-              <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full" />
+              <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-cyan-500" />
             </div>
           </div>
         )}
@@ -1293,11 +1338,11 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
 const FinderWindow = ({ isDark }: { isDark: boolean }) => (
   <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
     <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
-      <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-gray-500" : "text-gray-400")}>Favorites</p>
-      {["Desktop", "Documents", "Downloads", "Projects"].map((item) => <button key={item} className={cn("w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2", isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200")}><FolderOpen className="w-4 h-4" />{item}</button>)}
+      <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-cyan-400" : "text-cyan-600")}>My Stuff</p>
+      {["Desktop", "Documents", "Downloads", "Projects", "CTF Writeups"].map((item) => <button key={item} className={cn("w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2", isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200")}><FolderOpen className="w-4 h-4" />{item}</button>)}
     </div>
     <div className="flex-1 p-6">
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">{[{ name: "Documents", icon: <FileText className="w-8 h-8 text-blue-500" />, items: 12 }, { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: 4 }, { name: "Images", icon: <Image className="w-8 h-8 text-purple-500" />, items: 8 }, { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: 24 }, { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: 6 }, { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: 15 }].map((folder) => <motion.button key={folder.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"><div className="mb-2">{folder.icon}</div><span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{folder.name}</span><span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>{folder.items} items</span></motion.button>)}</div>
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">{[{ name: "Documents", icon: <FileText className="w-8 h-8 text-cyan-500" />, items: "12 files" }, { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: "4 folders" }, { name: "Screenshots", icon: <Image className="w-8 h-8 text-purple-500" />, items: "47 images" }, { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: "24 tracks" }, { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: "6 videos" }, { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: "15 items" }].map((folder) => <motion.button key={folder.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"><div className="mb-2">{folder.icon}</div><span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{folder.name}</span><span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>{folder.items}</span></motion.button>)}</div>
     </div>
   </div>
 );
@@ -1518,7 +1563,7 @@ function App() {
       case "Edit": return [{ label: "Undo", shortcut: "⌘Z", action: () => {} }, { label: "Redo", shortcut: "⌘⇧Z", action: () => {} }, { separator: true, label: "", action: () => {} }, { label: "Cut", shortcut: "⌘X", action: () => {} }, { label: "Copy", shortcut: "⌘C", action: () => {} }, { label: "Paste", shortcut: "⌘V", action: () => {} }, { separator: true, label: "", action: () => {} }, { label: "Preferences...", shortcut: "⌘,", action: () => openWindow("settings", "Settings") }];
       case "View": return [{ label: "Show Launchpad", shortcut: "F4", action: () => setShowLaunchpad(true) }, { separator: true, label: "", action: () => {} }, { label: "Enter Full Screen", shortcut: "⌃⌘F", action: () => activeWindow && maximizeWindow(activeWindow) }, { separator: true, label: "", action: () => {} }, { label: "Dark Mode", shortcut: "⌘⌥D", action: () => setIsDark(!isDark) }];
       case "Window": return [{ label: "Minimize", shortcut: "⌘M", action: () => activeWindow && minimizeWindow(activeWindow) }, { label: "Zoom", shortcut: "⌘⌥M", action: () => activeWindow && maximizeWindow(activeWindow) }, { separator: true, label: "", action: () => {} }, { label: "Bring All to Front", shortcut: "", action: () => { windows.forEach(w => bringToFront(w.id)); } }];
-      case "Help": return [{ label: "CyberOS Help", shortcut: "", action: () => openWindow("help", "CyberOS Help") }, { separator: true, label: "", action: () => {} }, { label: "Keyboard Shortcuts", shortcut: "", action: () => openWindow("shortcuts", "Keyboard Shortcuts") }, { separator: true, label: "", action: () => {} }, { label: "About CyberOS", shortcut: "", action: () => openWindow("about-os", "About CyberOS") }];
+      case "Help": return [{ label: "CyberOS Help", shortcut: "", action: () => openWindow("help", "CyberOS Help") }, { separator: true, label: "", action: () => {} }, { label: "Keyboard Shortcuts", shortcut: "", action: () => openWindow("shortcuts", "Keyboard Shortcuts") }, { separator: true, label: "", action: () => {} }, { label: "About This Mac... wait, About Me", shortcut: "", action: () => openWindow("about-os", "About CyberOS") }];
       default: return [];
     }
   };
@@ -1568,13 +1613,13 @@ function App() {
     }
   };
 
-  const dockItems = [{ id: "finder", icon: <LayoutGrid className="w-6 h-6" />, label: "Finder" }, { id: "terminal", icon: <Terminal className="w-6 h-6" />, label: "Terminal" }, { id: "about", icon: <User className="w-6 h-6" />, label: "About" }, { id: "projects", icon: <FolderOpen className="w-6 h-6" />, label: "Projects" }, { id: "skills", icon: <Code className="w-6 h-6" />, label: "Skills" }, { id: "contact", icon: <Mail className="w-6 h-6" />, label: "Contact" }, { id: "settings", icon: <Settings className="w-6 h-6" />, label: "Settings" }];
+  const dockItems = [{ id: "finder", icon: <LayoutGrid className="w-6 h-6" />, label: "Finder" }, { id: "terminal", icon: <Terminal className="w-6 h-6" />, label: "Terminal" }, { id: "about", icon: <User className="w-6 h-6" />, label: "About Me" }, { id: "projects", icon: <FolderOpen className="w-6 h-6" />, label: "My Projects" }, { id: "skills", icon: <Code className="w-6 h-6" />, label: "Skills" }, { id: "contact", icon: <Mail className="w-6 h-6" />, label: "Contact" }, { id: "settings", icon: <Settings className="w-6 h-6" />, label: "Settings" }];
 
-  const launchpadItems = [{ id: "finder", icon: <LayoutGrid className="w-8 h-8" />, label: "Finder", color: "from-blue-500 to-blue-600" }, { id: "terminal", icon: <Terminal className="w-8 h-8" />, label: "Terminal", color: "from-gray-700 to-gray-800" }, { id: "about", icon: <User className="w-8 h-8" />, label: "About", color: "from-purple-500 to-purple-600" }, { id: "projects", icon: <FolderOpen className="w-8 h-8" />, label: "Projects", color: "from-yellow-500 to-orange-500" }, { id: "skills", icon: <Code className="w-8 h-8" />, label: "Skills", color: "from-green-500 to-emerald-600" }, { id: "contact", icon: <Mail className="w-8 h-8" />, label: "Contact", color: "from-red-500 to-pink-600" }, { id: "settings", icon: <Settings className="w-8 h-8" />, label: "Settings", color: "from-gray-500 to-gray-600" }, { id: "calculator", icon: <Calculator className="w-8 h-8" />, label: "Calculator", color: "from-orange-500 to-red-500" }, { id: "calendar", icon: <Calendar className="w-8 h-8" />, label: "Calendar", color: "from-red-500 to-red-600" }, { id: "notes", icon: <FileText className="w-8 h-8" />, label: "Notes", color: "from-yellow-400 to-yellow-500" }];
+  const launchpadItems = [{ id: "finder", icon: <LayoutGrid className="w-8 h-8" />, label: "Finder", color: "from-cyan-500 to-blue-600" }, { id: "terminal", icon: <Terminal className="w-8 h-8" />, label: "Terminal", color: "from-gray-700 to-gray-800" }, { id: "about", icon: <User className="w-8 h-8" />, label: "About Me", color: "from-purple-500 to-purple-600" }, { id: "projects", icon: <FolderOpen className="w-8 h-8" />, label: "Projects", color: "from-yellow-500 to-orange-500" }, { id: "skills", icon: <Code className="w-8 h-8" />, label: "Skills", color: "from-green-500 to-emerald-600" }, { id: "contact", icon: <Mail className="w-8 h-8" />, label: "Contact", color: "from-red-500 to-pink-600" }, { id: "settings", icon: <Settings className="w-8 h-8" />, label: "Settings", color: "from-gray-500 to-gray-600" }, { id: "calculator", icon: <Calculator className="w-8 h-8" />, label: "Calculator", color: "from-orange-500 to-red-500" }, { id: "calendar", icon: <Calendar className="w-8 h-8" />, label: "Calendar", color: "from-red-500 to-red-600" }, { id: "notes", icon: <FileText className="w-8 h-8" />, label: "Notes", color: "from-yellow-400 to-yellow-500" }];
 
   return (
     <>
-      <style>{`.slider-container { position: relative; display: flex; align-items: center; } .cyber-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; outline: none; background: #374151; position: relative; } .cyber-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; } .cyber-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: white; border: none; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: pointer; margin-top: -6px; position: relative; z-index: 2; }`}</style>
+      <style>{`.slider-container { position: relative; display: flex; align-items: center; } input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; outline: none; background: #374151; } input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #06b6d4; border: none; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: pointer; margin-top: -6px; } input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #06b6d4; border: none; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: pointer; }`}</style>
       <AnimatePresence>
         {!isLoggedIn && <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />}
       </AnimatePresence>
@@ -1583,7 +1628,7 @@ function App() {
         <div className={cn("fixed inset-0 transition-opacity duration-500", isDark ? "bg-black/40" : "bg-white/20")} />
         <div className={cn("fixed top-0 left-0 right-0 h-8 flex items-center justify-between px-4 z-[100] backdrop-blur-md", isDark ? "bg-gray-900/80 text-white" : "bg-white/80 text-gray-900")}>
           <div className="flex items-center gap-4">
-            <Shield className="w-4 h-4 text-blue-500" />
+            <Shield className="w-4 h-4 text-cyan-500" />
             <span className="font-semibold text-sm">CyberOS</span>
             <div className="hidden md:flex items-center gap-3 text-sm">
               {["File", "Edit", "View", "Window", "Help"].map((menuName) => (
