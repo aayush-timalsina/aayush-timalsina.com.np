@@ -96,31 +96,31 @@ interface EditorState {
 const PROFILE_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/480347813_569555419398127_972680757615671058_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=dziFfm82pYkQ7kNvwFJNyrU&_nc_oc=AdnGHiO7a2zVBYjBJNqNjwdAmxJa8Syn2St16y5usHBzsh6hhgvTd1Yg4qxx6kf9fDM&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=FIRXfGn4xwDZQGPIbVzwwg&oh=00_AfsukNJBBKGMIFTH-ZlQhrHQLb0LIO1onoB49G1RljLQBA&oe=69960C19";
 const ABOUT_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/565717911_757399067280427_4804829451481773559_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wEZv58m8FD4Q7kNvwEBMUTM&_nc_oc=AdkvSmFOG6aDRZETa-P6EXC0c45-KP1UsQjPZ_R2eXPjZ1fzPcX1QNNiZmwHBFTzhZ0&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=NvsFZTZD3mElNoPgjO-DFA&oh=00_AfvOGPieAs-JcBHNTg-khTk1ISyQaRklAW-Rv7Kr4e35vA&oe=6995FF4B";
 const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80";
-
+// Replace WALLPAPERS with more curated selection
 const WALLPAPERS: Wallpaper[] = [
-  { id: "dark-abstract", name: "Midnight Coding", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
-  { id: "hack1", name: "My Hacker Setup", url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200&q=60" },
-  { id: "hack3", name: "Server Room Vibes", url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=60" },
+  { id: "aurora", name: "Aurora", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
+  { id: "neon-city", name: "Neon City", url: "https://images.unsplash.com/photo-1563089145-599997674d42?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1563089145-599997674d42?w=200&q=60" },
+  { id: "deep-space", name: "Deep Space", url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=200&q=60" },
 ];
 
 const PROJECTS: Project[] = [
-  { id: "1", title: "My First Security Lab", description: "Built this firewall setup myself. Learned IDS/IPS from scratch.", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80", skills: ["Firewall Config", "IDS/IPS", "Wireshark"], category: "Security" },
-  { id: "2", title: "Web App Pentest I Did", description: "Found SQLi and XSS bugs in test apps. Reported them ethically.", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80", skills: ["Burp Suite", "OWASP", "Report Writing"], category: "Web Security" },
-  { id: "3", title: "Network Traffic Analysis", description: "Spent nights analyzing packets. Found some weird stuff.", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80", skills: ["Wireshark", "TCPDump", "Analysis"], category: "Analysis" },
-  { id: "4", title: "Price Tampering Bug Hunt", description: "Found this bug in a local site. They fixed it and thanked me.", image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80", skills: ["Bug Bounty", "Ethical Disclosure", "Testing"], category: "Vulnerability" },
+  { id: "1", title: "Network Security Lab", description: "Configured firewalls and intrusion detection systems.", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80", skills: ["Firewall Configuration", "IDS/IPS Setup", "Vulnerability Scanning"], category: "Security" },
+  { id: "2", title: "Web Application Penetration Testing", description: "Conducted security assessments on web applications.", image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80", skills: ["OWASP Testing", "Burp Suite", "Vulnerability Reporting"], category: "Web Security" },
+  { id: "3", title: "Network Traffic Analysis", description: "Analyzed network traffic using Wireshark.", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80", skills: ["Wireshark Analysis", "Intrusion Detection", "Threat Hunting"], category: "Analysis" },
+  { id: "4", title: "Price Tampering Vulnerability", description: "Identified price tampering vulnerabilities in e-commerce.", image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80", skills: ["Vulnerability Assessment", "Penetration Testing", "Security Implementation"], category: "Vulnerability" },
 ];
 
 const SKILLS: Skill[] = [
-  { name: "Breaking Stuff (Ethically)", icon: <Target className="w-5 h-5" />, level: 85, category: "What I Do" },
-  { name: "Finding Threats", icon: <Eye className="w-5 h-5" />, level: 80, category: "What I Do" },
-  { name: "NMAP (my go-to)", icon: <Scan className="w-5 h-5" />, level: 90, category: "Tools I Use" },
-  { name: "Wireshark (packet nerd)", icon: <Activity className="w-5 h-5" />, level: 75, category: "Tools I Use" },
-  { name: "Burp Suite (web stuff)", icon: <Bug className="w-5 h-5" />, level: 70, category: "Tools I Use" },
-  { name: "Python (scripting)", icon: <Code className="w-5 h-5" />, level: 65, category: "Languages" },
-  { name: "Bash (terminal life)", icon: <Terminal className="w-5 h-5" />, level: 70, category: "Languages" },
-  { name: "Linux (daily driver)", icon: <TerminalSquare className="w-5 h-5" />, level: 85, category: "Systems" },
-  { name: "Kali Linux (hacking)", icon: <Shield className="w-5 h-5" />, level: 80, category: "Systems" },
-  { name: "Metasploit (learning)", icon: <Zap className="w-5 h-5" />, level: 60, category: "Tools I Use" },
+  { name: "Penetration Testing", icon: <Target className="w-5 h-5" />, level: 85, category: "Core" },
+  { name: "Threat Detection", icon: <Eye className="w-5 h-5" />, level: 80, category: "Core" },
+  { name: "NMAP", icon: <Scan className="w-5 h-5" />, level: 90, category: "Tools" },
+  { name: "Wireshark", icon: <Activity className="w-5 h-5" />, level: 75, category: "Tools" },
+  { name: "Burp Suite", icon: <Bug className="w-5 h-5" />, level: 70, category: "Tools" },
+  { name: "Python", icon: <Code className="w-5 h-5" />, level: 65, category: "Languages" },
+  { name: "Bash", icon: <Terminal className="w-5 h-5" />, level: 70, category: "Languages" },
+  { name: "Linux", icon: <TerminalSquare className="w-5 h-5" />, level: 85, category: "Systems" },
+  { name: "Kali Linux", icon: <Shield className="w-5 h-5" />, level: 80, category: "Systems" },
+  { name: "Metasploit", icon: <Zap className="w-5 h-5" />, level: 60, category: "Tools" },
 ];
 
 const cn = (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(" ");
@@ -1028,65 +1028,250 @@ const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
 // ============================================
 
 const AboutWindow = ({ isDark }: { isDark: boolean }) => (
-  <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-6 mb-8">
-        <ProfileImage src={ABOUT_IMAGE} size="w-32 h-32" rounded="rounded-2xl" fallbackSize="w-16 h-16" />
-        <div>
-          <h1 className={cn("text-3xl font-bold mb-2", isDark ? "text-white" : "text-gray-900")}>Hey, I'm Aayush 👋</h1>
-          <p className={cn("text-lg mb-2", isDark ? "text-cyan-400" : "text-cyan-600")}>17 y/o cybersecurity nerd from Nepal 🇳🇵</p>
-          <div className="flex items-center gap-2 text-sm"><MapPin className="w-4 h-4" /><span className={isDark ? "text-gray-400" : "text-gray-600"}>Chitwan, Nepal • Available for gigs</span></div>
+  <div className={cn("h-full overflow-auto", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+    {/* Hero Section - No box, just floating content */}
+    <div className="relative h-64 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-fuchsia-600/20 to-cyan-600/20" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center">
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-white/10 shadow-2xl"
+          >
+            <ProfileImage src={ABOUT_IMAGE} size="w-full h-full" rounded="rounded-full" fallbackSize="w-12 h-12" />
+          </motion.div>
+          <h1 className={cn("text-3xl font-bold", isDark ? "text-white" : "text-gray-900")}>Aayush Timalsina</h1>
+          <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Security Researcher • 17 • Nepal 🇳🇵</p>
         </div>
       </div>
-      
-      <div className={cn("rounded-xl p-6 mb-6 border-l-4 border-cyan-500", isDark ? "bg-gray-800" : "bg-white")}>
-        <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>My Story</h2>
-        <p className={cn("leading-relaxed mb-4", isDark ? "text-gray-300" : "text-gray-600")}>
-          Started hacking (legally) when I was 15. Broke my own router first, then moved to CTFs. 
-          Now I'm building this OS portfolio because why not? If I can break systems, I can build them too.
+    </div>
+
+    {/* Floating cards - No borders, just subtle shadows */}
+    <div className="max-w-2xl mx-auto px-6 -mt-8 relative z-10 space-y-4">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        className={cn("p-6 rounded-2xl shadow-xl backdrop-blur-xl", isDark ? "bg-white/5" : "bg-white/80")}
+      >
+        <p className={cn("leading-relaxed", isDark ? "text-gray-300" : "text-gray-700")}>
+          I break things to understand them. Started with my home router at 15, now doing CTFs and building this OS portfolio from scratch. No templates, just React + TypeScript + curiosity.
         </p>
-        <p className={cn("leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>
-          Currently in Class 12 at Skyrider College. Spending my nights learning Rust and doing HTB boxes. 
-          This entire OS? Coded it myself with React + TypeScript. No templates, no BS.
-        </p>
+      </motion.div>
+
+      {/* Stats - Minimal, no boxes */}
+      <div className="flex justify-center gap-8 py-4">
+        {[{ n: "4+", l: "Projects" }, { n: "15+", l: "CTFs" }, { n: "7", l: "Bugs" }].map((s, i) => (
+          <motion.div 
+            key={s.l}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 + i * 0.1 }}
+            className="text-center"
+          >
+            <div className={cn("text-2xl font-bold bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent", isDark ? "" : "from-violet-600 to-fuchsia-600")}>{s.n}</div>
+            <div className={cn("text-xs uppercase tracking-wider", isDark ? "text-gray-500" : "text-gray-500")}>{s.l}</div>
+          </motion.div>
+        ))}
       </div>
 
-      <div className={cn("rounded-xl p-6 mb-6", isDark ? "bg-gray-800" : "bg-white")}>
-        <h2 className={cn("text-xl font-semibold mb-4", isDark ? "text-white" : "text-gray-900")}>Quick Stats</h2>
-        <div className="grid grid-cols-3 gap-4">
-          {[{ label: "Projects", value: "4+", icon: <FolderOpen className="w-5 h-5" />, note: "Built" }, { label: "CTFs", value: "15+", icon: <Target className="w-5 h-5" />, note: "Played" }, { label: "Bugs", value: "7", icon: <Bug className="w-5 h-5" />, note: "Found" }].map((stat) => (
-            <div key={stat.label} className={cn("text-center p-4 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>
-              <div className={cn("flex justify-center mb-2", isDark ? "text-cyan-400" : "text-cyan-600")}>{stat.icon}</div>
-              <div className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>{stat.value}</div>
-              <div className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{stat.label}</div>
-              <div className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-500")}>{stat.note}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={cn("rounded-xl p-4 text-center", isDark ? "bg-cyan-900/20 border border-cyan-800" : "bg-cyan-50 border border-cyan-200")}>
-        <p className={cn("text-sm italic", isDark ? "text-cyan-300" : "text-cyan-700")}>
-          "Break things to make them stronger" — my motto
-        </p>
+      {/* Skills - Floating pills, no boxes */}
+      <div className="flex flex-wrap justify-center gap-2">
+        {["Penetration Testing", "Wireshark", "Burp Suite", "Python", "React", "TypeScript"].map((skill, i) => (
+          <motion.span
+            key={skill}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3 + i * 0.05 }}
+            className={cn("px-3 py-1 rounded-full text-xs font-medium", isDark ? "bg-white/10 text-gray-300" : "bg-gray-200 text-gray-700")}
+          >
+            {skill}
+          </motion.span>
+        ))}
       </div>
     </div>
   </div>
 );
 
 const ProjectsWindow = ({ isDark }: { isDark: boolean }) => (
+  <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+    <div className="max-w-4xl mx-auto">
+      <h1 className={cn("text-2xl font-light mb-6", isDark ? "text-white" : "text-gray-900")}>Selected Work</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {PROJECTS.map((project, i) => (
+          <motion.div
+            key={project.id}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: i * 0.1 }}
+            className={cn("group relative overflow-hidden rounded-2xl cursor-pointer", isDark ? "bg-white/5" : "bg-white")}
+          >
+            {/* Image with overlay gradient */}
+            <div className="h-48 overflow-hidden">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            </div>
+            
+            {/* Floating text over image */}
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <span className="text-xs font-medium text-violet-400 uppercase tracking-wider">{project.category}</span>
+              <h3 className="text-lg font-semibold text-white mt-1">{project.title}</h3>
+              <p className="text-sm text-gray-300 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">{project.description}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const SkillsWindow = ({ isDark }: { isDark: boolean }) => (
+  <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+    <div className="max-w-2xl mx-auto">
+      <h1 className={cn("text-2xl font-light mb-8", isDark ? "text-white" : "text-gray-900")}>Capabilities</h1>
+      
+      <div className="space-y-6">
+        {SKILLS.map((skill, i) => (
+          <motion.div
+            key={skill.name}
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: i * 0.05 }}
+            className="group"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{skill.name}</span>
+              <span className="text-xs text-gray-500">{skill.level}%</span>
+            </div>
+            <div className={cn("h-1.5 rounded-full overflow-hidden", isDark ? "bg-white/10" : "bg-gray-200")}>
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${skill.level}%` }}
+                transition={{ duration: 1, delay: 0.3 + i * 0.05 }}
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const ContactWindow = ({ isDark }: { isDark: boolean }) => {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsSubmitting(false);
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <div className={cn("h-full overflow-auto", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+      {/* Gradient header */}
+      <div className="h-48 bg-gradient-to-br from-violet-600/20 via-fuchsia-600/20 to-cyan-600/20 flex items-center justify-center">
+        <h1 className={cn("text-3xl font-light", isDark ? "text-white" : "text-gray-900")}>Let's Talk</h1>
+      </div>
+
+      <div className="max-w-md mx-auto px-6 -mt-16 relative z-10">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={cn("p-6 rounded-2xl shadow-2xl backdrop-blur-xl", isDark ? "bg-white/5" : "bg-white/90")}
+        >
+          {submitted ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-white" />
+              </div>
+              <p className={cn("text-lg", isDark ? "text-white" : "text-gray-900")}>Message sent!</p>
+              <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>I'll get back to you soon.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <input 
+                  type="text" 
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className={cn("w-full px-4 py-3 rounded-xl outline-none transition-all border-0", isDark ? "bg-white/10 text-white placeholder-gray-500 focus:bg-white/15" : "bg-gray-100 text-gray-900 placeholder-gray-400 focus:bg-gray-200")}
+                  required
+                />
+              </div>
+              <div>
+                <input 
+                  type="email" 
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className={cn("w-full px-4 py-3 rounded-xl outline-none transition-all border-0", isDark ? "bg-white/10 text-white placeholder-gray-500 focus:bg-white/15" : "bg-gray-100 text-gray-900 placeholder-gray-400 focus:bg-gray-200")}
+                  required
+                />
+              </div>
+              <div>
+                <textarea 
+                  placeholder="What's on your mind?"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={4}
+                  className={cn("w-full px-4 py-3 rounded-xl outline-none transition-all border-0 resize-none", isDark ? "bg-white/10 text-white placeholder-gray-500 focus:bg-white/15" : "bg-gray-100 text-gray-900 placeholder-gray-400 focus:bg-gray-200")}
+                  required
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-full py-3 rounded-xl font-medium text-white bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 transition-all disabled:opacity-50"
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </button>
+            </form>
+          )}
+        </motion.div>
+
+        {/* Social links - minimal */}
+        <div className="flex justify-center gap-6 mt-8">
+          {[{ icon: <Github className="w-5 h-5" />, href: "https://github.com/" }, { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c" }, { icon: <Mail className="w-5 h-5" />, href: "mailto:aayushtimalsina789@gmail.com" }].map((social, i) => (
+            <motion.a
+              key={i}
+              href={social.href}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.3 + i * 0.1 }}
+              className={cn("p-3 rounded-full transition-all", isDark ? "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white" : "bg-gray-200 text-gray-600 hover:bg-gray-300")}
+            >
+              {social.icon}
+            </motion.a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProjectsWindow = ({ isDark }: { isDark: boolean }) => (
   <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
     <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>Stuff I've Built 🛠️</h1>
-        <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Real projects, real learning, real mistakes.</p>
-      </div>
+      <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>My Projects <span className="text-sm font-normal opacity-60">- Built with my own hands</span></h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {PROJECTS.map((project) => (
           <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={cn("rounded-xl overflow-hidden group cursor-pointer", isDark ? "bg-gray-800" : "bg-white shadow-lg")}>
             <div className="h-40 overflow-hidden"><img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" /></div>
             <div className="p-4">
-              <span className={cn("text-xs font-medium px-2 py-1 rounded-full", isDark ? "bg-cyan-500/20 text-cyan-400" : "bg-cyan-100 text-cyan-700")}>{project.category}</span>
+              <span className={cn("text-xs font-medium px-2 py-1 rounded-full", isDark ? "bg-blue-500/20 text-blue-400" : "bg-blue-100 text-blue-600")}>{project.category}</span>
               <h3 className={cn("font-semibold mt-2 mb-2", isDark ? "text-white" : "text-gray-900")}>{project.title}</h3>
               <p className={cn("text-sm mb-3 line-clamp-2", isDark ? "text-gray-400" : "text-gray-600")}>{project.description}</p>
               <div className="flex flex-wrap gap-1">{project.skills.slice(0, 3).map((skill) => <span key={skill} className={cn("text-xs px-2 py-1 rounded", isDark ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-600")}>{skill}</span>)}</div>
@@ -1101,21 +1286,18 @@ const ProjectsWindow = ({ isDark }: { isDark: boolean }) => (
 const SkillsWindow = ({ isDark }: { isDark: boolean }) => (
   <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
     <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>What I'm Good At 💪</h1>
-        <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Self-taught. Self-motivated. Still learning.</p>
-      </div>
+      <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>Technical Skills <span className="text-sm font-normal opacity-60">- Self-taught & practiced</span></h1>
       <div className="space-y-6">
         {Array.from(new Set(SKILLS.map(s => s.category))).map((category) => (
           <div key={category}>
-            <h2 className={cn("text-lg font-semibold mb-4", isDark ? "text-cyan-400" : "text-cyan-700")}>{category}</h2>
+            <h2 className={cn("text-lg font-semibold mb-4", isDark ? "text-gray-300" : "text-gray-700")}>{category}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {SKILLS.filter(s => s.category === category).map((skill) => (
                 <div key={skill.name} className={cn("p-4 rounded-xl flex items-center gap-4", isDark ? "bg-gray-800" : "bg-white shadow-sm")}>
                   <div className={cn("p-3 rounded-lg", isDark ? "bg-gray-700" : "bg-gray-100")}>{skill.icon}</div>
                   <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2"><span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{skill.name}</span><span className={cn("text-sm", isDark ? "text-cyan-400" : "text-cyan-600")}>{skill.level}%</span></div>
-                    <div className={cn("h-2 rounded-full overflow-hidden", isDark ? "bg-gray-700" : "bg-gray-200")}><motion.div initial={{ width: 0 }} animate={{ width: `${skill.level}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" /></div>
+                    <div className="flex items-center justify-between mb-2"><span className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>{skill.name}</span><span className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{skill.level}%</span></div>
+                    <div className={cn("h-2 rounded-full overflow-hidden", isDark ? "bg-gray-700" : "bg-gray-200")}><motion.div initial={{ width: 0 }} animate={{ width: `${skill.level}%` }} transition={{ duration: 1, delay: 0.2 }} className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" /></div>
                   </div>
                 </div>
               ))}
@@ -1143,23 +1325,20 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
   return (
     <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
       <div className="max-w-2xl mx-auto">
-        <div className="mb-6">
-          <h1 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>Hit Me Up 📩</h1>
-          <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-600")}>Got a project? Want to collab? Just wanna say hi? I'm around.</p>
-        </div>
+        <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>Get In Touch <span className="text-sm font-normal opacity-60">- I built this contact form too!</span></h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <a href="mailto:aayushtimalsina789@gmail.com" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-cyan-500/20" : "bg-cyan-100")}><Mail className={isDark ? "text-cyan-400" : "text-cyan-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email me at</p><p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>aayushtimalsina789@gmail.com</p></div></a>
-          <a href="tel:+9779845242492" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}><Phone className={isDark ? "text-green-400" : "text-green-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Call/text me</p><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>+977 9845242492</p></div></a>
+          <a href="mailto:aayushtimalsina789@gmail.com" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-blue-500/20" : "bg-blue-100")}><Mail className={isDark ? "text-blue-400" : "text-blue-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email</p><p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>aayushtimalsina789@gmail.com</p></div></a>
+          <a href="tel:+9779845242492" className={cn("p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105", isDark ? "bg-gray-800" : "bg-white shadow-sm")}><div className={cn("p-3 rounded-lg", isDark ? "bg-green-500/20" : "bg-green-100")}><Phone className={isDark ? "text-green-400" : "text-green-600"} /></div><div><p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Phone</p><p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>+977 9845242492</p></div></a>
         </div>
         <div className={cn("rounded-xl p-6", isDark ? "bg-gray-800" : "bg-white shadow-lg")}>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Your Name</label><input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Who are you?" required /></div>
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Your Email</label><input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="your@email.com" required /></div>
-            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>What's up?</label><textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={4} className={cn("w-full px-4 py-3 rounded-lg outline-none resize-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Tell me about your project, idea, or just say hi..." required /></div>
-            <button type="submit" disabled={isSubmitting} className={cn("w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2", isDark ? "bg-cyan-600 text-white hover:bg-cyan-700" : "bg-cyan-500 text-white hover:bg-cyan-600")}>{isSubmitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : submitted ? <><CheckCircle className="w-5 h-5" /> Sent! I'll get back to you.</> : <><Send className="w-5 h-5" /> Send Message</>}</button>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Name</label><input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Your name" required /></div>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Email</label><input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={cn("w-full px-4 py-3 rounded-lg outline-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="your@email.com" required /></div>
+            <div><label className={cn("block text-sm font-medium mb-2", isDark ? "text-gray-300" : "text-gray-700")}>Message</label><textarea value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={4} className={cn("w-full px-4 py-3 rounded-lg outline-none resize-none", isDark ? "bg-gray-700 text-white border border-gray-600" : "bg-gray-50 text-gray-900 border border-gray-200")} placeholder="Your message..." required /></div>
+            <button type="submit" disabled={isSubmitting} className={cn("w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2", isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white")}>{isSubmitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : submitted ? <><CheckCircle className="w-5 h-5" /> Sent!</> : <><Send className="w-5 h-5" /> Send Message</>}</button>
           </form>
         </div>
-        <div className="flex justify-center gap-4 mt-8">{[{ icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" }, { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" }, { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" }, { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className={cn("p-3 rounded-xl transition-all hover:scale-110", isDark ? "bg-gray-800 text-gray-400 hover:text-cyan-400" : "bg-white text-gray-600 hover:text-cyan-600 shadow-sm")} title={social.label}>{social.icon}</a>)}</div>
+        <div className="flex justify-center gap-4 mt-8">{[{ icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" }, { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" }, { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" }, { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className={cn("p-3 rounded-xl transition-all hover:scale-110", isDark ? "bg-gray-800 text-gray-400 hover:text-white" : "bg-white text-gray-600 hover:text-gray-900 shadow-sm")} title={social.label}>{social.icon}</a>)}</div>
       </div>
     </div>
   );
@@ -1169,21 +1348,14 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
 // PART 2 ENDS HERE - Continue to Part 3
 // ============================================
 const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, setVolume, currentWallpaper, setCurrentWallpaper, customWallpapers, setCustomWallpapers }: any) => {
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState("appearance");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const tabs = [
-    { id: "general", label: "General", icon: <Settings className="w-4 h-4" /> },
-    { id: "display", label: "Display", icon: <Monitor className="w-4 h-4" /> },
-    { id: "wallpaper", label: "My Wallpapers", icon: <Image className="w-4 h-4" /> },
-    { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> }
-  ];
 
-  const getVolumeIcon = () => {
-    if (volume === 0) return <VolumeX className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
-    if (volume < 50) return <Volume1 className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
-    return <Volume2 className={isDark ? "text-cyan-400" : "text-cyan-600"} />;
-  };
+  const tabs = [
+    { id: "appearance", label: "Appearance", icon: <Monitor className="w-4 h-4" /> },
+    { id: "wallpaper", label: "Wallpaper", icon: <Image className="w-4 h-4" /> },
+    { id: "sound", label: "Sound", icon: <Volume2 className="w-4 h-4" /> },
+  ];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1191,13 +1363,7 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
       const reader = new FileReader();
       reader.onload = (event) => {
         const url = event.target?.result as string;
-        const newWallpaper = {
-          id: `custom-${Date.now()}`,
-          name: file.name.replace(/\.[^/.]+$/, ""),
-          url: url,
-          thumbnail: url
-        };
-        setCustomWallpapers([...customWallpapers, newWallpaper]);
+        setCustomWallpapers([...customWallpapers, { id: `custom-${Date.now()}`, name: file.name.replace(/\.[^/.]+$/, ""), url, thumbnail: url }]);
         setCurrentWallpaper(url);
       };
       reader.readAsDataURL(file);
@@ -1207,126 +1373,111 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
   const allWallpapers = [...WALLPAPERS, ...customWallpapers];
 
   return (
-    <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
-      <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+    <div className={cn("h-full flex", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+      {/* Sidebar - minimal */}
+      <div className="w-56 p-4">
         <div className="space-y-1">
           {tabs.map((tab) => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={cn("w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors", activeTab === tab.id ? (isDark ? "bg-cyan-600 text-white" : "bg-cyan-500 text-white") : (isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"))}>
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all",
+                activeTab === tab.id
+                  ? isDark ? "bg-white/10 text-white" : "bg-gray-900 text-white"
+                  : isDark ? "text-gray-400 hover:text-white hover:bg-white/5" : "text-gray-600 hover:bg-gray-200"
+              )}
+            >
               {tab.icon}
               {tab.label}
             </button>
           ))}
         </div>
       </div>
+
+      {/* Content */}
       <div className="flex-1 p-6 overflow-auto">
-        {activeTab === "general" && (
-          <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>System Settings</h2>
-            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
+        {activeTab === "appearance" && (
+          <div className="max-w-md">
+            <h2 className={cn("text-xl font-light mb-6", isDark ? "text-white" : "text-gray-900")}>Appearance</h2>
+            
+            <div className={cn("p-4 rounded-2xl mb-4", isDark ? "bg-white/5" : "bg-white")}>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className={cn("p-3 rounded-lg", isDark ? "bg-purple-500/20" : "bg-purple-100")}>
-                    {isDark ? <Moon className="text-purple-400" /> : <Sun className="text-purple-600" />}
-                  </div>
-                  <div>
-                    <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Appearance</p>
-                    <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{isDark ? "Dark mode (my preference)" : "Light mode"}</p>
-                  </div>
+                <div>
+                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Dark Mode</p>
+                  <p className={cn("text-sm", isDark ? "text-gray-500" : "text-gray-500")}>Easier on the eyes</p>
                 </div>
-                <button onClick={() => setIsDark(!isDark)} className={cn("w-14 h-8 rounded-full p-1 transition-colors", isDark ? "bg-cyan-600" : "bg-gray-300")}>
-                  <motion.div animate={{ x: isDark ? 24 : 0 }} className="w-6 h-6 rounded-full bg-white shadow-md" />
+                <button
+                  onClick={() => setIsDark(!isDark)}
+                  className={cn("w-12 h-6 rounded-full p-1 transition-colors", isDark ? "bg-violet-600" : "bg-gray-300")}
+                >
+                  <motion.div animate={{ x: isDark ? 24 : 0 }} className="w-4 h-4 rounded-full bg-white shadow-md" />
                 </button>
               </div>
             </div>
-            <div className={cn("p-4 rounded-xl mt-4", isDark ? "bg-gray-800" : "bg-white")}>
-              <div className="flex items-center gap-4">
-                <div className={cn("p-3 rounded-lg", isDark ? "bg-cyan-500/20" : "bg-cyan-100")}>
-                  <Info className={isDark ? "text-cyan-400" : "text-cyan-600"} />
-                </div>
-                <div>
-                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>About This System</p>
-                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>CyberOS v3.0 — Handcrafted by Aayush Timalsina</p>
-                  <p className={cn("text-xs mt-1", isDark ? "text-gray-500" : "text-gray-400")}>Built with React, TypeScript, and too much coffee ☕</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {activeTab === "display" && (
-          <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Display</h2>
-            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
-              <div className="flex items-center gap-4 mb-4">
-                <div className={cn("p-3 rounded-lg", isDark ? "bg-yellow-500/20" : "bg-yellow-100")}>
-                  <Sun className={isDark ? "text-yellow-400" : "text-yellow-600"} />
-                </div>
-                <div>
-                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>Brightness</p>
-                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{brightness}%</p>
-                </div>
-              </div>
-              <input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full accent-cyan-500" />
-            </div>
-          </div>
-        )}
-        {activeTab === "wallpaper" && (
-          <div className="max-w-4xl">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className={cn("text-xl font-semibold", isDark ? "text-white" : "text-gray-900")}>My Wallpapers</h2>
-                <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{allWallpapers.length} total • {customWallpapers.length} uploaded by me</p>
-              </div>
-              <button 
-                onClick={() => fileInputRef.current?.click()} 
-                className={cn("px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors", isDark ? "bg-cyan-600 hover:bg-cyan-700 text-white" : "bg-cyan-500 hover:bg-cyan-600 text-white")}
-              >
-                <Plus className="w-4 h-4" />
-                Upload My Own
-              </button>
-              <input 
-                ref={fileInputRef}
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageUpload} 
-                className="hidden" 
+
+            <div className={cn("p-4 rounded-2xl", isDark ? "bg-white/5" : "bg-white")}>
+              <p className={cn("font-medium mb-3", isDark ? "text-white" : "text-gray-900")}>Brightness</p>
+              <input
+                type="range"
+                min="20"
+                max="100"
+                value={brightness}
+                onChange={(e) => setBrightness(Number(e.target.value))}
+                className="w-full accent-violet-500"
               />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {allWallpapers.map((wallpaper: any) => (
-                <button key={wallpaper.id} onClick={() => setCurrentWallpaper(wallpaper.url)} className={cn("relative rounded-xl overflow-hidden aspect-video group", currentWallpaper === wallpaper.url ? "ring-2 ring-cyan-500" : "")}>
-                  <img src={wallpaper.thumbnail} alt={wallpaper.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="text-white font-medium text-sm px-2 text-center">{wallpaper.name}</span>
+          </div>
+        )}
+
+        {activeTab === "wallpaper" && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={cn("text-xl font-light", isDark ? "text-white" : "text-gray-900")}>Wallpaper</h2>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 transition-all"
+              >
+                Upload
+              </button>
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {allWallpapers.map((wp: any) => (
+                <button
+                  key={wp.id}
+                  onClick={() => setCurrentWallpaper(wp.url)}
+                  className={cn("relative aspect-video rounded-2xl overflow-hidden group", currentWallpaper === wp.url ? "ring-2 ring-violet-500" : "")}
+                >
+                  <img src={wp.thumbnail} alt={wp.name} className="w-full h-full object-cover" />
+                  {currentWallpaper === wp.url && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <CheckCircle className="w-8 h-8 text-white" />
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
+                    <p className="text-xs text-white font-medium">{wp.name}</p>
                   </div>
-                  {currentWallpaper === wallpaper.url && (
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-                  {wallpaper.id.startsWith('custom-') && (
-                    <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 rounded text-xs text-white">
-                      My Upload
-                    </div>
-                  )}
                 </button>
               ))}
             </div>
           </div>
         )}
+
         {activeTab === "sound" && (
-          <div className="max-w-xl">
-            <h2 className={cn("text-xl font-semibold mb-6", isDark ? "text-white" : "text-gray-900")}>Sound</h2>
-            <div className={cn("p-4 rounded-xl", isDark ? "bg-gray-800" : "bg-white")}>
-              <div className="flex items-center gap-4 mb-4">
-                <div className={cn("p-3 rounded-lg", isDark ? "bg-pink-500/20" : "bg-pink-100")}>
-                  {getVolumeIcon()}
-                </div>
-                <div>
-                  <p className={cn("font-medium", isDark ? "text-white" : "text-gray-900")}>System Volume</p>
-                  <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>{volume}%</p>
-                </div>
-              </div>
-              <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-cyan-500" />
+          <div className="max-w-md">
+            <h2 className={cn("text-xl font-light mb-6", isDark ? "text-white" : "text-gray-900")}>Sound</h2>
+            <div className={cn("p-4 rounded-2xl", isDark ? "bg-white/5" : "bg-white")}>
+              <p className={cn("font-medium mb-3", isDark ? "text-white" : "text-gray-900")}>Volume</p>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                onChange={(e) => setVolume(Number(e.target.value))}
+                className="w-full accent-violet-500"
+              />
             </div>
           </div>
         )}
@@ -1336,13 +1487,72 @@ const SettingsWindow = ({ isDark, setIsDark, brightness, setBrightness, volume, 
 };
 
 const FinderWindow = ({ isDark }: { isDark: boolean }) => (
-  <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
-    <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
-      <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-cyan-400" : "text-cyan-600")}>My Stuff</p>
-      {["Desktop", "Documents", "Downloads", "Projects", "CTF Writeups"].map((item) => <button key={item} className={cn("w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2", isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200")}><FolderOpen className="w-4 h-4" />{item}</button>)}
+  <div className={cn("h-full flex", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+    <div className="w-48 p-4">
+      <p className={cn("text-xs font-medium uppercase tracking-wider mb-3 px-4", isDark ? "text-gray-500" : "text-gray-400")}>Favorites</p>
+      {["Desktop", "Documents", "Downloads", "Projects"].map((item) => (
+        <button key={item} className={cn("w-full text-left px-4 py-2 rounded-xl text-sm transition-colors", isDark ? "text-gray-400 hover:text-white hover:bg-white/5" : "text-gray-600 hover:bg-gray-200")}>
+          {item}
+        </button>
+      ))}
     </div>
     <div className="flex-1 p-6">
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">{[{ name: "Documents", icon: <FileText className="w-8 h-8 text-cyan-500" />, items: "12 files" }, { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: "4 folders" }, { name: "Screenshots", icon: <Image className="w-8 h-8 text-purple-500" />, items: "47 images" }, { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: "24 tracks" }, { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: "6 videos" }, { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: "15 items" }].map((folder) => <motion.button key={folder.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"><div className="mb-2">{folder.icon}</div><span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{folder.name}</span><span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>{folder.items}</span></motion.button>)}</div>
+      <div className="grid grid-cols-4 gap-4">
+        {[{ name: "Documents", icon: <FileText className="w-10 h-10" />, color: "text-blue-500" }, { name: "Projects", icon: <FolderOpen className="w-10 h-10" />, color: "text-yellow-500" }, { name: "Images", icon: <Image className="w-10 h-10" />, color: "text-purple-500" }].map((folder) => (
+          <motion.button key={folder.name} whileHover={{ scale: 1.05 }} className="flex flex-col items-center p-4 rounded-2xl transition-colors hover:bg-white/5">
+            <div className={folder.color}>{folder.icon}</div>
+            <span className={cn("text-sm mt-2", isDark ? "text-gray-300" : "text-gray-700")}>{folder.name}</span>
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+const CalculatorWindow = ({ isDark }: { isDark: boolean }) => {
+  const [display, setDisplay] = useState("0");
+  // ... rest of calculator logic
+
+  const buttons = [
+    { l: "C", c: "text-red-400" }, { l: "±", c: "" }, { l: "%", c: "" }, { l: "÷", c: "text-violet-400" },
+    { l: "7", c: "" }, { l: "8", c: "" }, { l: "9", c: "" }, { l: "×", c: "text-violet-400" },
+    { l: "4", c: "" }, { l: "5", c: "" }, { l: "6", c: "" }, { l: "-", c: "text-violet-400" },
+    { l: "1", c: "" }, { l: "2", c: "" }, { l: "3", c: "" }, { l: "+", c: "text-violet-400" },
+    { l: "0", c: "col-span-2" }, { l: ".", c: "" }, { l: "=", c: "text-violet-400" },
+  ];
+
+  return (
+    <div className={cn("h-full flex items-center justify-center p-6", isDark ? "bg-[#0a0a0f]" : "bg-gray-50")}>
+      <div className={cn("w-72 rounded-3xl p-4 shadow-2xl", isDark ? "bg-white/5" : "bg-white")}>
+        <div className={cn("text-right text-4xl font-light mb-4 px-2 py-4", isDark ? "text-white" : "text-gray-900")}>{display}</div>
+        <div className="grid grid-cols-4 gap-2">
+          {buttons.map((btn) => (
+            <button
+              key={btn.l}
+              className={cn(
+                "h-14 rounded-2xl text-lg font-medium transition-all",
+                btn.c.includes("col-span") ? "col-span-2" : "",
+                btn.c.includes("text") ? btn.c : isDark ? "text-white hover:bg-white/10" : "text-gray-900 hover:bg-gray-100",
+                btn.l === "=" ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:opacity-90" : ""
+              )}
+            >
+              {btn.l}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const FinderWindow = ({ isDark }: { isDark: boolean }) => (
+  <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
+    <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+      <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-gray-500" : "text-gray-400")}>Favorites</p>
+      {["Desktop", "Documents", "Downloads", "Projects"].map((item) => <button key={item} className={cn("w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2", isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200")}><FolderOpen className="w-4 h-4" />{item}</button>)}
+    </div>
+    <div className="flex-1 p-6">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">{[{ name: "Documents", icon: <FileText className="w-8 h-8 text-blue-500" />, items: 12 }, { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: 4 }, { name: "Images", icon: <Image className="w-8 h-8 text-purple-500" />, items: 8 }, { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: 24 }, { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: 6 }, { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: 15 }].map((folder) => <motion.button key={folder.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"><div className="mb-2">{folder.icon}</div><span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>{folder.name}</span><span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>{folder.items} items</span></motion.button>)}</div>
     </div>
   </div>
 );
@@ -1528,129 +1738,80 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
 // ============================================
 
 function App() {
-  const [isDark, setIsDark] = useState(true);
-  const [brightness, setBrightness] = useState(100);
-  const [volume, setVolume] = useState(70);
-  const [wifiEnabled, setWifiEnabled] = useState(true);
-  const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
-  const [currentWallpaper, setCurrentWallpaper] = useState(DEFAULT_WALLPAPER);
-  const [customWallpapers, setCustomWallpapers] = useState<Wallpaper[]>([]);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [activeWindow, setActiveWindow] = useState<string | null>(null);
-  const [showControlCenter, setShowControlCenter] = useState(false);
-  const [windows, setWindows] = useState<WindowState[]>([{
-    id: "terminal",
-    title: "Terminal",
-    type: "terminal",
-    isOpen: true,
-    isMinimized: false,
-    isMaximized: false,
-    zIndex: 1,
-    position: { x: 100, y: 50 },
-    size: { width: 800, height: 500 },
-  }]);
-  const [showLaunchpad, setShowLaunchpad] = useState(false);
-  const [zIndexCounter, setZIndexCounter] = useState(2);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 32 });
-
-  useEffect(() => { const timer = setInterval(() => setCurrentTime(new Date()), 1000); return () => clearInterval(timer); }, []);
-
-  const getMenuItems = (menuName: string) => {
-    switch (menuName) {
-      case "File": return [{ label: "New Terminal", shortcut: "⌘N", action: () => openWindow("terminal", "Terminal") }, { label: "New Finder Window", shortcut: "⌘⇧N", action: () => openWindow("finder", "Finder") }, { separator: true, label: "", action: () => {} }, { label: "Close Window", shortcut: "⌘W", action: () => activeWindow && closeWindow(activeWindow) }, { separator: true, label: "", action: () => {} }, { label: "Exit", shortcut: "⌘Q", action: () => window.location.reload() }];
-      case "Edit": return [{ label: "Undo", shortcut: "⌘Z", action: () => {} }, { label: "Redo", shortcut: "⌘⇧Z", action: () => {} }, { separator: true, label: "", action: () => {} }, { label: "Cut", shortcut: "⌘X", action: () => {} }, { label: "Copy", shortcut: "⌘C", action: () => {} }, { label: "Paste", shortcut: "⌘V", action: () => {} }, { separator: true, label: "", action: () => {} }, { label: "Preferences...", shortcut: "⌘,", action: () => openWindow("settings", "Settings") }];
-      case "View": return [{ label: "Show Launchpad", shortcut: "F4", action: () => setShowLaunchpad(true) }, { separator: true, label: "", action: () => {} }, { label: "Enter Full Screen", shortcut: "⌃⌘F", action: () => activeWindow && maximizeWindow(activeWindow) }, { separator: true, label: "", action: () => {} }, { label: "Dark Mode", shortcut: "⌘⌥D", action: () => setIsDark(!isDark) }];
-      case "Window": return [{ label: "Minimize", shortcut: "⌘M", action: () => activeWindow && minimizeWindow(activeWindow) }, { label: "Zoom", shortcut: "⌘⌥M", action: () => activeWindow && maximizeWindow(activeWindow) }, { separator: true, label: "", action: () => {} }, { label: "Bring All to Front", shortcut: "", action: () => { windows.forEach(w => bringToFront(w.id)); } }];
-      case "Help": return [{ label: "CyberOS Help", shortcut: "", action: () => openWindow("help", "CyberOS Help") }, { separator: true, label: "", action: () => {} }, { label: "Keyboard Shortcuts", shortcut: "", action: () => openWindow("shortcuts", "Keyboard Shortcuts") }, { separator: true, label: "", action: () => {} }, { label: "About This Mac... wait, About Me", shortcut: "", action: () => openWindow("about-os", "About CyberOS") }];
-      default: return [];
-    }
-  };
-
-  const handleMenuClick = (menuName: string, event: React.MouseEvent) => {
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    setMenuPosition({ x: rect.left, y: 32 });
-    setActiveMenu(activeMenu === menuName ? null : menuName);
-  };
-
-  const openWindow = (type: WindowState["type"], title: string) => {
-    const existing = windows.find((w) => w.type === type);
-    if (existing) {
-      if (existing.isMinimized) setWindows(prev => prev.map(w => w.type === type ? { ...w, isMinimized: false, zIndex: zIndexCounter } : w));
-      setActiveWindow(existing.id);
-      setZIndexCounter(prev => prev + 1);
-    } else {
-      const newWindow: WindowState = { id: `${type}-${Date.now()}`, title, type, isOpen: true, isMinimized: false, isMaximized: false, zIndex: zIndexCounter, position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 }, size: { width: 800, height: 500 } };
-      setWindows(prev => [...prev, newWindow]);
-      setZIndexCounter(prev => prev + 1);
-      setActiveWindow(newWindow.id);
-    }
-    setShowLaunchpad(false);
-  };
-
-  const closeWindow = (id: string) => { setWindows(prev => prev.filter(w => w.id !== id)); if (activeWindow === id) setActiveWindow(null); };
-  const minimizeWindow = (id: string) => { setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: true } : w)); setActiveWindow(null); };
-  const maximizeWindow = (id: string) => { setWindows(prev => prev.map(w => w.id === id ? { ...w, isMaximized: !w.isMaximized } : w)); };
-  const bringToFront = (id: string) => { setWindows(prev => prev.map(w => w.id === id ? { ...w, zIndex: zIndexCounter } : w)); setZIndexCounter(prev => prev + 1); setActiveWindow(id); };
-
-  const getWindowContent = (win: WindowState) => {
-    switch (win.type) {
-      case "terminal": return <TerminalWindow isDark={isDark} />;
-      case "about": return <AboutWindow isDark={isDark} />;
-      case "projects": return <ProjectsWindow isDark={isDark} />;
-      case "skills": return <SkillsWindow isDark={isDark} />;
-      case "contact": return <ContactWindow isDark={isDark} />;
-      case "settings": return <SettingsWindow isDark={isDark} setIsDark={setIsDark} brightness={brightness} setBrightness={setBrightness} volume={volume} setVolume={setVolume} currentWallpaper={currentWallpaper} setCurrentWallpaper={setCurrentWallpaper} customWallpapers={customWallpapers} setCustomWallpapers={setCustomWallpapers} />;
-      case "finder": return <FinderWindow isDark={isDark} />;
-      case "calculator": return <CalculatorWindow isDark={isDark} />;
-      case "calendar": return <CalendarWindow isDark={isDark} />;
-      case "notes": return <NotesWindow isDark={isDark} />;
-      case "help": return <HelpWindow isDark={isDark} />;
-      case "shortcuts": return <ShortcutsWindow isDark={isDark} />;
-      case "about-os": return <AboutOSWindow isDark={isDark} />;
-      default: return null;
-    }
-  };
-
-  const dockItems = [{ id: "finder", icon: <LayoutGrid className="w-6 h-6" />, label: "Finder" }, { id: "terminal", icon: <Terminal className="w-6 h-6" />, label: "Terminal" }, { id: "about", icon: <User className="w-6 h-6" />, label: "About Me" }, { id: "projects", icon: <FolderOpen className="w-6 h-6" />, label: "My Projects" }, { id: "skills", icon: <Code className="w-6 h-6" />, label: "Skills" }, { id: "contact", icon: <Mail className="w-6 h-6" />, label: "Contact" }, { id: "settings", icon: <Settings className="w-6 h-6" />, label: "Settings" }];
-
-  const launchpadItems = [{ id: "finder", icon: <LayoutGrid className="w-8 h-8" />, label: "Finder", color: "from-cyan-500 to-blue-600" }, { id: "terminal", icon: <Terminal className="w-8 h-8" />, label: "Terminal", color: "from-gray-700 to-gray-800" }, { id: "about", icon: <User className="w-8 h-8" />, label: "About Me", color: "from-purple-500 to-purple-600" }, { id: "projects", icon: <FolderOpen className="w-8 h-8" />, label: "Projects", color: "from-yellow-500 to-orange-500" }, { id: "skills", icon: <Code className="w-8 h-8" />, label: "Skills", color: "from-green-500 to-emerald-600" }, { id: "contact", icon: <Mail className="w-8 h-8" />, label: "Contact", color: "from-red-500 to-pink-600" }, { id: "settings", icon: <Settings className="w-8 h-8" />, label: "Settings", color: "from-gray-500 to-gray-600" }, { id: "calculator", icon: <Calculator className="w-8 h-8" />, label: "Calculator", color: "from-orange-500 to-red-500" }, { id: "calendar", icon: <Calendar className="w-8 h-8" />, label: "Calendar", color: "from-red-500 to-red-600" }, { id: "notes", icon: <FileText className="w-8 h-8" />, label: "Notes", color: "from-yellow-400 to-yellow-500" }];
+  // ... all your state hooks stay the same
 
   return (
     <>
-      <style>{`.slider-container { position: relative; display: flex; align-items: center; } input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; outline: none; background: #374151; } input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #06b6d4; border: none; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: pointer; margin-top: -6px; } input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #06b6d4; border: none; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: pointer; }`}</style>
+      <style>{`
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #8b5cf6; border: none; cursor: pointer; }
+      `}</style>
+      
       <AnimatePresence>
         {!isLoggedIn && <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />}
       </AnimatePresence>
+
       <div className={cn("min-h-screen w-full overflow-hidden transition-opacity duration-500", isLoggedIn ? "opacity-100" : "opacity-0 pointer-events-none")} style={{ filter: `brightness(${brightness}%)` }}>
+        {/* Background */}
         <div className="fixed inset-0 bg-cover bg-center transition-all duration-700" style={{ backgroundImage: `url(${currentWallpaper})` }} />
-        <div className={cn("fixed inset-0 transition-opacity duration-500", isDark ? "bg-black/40" : "bg-white/20")} />
-        <div className={cn("fixed top-0 left-0 right-0 h-8 flex items-center justify-between px-4 z-[100] backdrop-blur-md", isDark ? "bg-gray-900/80 text-white" : "bg-white/80 text-gray-900")}>
+        <div className={cn("fixed inset-0 transition-opacity duration-500", isDark ? "bg-black/50 backdrop-blur-sm" : "bg-white/30 backdrop-blur-sm")} />
+
+        {/* Menu Bar - Glassmorphism */}
+        <div className={cn("fixed top-0 left-0 right-0 h-10 flex items-center justify-between px-4 z-[100]", isDark ? "bg-black/20" : "bg-white/20", "backdrop-blur-xl border-b border-white/10")}>
           <div className="flex items-center gap-4">
-            <Shield className="w-4 h-4 text-cyan-500" />
-            <span className="font-semibold text-sm">CyberOS</span>
-            <div className="hidden md:flex items-center gap-3 text-sm">
-              {["File", "Edit", "View", "Window", "Help"].map((menuName) => (
-                <button key={menuName} onClick={(e) => handleMenuClick(menuName, e)} className={cn("hover:opacity-70 transition-opacity px-2 py-1 rounded", activeMenu === menuName && (isDark ? "bg-white/20" : "bg-black/10"), menuName === "File" && "font-medium")}>{menuName}</button>
+            <Shield className="w-4 h-4 text-violet-500" />
+            <span className="font-medium text-sm text-white/90">CyberOS</span>
+            <div className="hidden md:flex items-center gap-1">
+              {["File", "Edit", "View", "Window", "Help"].map((menu) => (
+                <button key={menu} onClick={(e) => handleMenuClick(menu, e)} className="px-3 py-1 rounded-lg text-sm text-white/80 hover:bg-white/10 transition-colors">
+                  {menu}
+                </button>
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setShowControlCenter(!showControlCenter)} className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-                {wifiEnabled ? <WifiIcon className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
-                {volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-              </button>
-              <Battery className="w-4 h-4" />
-            </div>
-            <span className="font-medium">{format(currentTime, "EEE MMM d")}</span>
-            <span className="font-medium">{format(currentTime, "h:mm a")}</span>
+          <div className="flex items-center gap-4 text-sm text-white/80">
+            <button onClick={() => setShowControlCenter(!showControlCenter)} className="p-1.5 rounded-lg hover:bg-white/10">
+              {wifiEnabled ? <WifiIcon className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+            </button>
+            <span className="font-medium">{format(currentTime, "EEE MMM d h:mm a")}</span>
           </div>
         </div>
-        {activeMenu && <MenuDropdown isOpen={!!activeMenu} onClose={() => setActiveMenu(null)} items={getMenuItems(activeMenu)} isDark={isDark} position={menuPosition} />}
-        <ControlCenter isOpen={showControlCenter} onClose={() => setShowControlCenter(false)} isDark={isDark} setIsDark={setIsDark} brightness={brightness} setBrightness={setBrightness} volume={volume} setVolume={setVolume} wifiEnabled={wifiEnabled} setWifiEnabled={setWifiEnabled} bluetoothEnabled={bluetoothEnabled} setBluetoothEnabled={setBluetoothEnabled} />
-        <div className="pt-8 h-screen relative">
+
+        {/* Control Center - Modern glassmorphism */}
+        <AnimatePresence>
+          {showControlCenter && (
+            <>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[150]" onClick={() => setShowControlCenter(false)} />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                className={cn("fixed top-12 right-4 w-72 rounded-3xl p-4 z-[160] shadow-2xl", isDark ? "bg-black/40" : "bg-white/40", "backdrop-blur-2xl border border-white/10")}
+              >
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <button onClick={() => setWifiEnabled(!wifiEnabled)} className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-all", wifiEnabled ? "bg-violet-600 text-white" : "bg-white/10 text-white/60")}>
+                    {wifiEnabled ? <Wifi className="w-6 h-6" /> : <WifiOff className="w-6 h-6" />}
+                    <span className="text-xs font-medium">Wi-Fi</span>
+                  </button>
+                  <button onClick={() => setBluetoothEnabled(!bluetoothEnabled)} className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-all", bluetoothEnabled ? "bg-violet-600 text-white" : "bg-white/10 text-white/60")}>
+                    <Bluetooth className="w-6 h-6" />
+                    <span className="text-xs font-medium">Bluetooth</span>
+                  </button>
+                </div>
+                <div className={cn("p-3 rounded-2xl mb-3", isDark ? "bg-white/5" : "bg-white/30")}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Sun className="w-4 h-4 text-white/60" />
+                    <span className="text-xs text-white/80">Brightness</span>
+                  </div>
+                  <input type="range" min="20" max="100" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))} className="w-full" />
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* Windows */}
+        <div className="pt-10 h-screen relative">
           <AnimatePresence>
             {windows.map((win) => !win.isMinimized && (
               <Window key={win.id} window={win} isActive={activeWindow === win.id} onClose={() => closeWindow(win.id)} onMinimize={() => minimizeWindow(win.id)} onMaximize={() => maximizeWindow(win.id)} onClick={() => bringToFront(win.id)} isDark={isDark} brightness={brightness}>
@@ -1658,28 +1819,31 @@ function App() {
               </Window>
             ))}
           </AnimatePresence>
-          <AnimatePresence>
-            {showLaunchpad && (
-              <motion.div initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }} className={cn("fixed inset-0 z-[90] flex items-center justify-center backdrop-blur-xl", isDark ? "bg-gray-950/90" : "bg-white/90")} onClick={() => setShowLaunchpad(false)}>
-                <div className="grid grid-cols-4 md:grid-cols-5 gap-8 p-8">
-                  {launchpadItems.map((item) => (
-                    <motion.button key={item.id} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={(e) => { e.stopPropagation(); openWindow(item.id as WindowState["type"], item.label); }} className="flex flex-col items-center gap-3">
-                      <div className={cn("w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg bg-gradient-to-br", item.color)}>
-                        <div className="text-white">{item.icon}</div>
-                      </div>
-                      <span className={cn("text-sm font-medium", isDark ? "text-white" : "text-gray-900")}>{item.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]">
-          <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className={cn("flex items-end gap-2 px-4 py-3 rounded-2xl backdrop-blur-xl", isDark ? "bg-gray-900/60 border border-gray-700/50" : "bg-white/60 border border-white/50 shadow-xl")}>
+
+        {/* Dock - Floating glass */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80]">
+          <motion.div 
+            initial={{ y: 100, opacity: 0 }} 
+            animate={{ y: 0, opacity: 1 }} 
+            className={cn("flex items-end gap-2 px-3 py-3 rounded-3xl", isDark ? "bg-black/30" : "bg-white/30", "backdrop-blur-2xl border border-white/10 shadow-2xl")}
+          >
             {dockItems.map((item) => {
               const isActive = activeWindow?.startsWith(item.id);
-              return <DockItem key={item.id} icon={item.icon} label={item.label} isActive={isActive || false} onClick={() => item.id === "finder" ? setShowLaunchpad(true) : openWindow(item.id as WindowState["type"], item.label)} isDark={isDark} />;
+              return (
+                <motion.button
+                  key={item.id}
+                  whileHover={{ scale: 1.2, y: -8 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => item.id === "finder" ? setShowLaunchpad(true) : openWindow(item.id as WindowState["type"], item.label)}
+                  className="group relative"
+                >
+                  <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-all", isActive ? "bg-gradient-to-br from-violet-600 to-fuchsia-600" : "bg-white/10 hover:bg-white/20")}>
+                    <div className={isActive ? "text-white" : "text-white/80"}>{item.icon}</div>
+                  </div>
+                  {isActive && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white" />}
+                </motion.button>
+              );
             })}
           </motion.div>
         </div>
