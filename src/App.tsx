@@ -120,9 +120,8 @@ const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b
 
 const WALLPAPERS: Wallpaper[] = [
   { id: "1", name: "Cyberpunk", url: DEFAULT_WALLPAPER, thumbnail: DEFAULT_WALLPAPER },
-  { id: "2", name: "Matrix", url: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8b78f?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8b78f?w=400&q=80" },
   { id: "3", name: "Tech", url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&q=80" },
-  { id: "dark-abstract", name: "Dark Abstract", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
+  { id: "dark-abstract", name: "Dark Abstract", url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=200&q=60" },
   { id: "dark-gradient", name: "Dark Gradient", url: "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1557683316-973673baf926?w=200&q=60" },
   { id: "dark-mountain", name: "Dark Mountain", url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60" },
 ];
@@ -2386,40 +2385,97 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       </div>
 
       <motion.div
-        className="relative z-10 w-full max-w-md mx-4"
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="relative z-10 w-full max-w-2xl mx-4"
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       >
         <div
-          className="absolute -inset-2 rounded-3xl blur-2xl opacity-40"
+          className="absolute -inset-3 rounded-[28px] blur-2xl opacity-40"
           style={{
-            background: "linear-gradient(135deg, rgba(59,130,246,0.6), rgba(139,92,246,0.6), rgba(59,130,246,0.2))",
+            background: "conic-gradient(from 120deg, rgba(59,130,246,0.6), rgba(139,92,246,0.6), rgba(16,185,129,0.5), rgba(59,130,246,0.6))",
           }}
         />
         <motion.div
-          initial={{ scale: 0.9, y: 20, opacity: 0 }}
+          initial={{ scale: 0.92, y: 24, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
-          transition={{ type: "spring", damping: 20, stiffness: 100 }}
-          className="relative p-8 rounded-3xl shadow-2xl"
+          transition={{ type: "spring", damping: 18, stiffness: 120 }}
+          className="relative grid md:grid-cols-[1.1fr_1.2fr] gap-6 p-8 rounded-[26px] shadow-2xl overflow-hidden"
           style={{
             background: isDark 
-              ? "rgba(15, 15, 25, 0.85)"
-              : "rgba(255, 255, 255, 0.08)",
-            backdropFilter: "blur(24px)",
-            border: "1px solid rgba(99, 102, 241, 0.2)",
-            boxShadow: "0 0 80px rgba(59, 130, 246, 0.08), 0 25px 60px rgba(0,0,0,0.5)",
+              ? "rgba(12, 14, 26, 0.88)"
+              : "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(28px)",
+            border: "1px solid rgba(99, 102, 241, 0.25)",
+            boxShadow: "0 0 90px rgba(59, 130, 246, 0.1), 0 30px 70px rgba(0,0,0,0.55)",
           }}
         >
-          <div className="text-center mb-6">
-            <motion.h1
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-2xl font-bold text-white"
-            >
-              Secure Login
-            </motion.h1>
-            <p className="text-sm text-gray-500">Biometric session encrypted</p>
+          <div
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage: "radial-gradient(rgba(59,130,246,0.35) 1px, transparent 1px)",
+              backgroundSize: "22px 22px",
+            }}
+          />
+
+          <div className="relative z-10 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <p className="text-xs tracking-[0.2em] text-blue-300/70">CYBEROS ACCESS</p>
+                  <h1 className="text-2xl font-bold text-white">Secure Login</h1>
+                </div>
+                <div className="text-xs text-emerald-300/80 px-2 py-1 rounded-full border border-emerald-400/30 bg-emerald-400/10">
+                  LIVE
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <motion.div
+                  animate={isUnlocking ? { scale: 0.85, opacity: 0 } : { scale: 1, opacity: 1 }}
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center relative overflow-hidden"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(59,130,246,0.35), rgba(139,92,246,0.35))",
+                    border: "1px solid rgba(99,102,241,0.35)",
+                    boxShadow: "0 0 30px rgba(59,130,246,0.2)",
+                  }}
+                >
+                  <img
+                    src={PROFILE_IMAGE}
+                    alt="Aayush Timalsina"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                  <User className="w-8 h-8 text-blue-400 hidden absolute" />
+                  <div className="absolute inset-0 animate-pulse" style={{ border: "1px solid rgba(99,102,241,0.25)" }} />
+                </motion.div>
+                <div>
+                  <motion.h2
+                    animate={isUnlocking ? { y: -10, opacity: 0 } : { y: 0, opacity: 1 }}
+                    className="text-lg font-semibold text-white"
+                  >
+                    Aayush Timalsina
+                  </motion.h2>
+                  <p className="text-xs text-gray-500">Cybersecurity Student</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-3 text-xs">
+              {[
+                { label: "Clearance", value: "Level 3" },
+                { label: "Session", value: "Encrypted" },
+                { label: "Latency", value: "12ms" },
+                { label: "Shield", value: "Armed" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-xl p-3 border border-white/10 bg-white/5">
+                  <div className="text-gray-500">{item.label}</div>
+                  <div className="text-white font-semibold mt-1">{item.value}</div>
+                </div>
+              ))}
+            </div>
           </div>
         {/* User Avatar */}
         <div className="flex flex-col items-center mb-8">
@@ -2457,7 +2513,15 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           </p>
         </div>
 
-        <div className="flex items-center justify-center mb-6">
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-gray-400">Biometric session encrypted</p>
+            <div className="flex items-center gap-2 text-xs text-blue-300/80">
+              <span className="inline-block w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              Secure Link
+            </div>
+          </div>
+          <div className="flex items-center justify-center mb-6">
           <div
             className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
             style={{
@@ -2578,6 +2642,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
         </motion.div>
       </motion.div>
 
