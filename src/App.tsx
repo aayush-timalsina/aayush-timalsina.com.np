@@ -2337,6 +2337,17 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           }}
         />
         <motion.div
+          animate={{
+            backgroundPosition: ["0px 0px", "120px 120px"],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: "linear-gradient(135deg, rgba(59,130,246,0.6) 1px, transparent 1px)",
+            backgroundSize: "120px 120px",
+          }}
+        />
+        <motion.div
           animate={{ 
             opacity: [0.05, 0.12, 0.05],
           }}
@@ -2362,22 +2373,54 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             filter: "blur(60px)",
           }}
         />
+        <motion.div
+          animate={{ x: ["-30%", "130%"] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 left-0 h-full w-1/3 opacity-[0.08]"
+          style={{
+            background: "linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.8) 50%, transparent 100%)",
+            filter: "blur(24px)",
+          }}
+        />
+        <div className="absolute inset-0 pointer-events-none scanline" />
       </div>
 
       <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        transition={{ type: "spring", damping: 20, stiffness: 100 }}
-        className="relative z-10 p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4"
-        style={{
-          background: isDark 
-            ? "rgba(15, 15, 25, 0.85)"
-            : "rgba(255, 255, 255, 0.08)",
-          backdropFilter: "blur(24px)",
-          border: "1px solid rgba(99, 102, 241, 0.15)",
-          boxShadow: "0 0 80px rgba(59, 130, 246, 0.06), 0 25px 60px rgba(0,0,0,0.5)",
-        }}
+        className="relative z-10 w-full max-w-md mx-4"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
+        <div
+          className="absolute -inset-2 rounded-3xl blur-2xl opacity-40"
+          style={{
+            background: "linear-gradient(135deg, rgba(59,130,246,0.6), rgba(139,92,246,0.6), rgba(59,130,246,0.2))",
+          }}
+        />
+        <motion.div
+          initial={{ scale: 0.9, y: 20, opacity: 0 }}
+          animate={{ scale: 1, y: 0, opacity: 1 }}
+          transition={{ type: "spring", damping: 20, stiffness: 100 }}
+          className="relative p-8 rounded-3xl shadow-2xl"
+          style={{
+            background: isDark 
+              ? "rgba(15, 15, 25, 0.85)"
+              : "rgba(255, 255, 255, 0.08)",
+            backdropFilter: "blur(24px)",
+            border: "1px solid rgba(99, 102, 241, 0.2)",
+            boxShadow: "0 0 80px rgba(59, 130, 246, 0.08), 0 25px 60px rgba(0,0,0,0.5)",
+          }}
+        >
+          <div className="text-center mb-6">
+            <motion.h1
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-2xl font-bold text-white"
+            >
+              Secure Login
+            </motion.h1>
+            <p className="text-sm text-gray-500">Biometric session encrypted</p>
+          </div>
         {/* User Avatar */}
         <div className="flex flex-col items-center mb-8">
           <motion.div
@@ -2412,6 +2455,20 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           <p className="text-sm mt-1 text-gray-500">
             Cybersecurity Student
           </p>
+        </div>
+
+        <div className="flex items-center justify-center mb-6">
+          <div
+            className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
+            style={{
+              background: "rgba(16,185,129,0.12)",
+              border: "1px solid rgba(16,185,129,0.25)",
+              color: "#6ee7b7",
+            }}
+          >
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            System Integrity: 99%
+          </div>
         </div>
 
         {/* Password Display */}
@@ -2521,6 +2578,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             </motion.div>
           )}
         </AnimatePresence>
+        </motion.div>
       </motion.div>
 
       {/* Footer */}
@@ -2542,6 +2600,22 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         }
         .animate-shake {
           animation: shake 0.5s ease-in-out;
+        }
+        @keyframes scanline {
+          0% { transform: translateY(-100%); opacity: 0; }
+          10% { opacity: 0.4; }
+          50% { opacity: 0.08; }
+          100% { transform: translateY(100%); opacity: 0; }
+        }
+        .scanline::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 120px;
+          background: linear-gradient(180deg, transparent 0%, rgba(59,130,246,0.12) 50%, transparent 100%);
+          animation: scanline 6s linear infinite;
         }
       `}</style>
     </motion.div>
@@ -2896,7 +2970,7 @@ function App() {
         >
           <div className="flex items-center gap-4">
             <Shield className="w-4 h-4 text-blue-500" />
-            <span className="font-semibold text-sm">CyberOS v3.0 Enhanced</span>
+            <span className="font-semibold text-sm">CyberOS v3.0</span>
             <div className="hidden md:flex items-center gap-3 text-sm">
               {["File", "Edit", "View", "Window", "Help"].map((menuName) => (
                 <button
