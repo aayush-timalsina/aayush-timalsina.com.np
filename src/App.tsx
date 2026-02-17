@@ -2399,44 +2399,51 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           initial={{ scale: 0.92, y: 24, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
           transition={{ type: "spring", damping: 18, stiffness: 120 }}
-          className="relative grid md:grid-cols-[1.1fr_1.2fr] gap-6 p-8 rounded-[26px] shadow-2xl overflow-hidden"
+          className="relative grid md:grid-cols-[1.05fr_1.2fr] gap-6 p-8 rounded-[26px] shadow-2xl overflow-hidden"
           style={{
             background: isDark 
-              ? "rgba(12, 14, 26, 0.88)"
+              ? "rgba(10, 12, 20, 0.9)"
               : "rgba(255, 255, 255, 0.1)",
             backdropFilter: "blur(28px)",
-            border: "1px solid rgba(99, 102, 241, 0.25)",
-            boxShadow: "0 0 90px rgba(59, 130, 246, 0.1), 0 30px 70px rgba(0,0,0,0.55)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
+            boxShadow: "0 0 90px rgba(56, 189, 248, 0.12), 0 30px 70px rgba(0,0,0,0.6)",
           }}
         >
           <div
-            className="absolute inset-0 opacity-[0.12]"
+            className="absolute inset-0 opacity-[0.1]"
             style={{
-              backgroundImage: "radial-gradient(rgba(59,130,246,0.35) 1px, transparent 1px)",
-              backgroundSize: "22px 22px",
+              backgroundImage: "radial-gradient(rgba(56,189,248,0.35) 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
             }}
           />
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute left-4 top-4 w-10 h-10 border-l border-t border-cyan-400/50" />
+            <div className="absolute right-4 top-4 w-10 h-10 border-r border-t border-cyan-400/50" />
+            <div className="absolute left-4 bottom-4 w-10 h-10 border-l border-b border-cyan-400/50" />
+            <div className="absolute right-4 bottom-4 w-10 h-10 border-r border-b border-cyan-400/50" />
+          </div>
 
           <div className="relative z-10 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-xs tracking-[0.2em] text-blue-300/70">CYBEROS ACCESS</p>
+                  <p className="text-xs tracking-[0.2em] text-cyan-300/70">CYBEROS ACCESS</p>
                   <h1 className="text-2xl font-bold text-white">Secure Login</h1>
                 </div>
-                <div className="text-xs text-emerald-300/80 px-2 py-1 rounded-full border border-emerald-400/30 bg-emerald-400/10">
-                  LIVE
+                <div className="text-xs text-cyan-300/80 px-2 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10">
+                  LINK LIVE
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 <motion.div
-                  animate={isUnlocking ? { scale: 0.85, opacity: 0 } : { scale: 1, opacity: 1 }}
+                  animate={isUnlocking ? { scale: 0.92, opacity: 0 } : { scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
                   className="w-20 h-20 rounded-2xl flex items-center justify-center relative overflow-hidden"
                   style={{
-                    background: "linear-gradient(135deg, rgba(59,130,246,0.35), rgba(139,92,246,0.35))",
-                    border: "1px solid rgba(99,102,241,0.35)",
-                    boxShadow: "0 0 30px rgba(59,130,246,0.2)",
+                    background: "linear-gradient(135deg, rgba(14,165,233,0.35), rgba(6,182,212,0.35))",
+                    border: "1px solid rgba(56,189,248,0.4)",
+                    boxShadow: "0 0 26px rgba(56,189,248,0.25)",
                   }}
                 >
                   <img
@@ -2448,17 +2455,18 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                       (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
                     }}
                   />
-                  <User className="w-8 h-8 text-blue-400 hidden absolute" />
-                  <div className="absolute inset-0 animate-pulse" style={{ border: "1px solid rgba(99,102,241,0.25)" }} />
+                  <User className="w-8 h-8 text-cyan-300 hidden absolute" />
+                  <div className="absolute inset-0" style={{ border: "1px solid rgba(56,189,248,0.3)" }} />
                 </motion.div>
                 <div>
                   <motion.h2
-                    animate={isUnlocking ? { y: -10, opacity: 0 } : { y: 0, opacity: 1 }}
+                    animate={isUnlocking ? { y: -6, opacity: 0 } : { y: 0, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
                     className="text-lg font-semibold text-white"
                   >
                     Aayush Timalsina
                   </motion.h2>
-                  <p className="text-xs text-gray-500">Cybersecurity Student</p>
+                  <p className="text-xs text-cyan-200/70">Cybersecurity Student</p>
                 </div>
               </div>
             </div>
@@ -2470,179 +2478,145 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                 { label: "Latency", value: "12ms" },
                 { label: "Shield", value: "Armed" },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl p-3 border border-white/10 bg-white/5">
-                  <div className="text-gray-500">{item.label}</div>
+                <div key={item.label} className="rounded-xl p-3 border border-cyan-400/20 bg-cyan-400/5">
+                  <div className="text-cyan-200/70">{item.label}</div>
                   <div className="text-white font-semibold mt-1">{item.value}</div>
                 </div>
               ))}
             </div>
           </div>
-        {/* User Avatar */}
-        <div className="flex flex-col items-center mb-8">
-          <motion.div
-            animate={isUnlocking ? { scale: 0.8, opacity: 0 } : { scale: 1, opacity: 1 }}
-            className="w-28 h-28 rounded-full flex items-center justify-center mb-4 relative overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3))",
-              border: "2px solid rgba(99,102,241,0.3)",
-              boxShadow: "0 0 30px rgba(59,130,246,0.15)",
-            }}
-          >
-            <img 
-              src={PROFILE_IMAGE} 
-              alt="Aayush Timalsina" 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-                (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-              }}
-            />
-            <User className="w-12 h-12 text-blue-400 hidden absolute" />
-            <div className="absolute inset-0 rounded-full animate-pulse pointer-events-none" style={{
-              border: "1px solid rgba(99,102,241,0.2)",
-            }} />
-          </motion.div>
-          <motion.h2
-            animate={isUnlocking ? { y: -20, opacity: 0 } : { y: 0, opacity: 1 }}
-            className="text-2xl font-bold text-white"
-          >
-            Aayush Timalsina
-          </motion.h2>
-          <p className="text-sm mt-1 text-gray-500">
-            Cybersecurity Student
-          </p>
-        </div>
 
-        <div className="relative z-10">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-gray-400">Biometric session encrypted</p>
-            <div className="flex items-center gap-2 text-xs text-blue-300/80">
-              <span className="inline-block w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-              Secure Link
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm text-cyan-200/70">Biometric session encrypted</p>
+              <div className="flex items-center gap-2 text-xs text-cyan-300/80">
+                <span className="inline-block w-2 h-2 rounded-full bg-cyan-400" />
+                Secure Link
+              </div>
             </div>
-          </div>
-          <div className="flex items-center justify-center mb-6">
-          <div
-            className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
-            style={{
-              background: "rgba(16,185,129,0.12)",
-              border: "1px solid rgba(16,185,129,0.25)",
-              color: "#6ee7b7",
-            }}
-          >
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            System Integrity: 99%
-          </div>
-        </div>
-
-        {/* Password Display */}
-        <motion.div
-          animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
-          className="mb-6 p-4 rounded-xl text-center"
-          style={{
-            background: "rgba(99,102,241,0.06)",
-            border: "1px solid rgba(99,102,241,0.12)",
-          }}
-        >
-          <p className="text-xs uppercase tracking-wider mb-2 text-gray-600">
-            Password Hint
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <Lock className="w-4 h-4 text-blue-400" />
-            <code className="text-lg font-mono font-bold tracking-wider text-blue-400">
-              TYPE-C
-            </code>
-          </div>
-          <p className="text-xs mt-2 text-gray-600">
-            Enter this password to unlock
-          </p>
-        </motion.div>
-
-        {/* Login Form */}
-        <motion.form
-          animate={isUnlocking ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
-          onSubmit={handleLogin}
-          className="space-y-4"
-        >
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password..."
-              className={cn(
-                "w-full px-4 py-3 pr-12 rounded-xl outline-none transition-all text-center font-mono tracking-wider text-white placeholder-gray-600",
-                error 
-                  ? "animate-shake border-2 border-red-500/50 bg-red-500/5"
-                  : "border border-gray-700/50 focus:border-blue-500/50"
-              )}
-              style={{
-                background: error ? "rgba(239,68,68,0.05)" : "rgba(255,255,255,0.03)",
-              }}
-              autoFocus
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-colors text-gray-500 hover:text-white"
-            >
-              {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-400 text-sm text-center"
-            >
-              Incorrect password. Try again.
-            </motion.p>
-          )}
-
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-white"
-            style={{
-              background: "linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4))",
-              border: "1px solid rgba(99,102,241,0.25)",
-              boxShadow: "0 0 20px rgba(59,130,246,0.1)",
-            }}
-          >
-            <Shield className="w-5 h-5" />
-            Unlock System
-          </motion.button>
-        </motion.form>
-
-        {/* Unlock Animation Overlay */}
-        <AnimatePresence>
-          {isUnlocking && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center rounded-3xl"
-              style={{ background: "rgba(15,15,25,0.9)" }}
-            >
-              <motion.div
-                animate={{ 
-                  scale: [1, 1.5, 2],
-                  opacity: [1, 0.5, 0],
-                }}
-                transition={{ duration: 0.8 }}
-                className="w-20 h-20 rounded-full flex items-center justify-center"
+            <div className="flex items-center justify-center mb-6">
+              <div
+                className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
                 style={{
-                  background: "linear-gradient(135deg, rgba(59,130,246,0.5), rgba(139,92,246,0.5))",
+                  background: "rgba(14,165,233,0.12)",
+                  border: "1px solid rgba(56,189,248,0.3)",
+                  color: "#67e8f9",
                 }}
               >
-                <Unlock className="w-10 h-10 text-white" />
-              </motion.div>
+                <span className="inline-block w-2 h-2 rounded-full bg-cyan-400" />
+                System Integrity: 99%
+              </div>
+            </div>
+
+            {/* Password Display */}
+            <motion.div
+              animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
+              className="mb-6 p-4 rounded-xl text-center"
+              style={{
+                background: "rgba(14,165,233,0.06)",
+                border: "1px solid rgba(56,189,248,0.18)",
+              }}
+            >
+              <p className="text-xs uppercase tracking-wider mb-2 text-cyan-200/70">
+                Password Hint
+              </p>
+              <div className="flex items-center justify-center gap-2">
+                <Lock className="w-4 h-4 text-cyan-300" />
+                <code className="text-lg font-mono font-bold tracking-wider text-cyan-300">
+                  TYPE-C
+                </code>
+              </div>
+              <p className="text-xs mt-2 text-cyan-200/60">
+                Enter this password to unlock
+              </p>
             </motion.div>
-          )}
-        </AnimatePresence>
-        </div>
+
+            {/* Login Form */}
+            <motion.form
+              animate={isUnlocking ? { opacity: 0, y: -12 } : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+              onSubmit={handleLogin}
+              className="space-y-4"
+            >
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password..."
+                  className={cn(
+                    "w-full px-4 py-3 pr-12 rounded-xl outline-none transition-all text-center font-mono tracking-wider text-white placeholder-cyan-200/40",
+                    error 
+                      ? "animate-shake border-2 border-red-500/50 bg-red-500/5"
+                      : "border border-cyan-400/30 focus:border-cyan-300"
+                  )}
+                  style={{
+                    background: error ? "rgba(239,68,68,0.05)" : "rgba(3, 6, 12, 0.6)",
+                  }}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-colors text-cyan-200/60 hover:text-cyan-200"
+                >
+                  {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+                </button>
+              </div>
+
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm text-center"
+                >
+                  Incorrect password. Try again.
+                </motion.p>
+              )}
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-white"
+                style={{
+                  background: "linear-gradient(135deg, rgba(6,182,212,0.5), rgba(14,165,233,0.6))",
+                  border: "1px solid rgba(56,189,248,0.35)",
+                  boxShadow: "0 0 20px rgba(56,189,248,0.2)",
+                }}
+              >
+                <Shield className="w-5 h-5" />
+                Unlock System
+              </motion.button>
+            </motion.form>
+
+            {/* Unlock Animation Overlay */}
+            <AnimatePresence>
+              {isUnlocking && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center rounded-2xl"
+                  style={{ background: "rgba(6, 8, 16, 0.9)" }}
+                >
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.4, 1.8],
+                      opacity: [1, 0.5, 0],
+                    }}
+                    transition={{ duration: 0.7 }}
+                    className="w-20 h-20 rounded-full flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(6,182,212,0.6), rgba(14,165,233,0.6))",
+                    }}
+                  >
+                    <Unlock className="w-10 h-10 text-white" />
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       </motion.div>
 
