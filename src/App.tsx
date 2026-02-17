@@ -2295,6 +2295,193 @@ const MenuDropdown = ({
   );
 };
 
+// Login Screen Component
+const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "TYPE-C") {
+      setIsUnlocking(true);
+      setTimeout(() => {
+        onLogin();
+      }, 700);
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 900);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
+      style={{
+        background: "radial-gradient(circle at top, rgba(14,165,233,0.12), transparent 45%), linear-gradient(135deg, #07090f 0%, #0b1220 45%, #05070d 100%)",
+      }}
+    >
+      <div className="absolute inset-0 pointer-events-none login-grid" />
+      <div className="absolute inset-0 pointer-events-none login-noise" />
+      <div className="absolute inset-0 pointer-events-none login-sweep" />
+
+      <motion.div
+        initial={{ scale: 0.94, y: 18, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        transition={{ type: "spring", damping: 18, stiffness: 120 }}
+        className={cn(
+          "relative w-full max-w-md mx-4 rounded-3xl p-7 shadow-2xl overflow-hidden",
+          isDark ? "bg-slate-950/80" : "bg-white/70"
+        )}
+        style={{
+          border: "1px solid rgba(56,189,248,0.3)",
+          backdropFilter: "blur(24px)",
+          boxShadow: "0 0 70px rgba(56,189,248,0.15), 0 30px 70px rgba(0,0,0,0.6)",
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute left-4 top-4 w-10 h-10 border-l border-t border-cyan-400/50" />
+          <div className="absolute right-4 top-4 w-10 h-10 border-r border-t border-cyan-400/50" />
+          <div className="absolute left-4 bottom-4 w-10 h-10 border-l border-b border-cyan-400/50" />
+          <div className="absolute right-4 bottom-4 w-10 h-10 border-r border-b border-cyan-400/50" />
+        </div>
+
+        <div className="relative z-10 text-center">
+          <p className="text-xs tracking-[0.25em] text-cyan-300/70">SECURE ACCESS</p>
+          <h1 className="text-2xl font-bold text-white mt-2">CyberOS Login</h1>
+          <p className="text-xs text-cyan-200/60 mt-1">Encrypted session handshake</p>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center mt-6">
+          <div
+            className="w-24 h-24 rounded-2xl overflow-hidden border"
+            style={{ borderColor: "rgba(56,189,248,0.45)" }}
+          >
+            <img
+              src={PROFILE_IMAGE}
+              alt="Aayush Timalsina"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+                (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+              }}
+            />
+            <User className="w-8 h-8 text-cyan-300 hidden" />
+          </div>
+          <div className="mt-3 text-white font-semibold">Aayush Timalsina</div>
+          <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
+        </div>
+
+        <motion.form
+          onSubmit={handleLogin}
+          className="relative z-10 mt-6 space-y-4"
+          animate={isUnlocking ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password..."
+              className={cn(
+                "w-full px-4 py-3 pr-12 rounded-xl outline-none text-center font-mono tracking-wider text-white placeholder-cyan-200/40",
+                error ? "border-2 border-red-500/50" : "border border-cyan-400/30 focus:border-cyan-300"
+              )}
+              style={{ background: "rgba(3, 6, 12, 0.7)" }}
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-cyan-200/60 hover:text-cyan-200"
+            >
+              {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {error && (
+            <motion.p
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-sm text-center"
+            >
+              Incorrect password. Try again.
+            </motion.p>
+          )}
+
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-white"
+            style={{
+              background: "linear-gradient(135deg, rgba(6,182,212,0.55), rgba(14,165,233,0.7))",
+              border: "1px solid rgba(56,189,248,0.35)",
+              boxShadow: "0 0 20px rgba(56,189,248,0.25)",
+            }}
+          >
+            <Shield className="w-5 h-5" />
+            Unlock System
+          </motion.button>
+        </motion.form>
+
+        <AnimatePresence>
+          {isUnlocking && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ background: "rgba(4, 8, 14, 0.9)" }}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.35, 1.7], opacity: [1, 0.6, 0] }}
+                transition={{ duration: 0.7 }}
+                className="w-20 h-20 rounded-full flex items-center justify-center"
+                style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.7), rgba(14,165,233,0.7))" }}
+              >
+                <Unlock className="w-10 h-10 text-white" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <style>{`
+        .login-grid {
+          background-image:
+            linear-gradient(rgba(56,189,248,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(56,189,248,0.08) 1px, transparent 1px);
+          background-size: 90px 90px;
+          opacity: 0.2;
+        }
+        .login-noise {
+          background-image:
+            repeating-linear-gradient(0deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 3px),
+            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 4px);
+          mix-blend-mode: screen;
+          opacity: 0.2;
+        }
+        .login-sweep {
+          background: linear-gradient(90deg, transparent 0%, rgba(56,189,248,0.25) 50%, transparent 100%);
+          animation: loginSweep 9s ease-in-out infinite;
+          opacity: 0.2;
+        }
+        @keyframes loginSweep {
+          0% { transform: translateX(-60%); }
+          50% { transform: translateX(50%); }
+          100% { transform: translateX(120%); }
+        }
+      `}</style>
+    </motion.div>
+  );
+};
+
 // Main App Component
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -2322,6 +2509,7 @@ function App() {
   ]);
   const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [zIndexCounter, setZIndexCounter] = useState(2);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -2626,9 +2814,19 @@ function App() {
         }
       `}</style>
       
+      {/* Login Screen */}
+      <AnimatePresence>
+        {!isLoggedIn && (
+          <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
+        )}
+      </AnimatePresence>
+
       {/* Main Desktop */}
       <div
-        className="min-h-screen w-full overflow-hidden transition-opacity duration-500"
+        className={cn(
+          "min-h-screen w-full overflow-hidden transition-opacity duration-500",
+          isLoggedIn ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
         style={{
           filter: `brightness(${brightness}%)`,
         }}
