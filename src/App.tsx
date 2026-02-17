@@ -2332,7 +2332,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "TYPE-C") {
+    if (password === " TYPE-C") {
       setIsUnlocking(true);
       setTimeout(() => {
         onLogin();
