@@ -53,8 +53,29 @@ import {
   Plus,
   Lock,
   Unlock,
+  HardDrive,
+  GitBranch,
+  Cpu,
+  Layers,
+  Search,
+  Undo,
+  RotateCcw,
+  Save,
+  Trash2,
+  ChevronRight,
 } from "lucide-react";
 import { format } from "date-fns";
+import { cn } from "./utils/cn";
+
+// File System Types
+interface FileSystemNode {
+  type: "file" | "directory";
+  name: string;
+  content?: string;
+  children?: { [key: string]: FileSystemNode };
+  size: number;
+  modified: Date;
+}
 
 // Types
 interface WindowState {
@@ -98,79 +119,147 @@ const ABOUT_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/56571
 const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80";
 
 const WALLPAPERS: Wallpaper[] = [
-  {
-    id: "dark-abstract",
-    name: "Dark Abstract",
-    url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60",
-  },
-  {
-    id: "dark-gradient",
-    name: "Dark Gradient",
-    url: "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1557683316-973673baf926?w=200&q=60",
-  },
-  {
-    id: "dark-mountain",
-    name: "Dark Mountain",
-    url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60",
-  },
-  {
-    id: "hack1",
-    name: "Hacker Terminal",
-    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200&q=60",
-  },
-  {
-    id: "hack3",
-    name: "Server Room",
-    url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=60",
-  },
-  {
-    id: "hack5",
-    name: "Network Security",
-    url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=200&q=60",
-  },
-  {
-    id: "hack6",
-    name: "Dark Code",
-    url: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=200&q=60",
-  },
-  {
-    id: "hack7",
-    name: "Binary Rain",
-    url: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=200&q=60",
-  },
-  {
-    id: "hack8",
-    name: "Circuit Board",
-    url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=60",
-  },
-  {
-    id: "cyber1",
-    name: "Cyber Grid",
-    url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=200&q=60",
-  },
-  {
-    id: "cyber3",
-    name: "Northern Lights",
-    url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=200&q=60",
-  },
-  {
-    id: "dark-space",
-    name: "Deep Space",
-    url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80",
-    thumbnail: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=200&q=60",
-  },
+  { id: "1", name: "Cyberpunk", url: DEFAULT_WALLPAPER, thumbnail: DEFAULT_WALLPAPER },
+  { id: "2", name: "Matrix", url: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8b78f?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1526374965328-7f5ae4e8b78f?w=400&q=80" },
+  { id: "3", name: "Tech", url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&q=80" },
+  { id: "dark-abstract", name: "Dark Abstract", url: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=200&q=60" },
+  { id: "dark-gradient", name: "Dark Gradient", url: "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1557683316-973673baf926?w=200&q=60" },
+  { id: "dark-mountain", name: "Dark Mountain", url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80", thumbnail: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200&q=60" },
 ];
+
+// File System Initialization
+const initializeFileSystem = (): FileSystemNode => ({
+  type: "directory",
+  name: "root",
+  size: 0,
+  modified: new Date(),
+  children: {
+    home: {
+      type: "directory",
+      name: "home",
+      size: 0,
+      modified: new Date(),
+      children: {
+        aayush: {
+          type: "directory",
+          name: "aayush",
+          size: 0,
+          modified: new Date(),
+          children: {
+            "about.md": {
+              type: "file",
+              name: "about.md",
+              content: `# Aayush Timalsina - Cybersecurity Student
+
+## About
+Hi! I'm Aayush Timalsina, currently studying in class 12 at Skyrider College, Nepal.
+Passionate about cybersecurity, penetration testing, and ethical hacking.
+
+## Skills
+- Python, JavaScript, TypeScript, React
+- Linux/Bash, Network Security
+- Penetration Testing, Web Security
+- Threat Detection & Analysis
+
+## Contact
+📧 Email: aayush@cyberos.local
+📍 Location: Chitwan, Nepal
+🔗 GitHub: github.com/aayush`,
+              size: 512,
+              modified: new Date(),
+            },
+            "projects.json": {
+              type: "file",
+              name: "projects.json",
+              content: `[
+  {
+    "title": "CyberOS Portfolio",
+    "description": "Interactive OS-based portfolio with terminal",
+    "tech": ["React", "TypeScript", "Tailwind", "Framer Motion"]
+  },
+  {
+    "title": "Security Scanner",
+    "description": "Network vulnerability scanner",
+    "tech": ["Python", "Scapy", "Flask"]
+  }
+]`,
+              size: 256,
+              modified: new Date(),
+            },
+            resume: {
+              type: "directory",
+              name: "resume",
+              size: 0,
+              modified: new Date(),
+              children: {
+                "resume.pdf": {
+                  type: "file",
+                  name: "resume.pdf",
+                  content: "PDF resume document - Download from portfolio",
+                  size: 1024,
+                  modified: new Date(),
+                },
+              },
+            },
+            projects: {
+              type: "directory",
+              name: "projects",
+              size: 0,
+              modified: new Date(),
+              children: {
+                "cybersecurity": {
+                  type: "directory",
+                  name: "cybersecurity",
+                  size: 0,
+                  modified: new Date(),
+                  children: {
+                    "notes.txt": {
+                      type: "file",
+                      name: "notes.txt",
+                      content: "Security research and findings\n\nNotes on network security, cryptography, and best practices.",
+                      size: 256,
+                      modified: new Date(),
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    etc: {
+      type: "directory",
+      name: "etc",
+      size: 0,
+      modified: new Date(),
+      children: {
+        "config.conf": {
+          type: "file",
+          name: "config.conf",
+          content: "CyberOS Configuration File\nVersion: 3.0\nTheme: Dark\nLocale: en_US",
+          size: 128,
+          modified: new Date(),
+        },
+      },
+    },
+    usr: {
+      type: "directory",
+      name: "usr",
+      size: 0,
+      modified: new Date(),
+      children: {
+        bin: {
+          type: "directory",
+          name: "bin",
+          size: 0,
+          modified: new Date(),
+          children: {},
+        },
+      },
+    },
+  },
+});
 
 const PROJECTS: Project[] = [
   {
@@ -415,130 +504,232 @@ const Window = ({
   );
 };
 
-// Window Content Components
-const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
+// Enhanced Terminal Component with File System
+const TerminalWindow = ({ isDark, fileSystem, setFileSystem }: { isDark: boolean; fileSystem: FileSystemNode; setFileSystem: (fs: FileSystemNode) => void }) => {
   const [commands, setCommands] = useState<string[]>([
-    "Welcome to Aayush's Portfolio Terminal v3.0",
-    "Type 'help' to see available commands",
+    "Welcome to CyberOS Terminal v3.0",
+    "Type 'help' for available commands",
     "",
   ]);
   const [input, setInput] = useState("");
+  const [currentPath, setCurrentPath] = useState<string[]>(["home", "aayush"]);
+  const [editingFile, setEditingFile] = useState<{ path: string[]; name: string } | null>(null);
+  const [editContent, setEditContent] = useState("");
   const terminalRef = useRef<HTMLDivElement>(null);
 
+  const getNodeAtPath = (path: string[]): FileSystemNode | null => {
+    let node = fileSystem;
+    for (const part of path) {
+      if (node.children && node.children[part]) {
+        node = node.children[part];
+      } else {
+        return null;
+      }
+    }
+    return node;
+  };
+
   const handleCommand = (cmd: string) => {
-    const newCommands = [...commands, `aayush@portfolio:~$ ${cmd}`];
-    
-    switch (cmd.toLowerCase().trim()) {
+    const newCommands = [...commands];
+    const parts = cmd.trim().split(" ");
+    const command = parts[0];
+    const args = parts.slice(1);
+
+    const displayPrompt = () => `aayush@cyberos:~/${currentPath.join("/")}$`;
+
+    newCommands.push(`${displayPrompt()} ${cmd}`);
+
+    switch (command) {
       case "help":
         newCommands.push(
-          "Available commands:",
-          "  about     - Display information about me",
-          "  skills    - List my technical skills",
-          "  projects  - View my projects",
-          "  contact   - Get contact information",
-          "  clear     - Clear the terminal",
-          "  whoami    - Display current user",
-          "  pwd       - Print working directory",
-          "  ls        - List files",
-          "  date      - Display current date and time",
-          "  neofetch  - Display system information",
-          "  hack      - Simulate a hacking sequence"
+          "\nAvailable Commands:",
+          "  pwd              - Print working directory",
+          "  ls [dir]         - List files and directories",
+          "  cd [directory]   - Change directory",
+          "  mkdir [name]     - Create directory",
+          "  touch [file]     - Create file",
+          "  cat [file]       - View file contents",
+          "  nano [file]      - Edit file",
+          "  rm [file/dir]    - Remove file or directory",
+          "  clear            - Clear screen",
+          "  whoami           - Display user info",
+          "  date             - Show current date",
+          "  neofetch         - System information",
+          "  tree             - Show directory tree",
+          ""
         );
         break;
-      case "about":
-        newCommands.push(
-          "Name: Aayush Timalsina",
-          "Role: Cybersecurity Student",
-          "Location: Chitwan, Nepal",
-          "Education: Class 12, Skyrider College",
-          "Passion: Protecting digital assets and learning new security techniques"
-        );
+
+      case "pwd":
+        newCommands.push(currentPath.join("/") === "" ? "/" : "/" + currentPath.join("/") + "/");
         break;
-      case "skills":
-        newCommands.push(
-          "Technical Skills:",
-          "  • Penetration Testing & Ethical Hacking",
-          "  • Threat Detection & Monitoring",
-          "  • NMAP, Wireshark, Burp Suite",
-          "  • Python & Bash Scripting",
-          "  • Linux System Administration",
-          "  • Vulnerability Assessment"
-        );
+
+      case "ls":
+        const targetPath = args[0] ? [...currentPath, args[0]] : currentPath;
+        const target = getNodeAtPath(targetPath);
+        if (target && target.type === "directory" && target.children) {
+          const items = Object.values(target.children);
+          newCommands.push(
+            items.map((item) => `${item.type === "directory" ? "📁" : "📄"} ${item.name}`).join("  ")
+          );
+        } else {
+          newCommands.push("Directory not found");
+        }
         break;
-      case "projects":
-        newCommands.push(
-          "Projects:",
-          "  1. Network Security Lab",
-          "  2. Web Application Penetration Testing",
-          "  3. Network Traffic Analysis",
-          "  4. Price Tampering Vulnerability Research",
-          "",
-          "Type 'open projects' to view in GUI mode"
-        );
+
+      case "cd":
+        if (!args[0]) {
+          setCurrentPath(["home", "aayush"]);
+          newCommands.push("Changed to home directory");
+        } else if (args[0] === "..") {
+          if (currentPath.length > 0) {
+            setCurrentPath(currentPath.slice(0, -1));
+          }
+        } else {
+          const newPath = [...currentPath, args[0]];
+          const node = getNodeAtPath(newPath);
+          if (node && node.type === "directory") {
+            setCurrentPath(newPath);
+          } else {
+            newCommands.push(`bash: cd: ${args[0]}: No such file or directory`);
+          }
+        }
         break;
-      case "contact":
-        newCommands.push(
-          "Contact Information:",
-          "  Email: aayushtimalsina789@gmail.com",
-          "  Phone: +977 9845242492",
-          "  Location: Ratnanagar-10, Shanti Tole, Chitwan, Nepal",
-          "",
-          "Social Media:",
-          "  GitHub: github.com/aayush-timalsina",
-          "  LinkedIn: linkedin.com/in/aayush-timalsina",
-          "  Instagram: @t_y_p_e_c"
-        );
+
+      case "cat":
+        if (args[0]) {
+          const filePath = [...currentPath, args[0]];
+          const file = getNodeAtPath(filePath);
+          if (file && file.type === "file" && file.content) {
+            newCommands.push(file.content);
+          } else {
+            newCommands.push(`cat: ${args[0]}: No such file or directory`);
+          }
+        } else {
+          newCommands.push("Usage: cat [filename]");
+        }
         break;
+
+      case "nano":
+        if (args[0]) {
+          setEditingFile({ path: currentPath, name: args[0] });
+          const filePath = [...currentPath, args[0]];
+          const file = getNodeAtPath(filePath);
+          setEditContent(file && file.type === "file" ? file.content || "" : "");
+        } else {
+          newCommands.push("Usage: nano [filename]");
+        }
+        break;
+
+      case "mkdir":
+        if (args[0]) {
+          const currentNode = getNodeAtPath(currentPath);
+          if (currentNode && currentNode.children) {
+            currentNode.children[args[0]] = {
+              type: "directory",
+              name: args[0],
+              size: 0,
+              modified: new Date(),
+              children: {},
+            };
+            setFileSystem({ ...fileSystem });
+            newCommands.push(`Directory '${args[0]}' created`);
+          }
+        } else {
+          newCommands.push("Usage: mkdir [directory name]");
+        }
+        break;
+
+      case "touch":
+        if (args[0]) {
+          const currentNode = getNodeAtPath(currentPath);
+          if (currentNode && currentNode.children) {
+            currentNode.children[args[0]] = {
+              type: "file",
+              name: args[0],
+              content: "",
+              size: 0,
+              modified: new Date(),
+            };
+            setFileSystem({ ...fileSystem });
+            newCommands.push(`File '${args[0]}' created`);
+          }
+        } else {
+          newCommands.push("Usage: touch [filename]");
+        }
+        break;
+
       case "clear":
         setCommands([]);
         return;
+
       case "whoami":
         newCommands.push("aayush");
         break;
-      case "pwd":
-        newCommands.push("/home/aayush/portfolio");
-        break;
-      case "ls":
-        newCommands.push(
-          "about.md  contact.txt  projects/  skills.json  resume.pdf  README.md"
-        );
-        break;
+
       case "date":
         newCommands.push(new Date().toString());
         break;
+
       case "neofetch":
         newCommands.push(
-          "       .---.        aayush@portfolio",
+          "       .---.        aayush@cyberos",
           "      /     \\       ----------------",
           "      \\.@-@./       OS: CyberOS 3.0",
-          "      /`\\_/`\\       Kernel: Security-First",
-          "     //  _  \\\\      Uptime: Always Learning",
-          "    | \\     )|_     Shell: zsh",
-          "   /`\\_`>  <_/ \\    DE: ReactOS",
-          "   \\__/'---'\\__/    WM: Framer Motion",
-          "                    Theme: Cyberpunk",
-          "                    CPU: Brain v2.0",
-          "                    GPU: Imagination",
-          "                    Memory: Unlimited Curiosity"
+          "      /`\\_/`\\       Kernel: Security-First Arch",
+          "     //  _  \\\\      Shell: zsh 5.8",
+          "    | \\     )|_     DE: ReactOS Wind",
+          "   /`\\_`>  <_/ \\    WM: Framer Motion",
+          "   \\__/'---'\\__/    Theme: Cyberpunk Dark",
+          "                    Icons: Lucide React",
+          "                    RAM: 69 GiB (Nice)",
+          "                    CPU: Brain v2.0 Quantum"
         );
         break;
+
+      case "tree":
+        const printTree = (node: FileSystemNode, indent = "") => {
+          const lines: string[] = [];
+          if (node.children) {
+            const entries = Object.entries(node.children);
+            entries.forEach(([, child], idx) => {
+              const isLast = idx === entries.length - 1;
+              lines.push(`${indent}${isLast ? "└── " : "├── "}${child.type === "directory" ? "📁 " : "📄 "}${child.name}`);
+              if (child.type === "directory" && child.children) {
+                const childLines = printTree(child, indent + (isLast ? "    " : "│   "));
+                lines.push(...childLines);
+              }
+            });
+          }
+          return lines;
+        };
+        const currentNode = getNodeAtPath(currentPath);
+        if (currentNode) {
+          newCommands.push(currentNode.name);
+          newCommands.push(...printTree(currentNode));
+        }
+        break;
+
       case "hack":
         newCommands.push(
           "[+] Initializing penetration testing sequence...",
-          "[+] Scanning target...",
+          "[~] Scanning target...",
           "[+] Found 3 open ports",
-          "[+] Exploiting vulnerability...",
-          "[+] Access granted!",
-          "[+] Just kidding! This is a simulation.",
-          "[+] Remember: Ethical hacking only!"
+          "[!] Vulnerability detected in SSH service",
+          "[+] Attempting credential stuffing...",
+          "[✓] Access granted!",
+          "[!] Just kidding! This is a simulation.",
+          "[i] Remember: Only ethical hacking!",
+          "[i] Type 'help' for more commands"
         );
         break;
+
       default:
         if (cmd.trim()) {
-          newCommands.push(`Command not found: ${cmd}. Type 'help' for available commands.`);
+          newCommands.push(`bash: ${command}: command not found`);
         }
     }
-    
+
     newCommands.push("");
     setCommands(newCommands);
   };
@@ -557,22 +748,42 @@ const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
     }
   }, [commands]);
 
+  if (editingFile) {
+    return (
+      <NanoEditor
+        isDark={isDark}
+        content={editContent}
+        onSave={(content) => {
+          const parentPath = editingFile.path;
+          const parentNode = getNodeAtPath(parentPath);
+          if (parentNode && parentNode.children) {
+            parentNode.children[editingFile.name] = {
+              type: "file",
+              name: editingFile.name,
+              content,
+              size: content.length,
+              modified: new Date(),
+            };
+            setFileSystem({ ...fileSystem });
+            setCommands([...commands, `\nFile '${editingFile.name}' saved successfully\n`]);
+          }
+          setEditingFile(null);
+        }}
+        onExit={() => setEditingFile(null)}
+        onEdit={setEditContent}
+        filename={editingFile.name}
+      />
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        "h-full p-4 font-mono text-sm",
-        isDark ? "bg-gray-950 text-green-400" : "bg-gray-900 text-green-400"
-      )}
-    >
-      <div ref={terminalRef} className="h-full overflow-auto pb-8">
+    <div className={cn("h-full p-4 font-mono text-sm flex flex-col", isDark ? "bg-gray-950 text-green-400" : "bg-gray-900 text-green-400")}>
+      <div ref={terminalRef} className="flex-1 overflow-auto whitespace-pre-wrap text-xs md:text-sm">
         {commands.map((line, i) => (
-          <div key={i} className="whitespace-pre-wrap">
-            {line.startsWith("aayush@portfolio") ? (
+          <div key={i} className="leading-relaxed">
+            {line.startsWith("aayush@") ? (
               <span>
-                <span className="text-blue-400">aayush@portfolio</span>
-                <span className="text-white">:</span>
-                <span className="text-blue-400">~</span>
-                <span className="text-white">$</span>
+                <span className="text-cyan-400">{line.split("$")[0]}$</span>
                 <span className="text-gray-300"> {line.split("$ ")[1]}</span>
               </span>
             ) : line.startsWith("[") ? (
@@ -582,24 +793,74 @@ const TerminalWindow = ({ isDark }: { isDark: boolean }) => {
             )}
           </div>
         ))}
-        <form onSubmit={handleSubmit} className="flex items-center mt-2">
-          <span className="text-blue-400">aayush@portfolio</span>
-          <span className="text-white">:</span>
-          <span className="text-blue-400">~</span>
-          <span className="text-white">$</span>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none text-gray-300 ml-2"
-            autoFocus
-            spellCheck={false}
-          />
-        </form>
+      </div>
+      <form onSubmit={handleSubmit} className="flex items-center mt-2 border-t border-gray-700 pt-2">
+        <span className="text-cyan-400 flex-shrink-0 text-xs md:text-sm">aayush@cyberos</span>
+        <span className="text-white text-xs md:text-sm">:</span>
+        <span className="text-cyan-400 text-xs md:text-sm">{currentPath.length === 0 ? "/" : "/" + currentPath.join("/")}</span>
+        <span className="text-white text-xs md:text-sm">$</span>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="flex-1 bg-transparent border-none outline-none text-gray-300 ml-2 text-xs md:text-sm"
+          autoFocus
+          spellCheck={false}
+        />
+      </form>
+    </div>
+  );
+};
+
+// Nano Editor Component
+const NanoEditor = ({
+  isDark,
+  content,
+  onSave,
+  onExit,
+  onEdit,
+  filename,
+}: {
+  isDark: boolean;
+  content: string;
+  onSave: (content: string) => void;
+  onExit: () => void;
+  onEdit: (content: string) => void;
+  filename: string;
+}) => {
+  return (
+    <div className={cn("h-full flex flex-col", isDark ? "bg-gray-950 text-gray-100" : "bg-gray-900 text-gray-100")}>
+      <div className={cn("p-2 border-b text-xs", isDark ? "border-gray-700 bg-gray-800" : "border-gray-600 bg-gray-800")}>
+        <div className="font-semibold">GNU nano 6.4 - {filename}</div>
+      </div>
+
+      <textarea
+        value={content}
+        onChange={(e) => onEdit(e.target.value)}
+        className={cn(
+          "flex-1 p-4 font-mono text-sm border-none outline-none resize-none",
+          isDark ? "bg-gray-950 text-green-400" : "bg-gray-900 text-green-400"
+        )}
+        spellCheck={false}
+      />
+
+      <div className={cn("p-2 border-t text-xs", isDark ? "border-gray-700 bg-gray-800" : "border-gray-600 bg-gray-800")}>
+        <div className="flex flex-wrap gap-4 mb-2">
+          <span className="text-cyan-400 cursor-pointer hover:text-cyan-300 text-xs" onClick={() => onSave(content)}>
+            ^O WriteOut
+          </span>
+          <span className="text-cyan-400 cursor-pointer hover:text-cyan-300 text-xs" onClick={onExit}>
+            ^X Exit
+          </span>
+        </div>
+        <div className="text-gray-500 text-xs">
+          Lines: {content.split("\n").length} | Chars: {content.length}
+        </div>
       </div>
     </div>
   );
 };
+
 
 const AboutWindow = ({ isDark }: { isDark: boolean }) => {
   return (
@@ -1284,63 +1545,97 @@ const SettingsWindow = ({
   );
 };
 
-const FinderWindow = ({ isDark }: { isDark: boolean }) => {
-  const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
+const FinderWindow = ({ isDark, fileSystem }: { isDark: boolean; fileSystem?: FileSystemNode }) => {
+  const [selectedFolder, setSelectedFolder] = useState<string[]>(["home", "aayush"]);
+  const [currentPath, setCurrentPath] = useState(["home", "aayush"]);
   
-  const folders = [
-    { name: "Documents", icon: <FileText className="w-8 h-8 text-blue-500" />, items: 12 },
-    { name: "Projects", icon: <FolderOpen className="w-8 h-8 text-yellow-500" />, items: 4 },
-    { name: "Images", icon: <Image className="w-8 h-8 text-purple-500" />, items: 8 },
-    { name: "Music", icon: <Music className="w-8 h-8 text-pink-500" />, items: 24 },
-    { name: "Videos", icon: <Video className="w-8 h-8 text-red-500" />, items: 6 },
-    { name: "Downloads", icon: <Download className="w-8 h-8 text-green-500" />, items: 15 },
-  ];
+  const getNodeAtPath = (path: string[]): FileSystemNode | null => {
+    if (!fileSystem) return null;
+    let node = fileSystem;
+    for (const part of path) {
+      if (node.children && node.children[part]) {
+        node = node.children[part];
+      } else {
+        return null;
+      }
+    }
+    return node;
+  };
+
+  const currentNode = getNodeAtPath(currentPath);
 
   return (
-    <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
-      {/* Sidebar */}
-      <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
-        <div className="space-y-1">
-          <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-gray-500" : "text-gray-400")}>
-            Favorites
-          </p>
-          {["Desktop", "Documents", "Downloads", "Projects"].map((item) => (
-            <button
-              key={item}
-              onClick={() => setSelectedFolder(item)}
-              className={cn(
-                "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
-                selectedFolder === item
-                  ? isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
-                  : isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"
-              )}
-            >
-              <FolderOpen className="w-4 h-4" />
-              {item}
-            </button>
-          ))}
+    <div className={cn("h-full flex flex-col", isDark ? "bg-gray-900" : "bg-gray-50")}>
+      {/* Toolbar */}
+      <div className={cn("px-4 py-3 border-b", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+        <div className="text-sm" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {currentPath.length === 0 ? "/" : "/" + currentPath.join("/")}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 p-6">
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {folders.map((folder) => (
-            <motion.button
-              key={folder.name}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"
-            >
-              <div className="mb-2">{folder.icon}</div>
-              <span className={cn("text-sm font-medium", isDark ? "text-gray-300" : "text-gray-700")}>
-                {folder.name}
-              </span>
-              <span className={cn("text-xs", isDark ? "text-gray-500" : "text-gray-400")}>
-                {folder.items} items
-              </span>
-            </motion.button>
-          ))}
+      <div className={cn("h-full flex", isDark ? "bg-gray-900" : "bg-gray-50")}>
+        {/* Sidebar */}
+        <div className={cn("w-48 p-4 border-r", isDark ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200")}>
+          <div className="space-y-1">
+            <p className={cn("text-xs font-semibold uppercase tracking-wider mb-3 px-3", isDark ? "text-gray-500" : "text-gray-400")}>
+              Quick Access
+            </p>
+            {[
+              { name: "Home", path: ["home", "aayush"] },
+              { name: "Projects", path: ["home", "aayush", "projects"] },
+              { name: "Resume", path: ["home", "aayush", "resume"] },
+            ].map((item) => (
+              <button
+                key={item.name}
+                onClick={() => setCurrentPath(item.path)}
+                className={cn(
+                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
+                  JSON.stringify(currentPath) === JSON.stringify(item.path)
+                    ? isDark ? "bg-blue-600 text-white" : "bg-blue-500 text-white"
+                    : isDark ? "text-gray-300 hover:bg-gray-700" : "text-gray-700 hover:bg-gray-200"
+                )}
+              >
+                <FolderOpen className="w-4 h-4" />
+                {item.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          {currentNode && currentNode.type === "directory" && currentNode.children ? (
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {Object.values(currentNode.children).map((item) => (
+                <motion.button
+                  key={item.name}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    if (item.type === "directory") {
+                      setCurrentPath([...currentPath, item.name]);
+                    }
+                  }}
+                  className="flex flex-col items-center p-4 rounded-xl transition-colors hover:bg-white/5"
+                >
+                  <div className="mb-2">
+                    {item.type === "directory" ? (
+                      <FolderOpen className="w-8 h-8 text-blue-500" />
+                    ) : (
+                      <FileText className="w-8 h-8 text-gray-500" />
+                    )}
+                  </div>
+                  <span className={cn("text-sm font-medium text-center truncate w-full", isDark ? "text-gray-300" : "text-gray-700")}>
+                    {item.name}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          ) : (
+            <div className={cn("text-center py-12", isDark ? "text-gray-400" : "text-gray-600")}>
+              Empty folder
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -2264,6 +2559,7 @@ function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [showControlCenter, setShowControlCenter] = useState(false);
+  const [fileSystem, setFileSystem] = useState<FileSystemNode>(initializeFileSystem());
   const [windows, setWindows] = useState<WindowState[]>([
     {
       id: "terminal",
@@ -2429,7 +2725,7 @@ function App() {
   const getWindowContent = (win: WindowState) => {
     switch (win.type) {
       case "terminal":
-        return <TerminalWindow isDark={isDark} />;
+        return <TerminalWindow isDark={isDark} fileSystem={fileSystem} setFileSystem={setFileSystem} />;
       case "about":
         return <AboutWindow isDark={isDark} />;
       case "projects":
@@ -2452,7 +2748,7 @@ function App() {
           />
         );
       case "finder":
-        return <FinderWindow isDark={isDark} />;
+        return <FinderWindow isDark={isDark} fileSystem={fileSystem} />;
       case "calculator":
         return <CalculatorWindow isDark={isDark} />;
       case "calendar":
@@ -2600,7 +2896,7 @@ function App() {
         >
           <div className="flex items-center gap-4">
             <Shield className="w-4 h-4 text-blue-500" />
-            <span className="font-semibold text-sm">CyberOS</span>
+            <span className="font-semibold text-sm">CyberOS v3.0 Enhanced</span>
             <div className="hidden md:flex items-center gap-3 text-sm">
               {["File", "Edit", "View", "Window", "Help"].map((menuName) => (
                 <button
