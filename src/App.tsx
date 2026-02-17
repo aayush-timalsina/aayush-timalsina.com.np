@@ -2295,388 +2295,6 @@ const MenuDropdown = ({
   );
 };
 
-// Login Screen Component
-const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isUnlocking, setIsUnlocking] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === "TYPE-C") {
-      setIsUnlocking(true);
-      setTimeout(() => {
-        onLogin();
-      }, 800);
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 1000);
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 30%, #111127 60%, #0a0a14 100%)",
-      }}
-    >
-      {/* Subtle animated background particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Faint grid lines */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
-          }}
-        />
-        <motion.div
-          animate={{
-            backgroundPosition: ["0px 0px", "120px 120px"],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: "linear-gradient(135deg, rgba(59,130,246,0.6) 1px, transparent 1px)",
-            backgroundSize: "120px 120px",
-          }}
-        />
-        <motion.div
-          animate={{ 
-            opacity: [0.05, 0.12, 0.05],
-          }}
-          transition={{ 
-            duration: 6, repeat: Infinity, ease: "easeInOut"
-          }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
-        <motion.div
-          animate={{ 
-            opacity: [0.08, 0.15, 0.08],
-          }}
-          transition={{ 
-            duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2
-          }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
-        <motion.div
-          animate={{ x: ["-30%", "130%"] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-0 left-0 h-full w-1/3 opacity-[0.08]"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.8) 50%, transparent 100%)",
-            filter: "blur(24px)",
-          }}
-        />
-        <motion.div
-          animate={{ backgroundPosition: ["0px 0px", "240px 240px"] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: "repeating-linear-gradient(120deg, rgba(56,189,248,0.25) 0 1px, transparent 1px 22px)",
-            backgroundSize: "240px 240px",
-          }}
-        />
-        <div className="absolute inset-0 opacity-[0.05] hacker-noise" />
-        <div className="absolute inset-0 pointer-events-none scanline" />
-      </div>
-
-      <motion.div
-        className="relative z-10 w-full max-w-md mx-4"
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div
-          className="absolute -inset-3 rounded-[28px] blur-2xl opacity-40"
-          style={{
-            background: "conic-gradient(from 120deg, rgba(59,130,246,0.6), rgba(139,92,246,0.6), rgba(16,185,129,0.5), rgba(59,130,246,0.6))",
-          }}
-        />
-        <motion.div
-          initial={{ scale: 0.92, y: 24, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          transition={{ type: "spring", damping: 18, stiffness: 120 }}
-          className="relative w-full p-8 rounded-[26px] shadow-2xl overflow-hidden"
-          style={{
-            background: isDark 
-              ? "rgba(10, 12, 20, 0.9)"
-              : "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(28px)",
-            border: "1px solid rgba(56, 189, 248, 0.3)",
-            boxShadow: "0 0 90px rgba(56, 189, 248, 0.12), 0 30px 70px rgba(0,0,0,0.6)",
-          }}
-        >
-          <div
-            className="absolute inset-0 opacity-[0.1]"
-            style={{
-              backgroundImage: "radial-gradient(rgba(56,189,248,0.35) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-            }}
-          />
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute left-4 top-4 w-10 h-10 border-l border-t border-cyan-400/50" />
-            <div className="absolute right-4 top-4 w-10 h-10 border-r border-t border-cyan-400/50" />
-            <div className="absolute left-4 bottom-4 w-10 h-10 border-l border-b border-cyan-400/50" />
-            <div className="absolute right-4 bottom-4 w-10 h-10 border-r border-b border-cyan-400/50" />
-          </div>
-
-          <div className="relative z-10 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <p className="text-xs tracking-[0.2em] text-cyan-300/70">CYBEROS ACCESS</p>
-                  <h1 className="text-2xl font-bold text-white">Secure Login</h1>
-                </div>
-                <div className="text-xs text-cyan-300/80 px-2 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10">
-                  LINK LIVE
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <motion.div
-                  animate={isUnlocking ? { scale: 0.92, opacity: 0 } : { scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center relative overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(14,165,233,0.35), rgba(6,182,212,0.35))",
-                    border: "1px solid rgba(56,189,248,0.4)",
-                    boxShadow: "0 0 26px rgba(56,189,248,0.25)",
-                  }}
-                >
-                  <img
-                    src={PROFILE_IMAGE}
-                    alt="Aayush Timalsina"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
-                    }}
-                  />
-                  <User className="w-8 h-8 text-cyan-300 hidden absolute" />
-                  <div className="absolute inset-0" style={{ border: "1px solid rgba(56,189,248,0.3)" }} />
-                </motion.div>
-                <div>
-                  <motion.h2
-                    animate={isUnlocking ? { y: -6, opacity: 0 } : { y: 0, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-lg font-semibold text-white"
-                  >
-                    Aayush Timalsina
-                  </motion.h2>
-                  <p className="text-xs text-cyan-200/70">Cybersecurity Student</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3 text-xs">
-              {[
-                { label: "Clearance", value: "Level 3" },
-                { label: "Session", value: "Encrypted" },
-                { label: "Latency", value: "12ms" },
-                { label: "Shield", value: "Armed" },
-              ].map((item) => (
-                <div key={item.label} className="rounded-xl p-3 border border-cyan-400/20 bg-cyan-400/5">
-                  <div className="text-cyan-200/70">{item.label}</div>
-                  <div className="text-white font-semibold mt-1">{item.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-cyan-200/70">Biometric session encrypted</p>
-              <div className="flex items-center gap-2 text-xs text-cyan-300/80">
-                <span className="inline-block w-2 h-2 rounded-full bg-cyan-400" />
-                Secure Link
-              </div>
-            </div>
-            <div className="flex items-center justify-center mb-6">
-              <div
-                className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2"
-                style={{
-                  background: "rgba(14,165,233,0.12)",
-                  border: "1px solid rgba(56,189,248,0.3)",
-                  color: "#67e8f9",
-                }}
-              >
-                <span className="inline-block w-2 h-2 rounded-full bg-cyan-400" />
-                System Integrity: 99%
-              </div>
-            </div>
-
-            {/* Password Display */}
-            <motion.div
-              animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
-              className="mb-6 p-4 rounded-xl text-center"
-              style={{
-                background: "rgba(14,165,233,0.06)",
-                border: "1px solid rgba(56,189,248,0.18)",
-              }}
-            >
-              <p className="text-xs uppercase tracking-wider mb-2 text-cyan-200/70">
-                Password Hint
-              </p>
-              <div className="flex items-center justify-center gap-2">
-                <Lock className="w-4 h-4 text-cyan-300" />
-                <code className="text-lg font-mono font-bold tracking-wider text-cyan-300">
-                  TYPE-C
-                </code>
-              </div>
-              <p className="text-xs mt-2 text-cyan-200/60">
-                Enter this password to unlock
-              </p>
-            </motion.div>
-
-            {/* Login Form */}
-            <motion.form
-              animate={isUnlocking ? { opacity: 0, y: -12 } : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              onSubmit={handleLogin}
-              className="space-y-4"
-            >
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password..."
-                  className={cn(
-                    "w-full px-4 py-3 pr-12 rounded-xl outline-none transition-all text-center font-mono tracking-wider text-white placeholder-cyan-200/40",
-                    error 
-                      ? "animate-shake border-2 border-red-500/50 bg-red-500/5"
-                      : "border border-cyan-400/30 focus:border-cyan-300"
-                  )}
-                  style={{
-                    background: error ? "rgba(239,68,68,0.05)" : "rgba(3, 6, 12, 0.6)",
-                  }}
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg transition-colors text-cyan-200/60 hover:text-cyan-200"
-                >
-                  {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-                </button>
-              </div>
-
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-400 text-sm text-center"
-                >
-                  Incorrect password. Try again.
-                </motion.p>
-              )}
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all text-white"
-                style={{
-                  background: "linear-gradient(135deg, rgba(6,182,212,0.5), rgba(14,165,233,0.6))",
-                  border: "1px solid rgba(56,189,248,0.35)",
-                  boxShadow: "0 0 20px rgba(56,189,248,0.2)",
-                }}
-              >
-                <Shield className="w-5 h-5" />
-                Unlock System
-              </motion.button>
-            </motion.form>
-
-            {/* Unlock Animation Overlay */}
-            <AnimatePresence>
-              {isUnlocking && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 flex items-center justify-center rounded-2xl"
-                  style={{ background: "rgba(6, 8, 16, 0.9)" }}
-                >
-                  <motion.div
-                    animate={{ 
-                      scale: [1, 1.4, 1.8],
-                      opacity: [1, 0.5, 0],
-                    }}
-                    transition={{ duration: 0.7 }}
-                    className="w-20 h-20 rounded-full flex items-center justify-center"
-                    style={{
-                      background: "linear-gradient(135deg, rgba(6,182,212,0.6), rgba(14,165,233,0.6))",
-                    }}
-                  >
-                    <Unlock className="w-10 h-10 text-white" />
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Footer */}
-      <motion.div
-        animate={isUnlocking ? { opacity: 0 } : { opacity: 1 }}
-        className="absolute bottom-8 text-center"
-      >
-        <p className="text-sm text-gray-700">
-          CyberOS v3.0 Portfolio Edition
-        </p>
-      </motion.div>
-
-      {/* CSS for shake animation */}
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-          20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
-        }
-        .hacker-noise {
-          background-image:
-            repeating-linear-gradient(0deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 3px),
-            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 4px);
-          mix-blend-mode: screen;
-        }
-        @keyframes scanline {
-          0% { transform: translateY(-100%); opacity: 0; }
-          10% { opacity: 0.4; }
-          50% { opacity: 0.08; }
-          100% { transform: translateY(100%); opacity: 0; }
-        }
-        .scanline::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          height: 120px;
-          background: linear-gradient(180deg, transparent 0%, rgba(59,130,246,0.12) 50%, transparent 100%);
-          animation: scanline 6s linear infinite;
-        }
-      `}</style>
-    </motion.div>
-  );
-};
-
 // Main App Component
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -2704,7 +2322,6 @@ function App() {
   ]);
   const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [zIndexCounter, setZIndexCounter] = useState(2);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -2983,21 +2600,35 @@ function App() {
         .volume-slider::-moz-range-progress {
           background: #ec4899;
         }
+        .cyber-grid {
+          background-image:
+            linear-gradient(rgba(56,189,248,0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(56,189,248,0.08) 1px, transparent 1px);
+          background-size: 80px 80px;
+          opacity: 0.2;
+        }
+        .cyber-noise {
+          background-image:
+            repeating-linear-gradient(0deg, rgba(56,189,248,0.08) 0 1px, transparent 1px 3px),
+            repeating-linear-gradient(90deg, rgba(14,165,233,0.05) 0 1px, transparent 1px 4px);
+          mix-blend-mode: screen;
+          opacity: 0.15;
+        }
+        .cyber-sweep {
+          background: linear-gradient(90deg, transparent 0%, rgba(56,189,248,0.25) 50%, transparent 100%);
+          animation: cyberSweep 10s ease-in-out infinite;
+          opacity: 0.25;
+        }
+        @keyframes cyberSweep {
+          0% { transform: translateX(-60%); }
+          50% { transform: translateX(60%); }
+          100% { transform: translateX(120%); }
+        }
       `}</style>
       
-      {/* Login Screen */}
-      <AnimatePresence>
-        {!isLoggedIn && (
-          <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
-        )}
-      </AnimatePresence>
-
       {/* Main Desktop */}
       <div
-        className={cn(
-          "min-h-screen w-full overflow-hidden transition-opacity duration-500",
-          isLoggedIn ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
+        className="min-h-screen w-full overflow-hidden transition-opacity duration-500"
         style={{
           filter: `brightness(${brightness}%)`,
         }}
@@ -3015,6 +2646,59 @@ function App() {
             isDark ? "bg-black/40" : "bg-white/20"
           )}
         />
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute inset-0 cyber-grid" />
+          <div className="absolute inset-0 cyber-noise" />
+          <div className="absolute inset-0 cyber-sweep" />
+        </div>
+
+        <div className="fixed top-12 right-6 z-[85]">
+          <div
+            className={cn(
+              "rounded-2xl p-4 w-64 border shadow-2xl backdrop-blur-xl",
+              isDark ? "bg-slate-950/70 border-cyan-400/20" : "bg-white/70 border-cyan-500/30"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl overflow-hidden border"
+                style={{ borderColor: "rgba(56,189,248,0.45)" }}
+              >
+                <img
+                  src={PROFILE_IMAGE}
+                  alt="Aayush Timalsina"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                  }}
+                />
+                <User className="w-6 h-6 text-cyan-300 hidden" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-white">Aayush Timalsina</div>
+                <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+              {[
+                { label: "Clearance", value: "L3" },
+                { label: "Ops", value: "Live" },
+                { label: "Signal", value: "Secure" },
+                { label: "Status", value: "Ready" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-lg px-2 py-2 border"
+                  style={{ borderColor: "rgba(56,189,248,0.2)", background: "rgba(6,182,212,0.08)" }}
+                >
+                  <div className="text-cyan-200/70">{item.label}</div>
+                  <div className="text-white font-semibold mt-0.5">{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Menu Bar */}
         <div
