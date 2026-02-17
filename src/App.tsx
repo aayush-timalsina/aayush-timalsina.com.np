@@ -2301,6 +2301,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isUnlocking, setIsUnlocking] = useState(false);
+  const [booting, setBooting] = useState(true);
   const sessionIdRef = useRef(`0x${Math.floor(1e12 + Math.random() * 9e12).toString(16).toUpperCase()}`);
 
   const accessLog = [
@@ -2330,6 +2331,11 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     { label: "Protocol", value: "ZETA-9" },
   ];
 
+  useEffect(() => {
+    const timer = setTimeout(() => setBooting(false), 2600);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === " TYPE-C") {
@@ -2358,10 +2364,53 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       <div className="absolute inset-0 pointer-events-none login-sweep" />
       <div className="absolute inset-0 pointer-events-none login-radial" />
       <div className="absolute inset-0 pointer-events-none login-matrix" />
+      <div className="absolute inset-0 pointer-events-none login-orb login-orb-1" />
+      <div className="absolute inset-0 pointer-events-none login-orb login-orb-2" />
+      <div className="absolute inset-0 pointer-events-none login-orb login-orb-3" />
+      <div className="absolute inset-0 pointer-events-none login-corner login-corner-tl" />
+      <div className="absolute inset-0 pointer-events-none login-corner login-corner-tr" />
+      <div className="absolute inset-0 pointer-events-none login-corner login-corner-bl" />
+      <div className="absolute inset-0 pointer-events-none login-corner login-corner-br" />
+      <span className="absolute left-6 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
+        CyberOS v3.0
+      </span>
+      <span className="absolute right-6 top-1/2 -translate-y-1/2 rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
+        Portfolio 2026
+      </span>
+      <div className="absolute inset-0 pointer-events-none login-glitch" />
+      <div className="absolute left-0 right-0 h-0.5 login-hscan" />
+      <div className="absolute left-0 right-0 h-0.5 login-hscan login-hscan-2" />
+
+      <div className="absolute inset-0 pointer-events-none login-typing">
+        <div className="login-typing-line">&gt; initializing portfolio...</div>
+        <div className="login-typing-line">&gt; loading modules: [react, framer-motion, tailwind]</div>
+        <div className="login-typing-line">&gt; connecting to aayush-timalsina.com.np</div>
+        <div className="login-typing-line login-typing-ok">&gt; status: DEPLOYED ✓</div>
+      </div>
+
+      <AnimatePresence>
+        {booting && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="absolute inset-0 z-[220] flex flex-col items-center justify-center bg-[#030308]"
+          >
+            <div className="login-boot-logo">
+              <Shield className="w-8 h-8 text-cyan-300" />
+            </div>
+            <div className="login-boot-text">CyberOS</div>
+            <div className="login-boot-bar">
+              <div className="login-boot-bar-fill" />
+            </div>
+            <div className="login-boot-status">Initializing secure environment...</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
         <div className="w-full max-w-6xl">
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto_1fr] items-center">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto_1fr] items-center">
             <div className="hidden lg:flex flex-col gap-4">
               <div className="login-panel">
                 <div className="login-panel-title">
@@ -2417,6 +2466,14 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               <div className="absolute inset-0 pointer-events-none login-scanline" />
               <div className="absolute inset-0 pointer-events-none login-frame" />
 
+              <div className="relative z-10 text-[11px] text-cyan-200/70 flex items-center justify-between login-mono">
+                <span>&gt; deploy --production</span>
+                <span className="login-live">
+                  <span />
+                  NOW LIVE
+                </span>
+              </div>
+
               <div className="relative z-10 text-center">
                 <p className="text-xs tracking-[0.35em] text-cyan-300/70">SECURE ACCESS</p>
                 <h1 className="text-2xl font-semibold text-white mt-2 login-glitch" data-text="CYBEROS LOGIN">
@@ -2430,20 +2487,30 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               </div>
 
               <div className="relative z-10 flex flex-col items-center mt-6">
-                <div className="login-avatar">
-                  <img
-                    src={PROFILE_IMAGE}
-                    alt="Aayush Timalsina"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
-                    }}
-                  />
-                  <User className="w-8 h-8 text-cyan-300 hidden" />
+                <div className="login-profile">
+                  <div className="login-profile-ring">
+                    <img
+                      src={PROFILE_IMAGE}
+                      alt="Aayush Timalsina"
+                      className="w-full h-full object-cover login-profile-img"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                        (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                      }}
+                    />
+                    <User className="w-8 h-8 text-cyan-300 hidden" />
+                  </div>
+                  <div className="login-profile-orbit" />
+                  <div className="login-profile-hex" />
                 </div>
-                <div className="mt-3 text-white font-semibold">Aayush Timalsina</div>
+                <div className="mt-4 text-white font-semibold">Aayush Timalsina</div>
                 <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
+              </div>
+
+              <div className="relative z-10 mt-5 text-center">
+                <div className="text-xs uppercase tracking-[0.5em] text-cyan-200/60">Access Portal</div>
+                <div className="text-3xl font-semibold text-white mt-2 login-title-line">MY PORTFOLIO</div>
+                <div className="text-2xl font-semibold text-transparent mt-1 login-title-line-stroke">IS LIVE</div>
               </div>
 
               <div className="relative z-10 mt-5 grid grid-cols-2 gap-3 text-[11px] text-cyan-100/70">
@@ -2646,6 +2713,114 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 32px);
           opacity: 0.15;
         }
+        .login-orb {
+          opacity: 0.25;
+          filter: blur(90px);
+        }
+        .login-orb-1 {
+          background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%);
+          animation: orbFloat1 8s ease-in-out infinite;
+        }
+        .login-orb-2 {
+          background: radial-gradient(circle, rgba(139,92,246,0.18), transparent 70%);
+          animation: orbFloat2 10s ease-in-out infinite;
+        }
+        .login-orb-3 {
+          background: radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%);
+          animation: orbFloat1 9s ease-in-out infinite;
+        }
+        .login-orb-1 { inset: -10% auto auto -15%; width: 45vw; height: 45vw; position: absolute; }
+        .login-orb-2 { inset: 30% -20% auto auto; width: 55vw; height: 55vw; position: absolute; }
+        .login-orb-3 { inset: auto auto -10% 5%; width: 40vw; height: 40vw; position: absolute; }
+        .login-corner {
+          width: 30px;
+          height: 30px;
+          position: absolute;
+          opacity: 0.7;
+        }
+        .login-corner-tl { top: 24px; left: 24px; border-top: 2px solid rgba(59,130,246,0.4); border-left: 2px solid rgba(59,130,246,0.4); }
+        .login-corner-tr { top: 24px; right: 24px; border-top: 2px solid rgba(59,130,246,0.4); border-right: 2px solid rgba(59,130,246,0.4); }
+        .login-corner-bl { bottom: 24px; left: 24px; border-bottom: 2px solid rgba(139,92,246,0.4); border-left: 2px solid rgba(139,92,246,0.4); }
+        .login-corner-br { bottom: 24px; right: 24px; border-bottom: 2px solid rgba(139,92,246,0.4); border-right: 2px solid rgba(139,92,246,0.4); }
+        .login-glitch {
+          background: rgba(59,130,246,0.08);
+          opacity: 0;
+          animation: glitchFlash 0.12s ease-out 2.4s, glitchFlash 0.12s ease-out 4.6s, glitchFlash 0.12s ease-out 7s;
+        }
+        .login-hscan {
+          top: 0;
+          background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent);
+          opacity: 0.8;
+          animation: hScan 3s ease-in-out 2.5s forwards;
+          box-shadow: 0 0 20px rgba(59,130,246,0.3);
+        }
+        .login-hscan-2 {
+          animation-delay: 6s;
+        }
+        .login-typing {
+          padding: 60px 32px;
+          opacity: 0;
+          animation: fadeIn 0.3s ease-out 2.6s forwards, fadeOut 0.5s ease-out 3.8s forwards;
+        }
+        .login-typing-line {
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+          font-size: 12px;
+          color: rgba(59,130,246,0.5);
+          margin-bottom: 4px;
+          opacity: 0;
+          animation: typeIn 0.3s ease-out forwards;
+        }
+        .login-typing-line:nth-child(1) { animation-delay: 2.7s; }
+        .login-typing-line:nth-child(2) { animation-delay: 2.9s; }
+        .login-typing-line:nth-child(3) { animation-delay: 3.1s; }
+        .login-typing-line:nth-child(4) { animation-delay: 3.3s; }
+        .login-typing-ok { color: rgba(34,197,94,0.8); }
+        .login-boot-logo {
+          width: 80px;
+          height: 80px;
+          border: 2px solid rgba(56,189,248,0.5);
+          border-radius: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 30px rgba(56,189,248,0.35), inset 0 0 20px rgba(56,189,248,0.1);
+          margin-bottom: 22px;
+          animation: bootLogoIn 0.6s ease-out 0.2s forwards;
+        }
+        .login-boot-text {
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+          letter-spacing: 0.6em;
+          text-transform: uppercase;
+          color: rgba(56,189,248,0.85);
+          font-size: 14px;
+          margin-bottom: 18px;
+          opacity: 0;
+          animation: fadeIn 0.4s ease-out 0.6s forwards;
+        }
+        .login-boot-bar {
+          width: 200px;
+          height: 3px;
+          background: rgba(56,189,248,0.15);
+          border-radius: 2px;
+          overflow: hidden;
+          opacity: 0;
+          animation: fadeIn 0.3s ease-out 0.9s forwards;
+        }
+        .login-boot-bar-fill {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+          animation: loadBar 1.2s ease-out 1s forwards;
+          box-shadow: 0 0 10px rgba(56,189,248,0.5);
+        }
+        .login-boot-status {
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+          font-size: 11px;
+          color: rgba(59,130,246,0.4);
+          margin-top: 14px;
+          opacity: 0;
+          animation: fadeIn 0.3s ease-out 1.2s forwards;
+        }
         .login-card {
           border: 1px solid rgba(56,189,248,0.3);
           backdrop-filter: blur(24px);
@@ -2738,6 +2913,69 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           border: 1px solid rgba(56,189,248,0.45);
           box-shadow: 0 0 25px rgba(56,189,248,0.2);
         }
+        .login-profile {
+          position: relative;
+          width: 160px;
+          height: 160px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .login-profile-ring {
+          width: 140px;
+          height: 140px;
+          border-radius: 999px;
+          padding: 3px;
+          background: conic-gradient(from 0deg, #38bdf8, #8b5cf6, #ec4899, #38bdf8);
+          animation: ringSpin 6s linear infinite, ringGlow 4s ease-in-out infinite;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 40px rgba(59,130,246,0.25);
+        }
+        .login-profile-img {
+          width: 100%;
+          height: 100%;
+          border-radius: 999px;
+          border: 3px solid #0a0a1a;
+        }
+        .login-profile-orbit {
+          position: absolute;
+          width: 180px;
+          height: 180px;
+          border-radius: 999px;
+          border: 1px dashed rgba(59,130,246,0.18);
+          animation: spinSlow 18s linear infinite;
+        }
+        .login-profile-orbit::before,
+        .login-profile-orbit::after {
+          content: "";
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: #38bdf8;
+          box-shadow: 0 0 10px rgba(59,130,246,0.8);
+        }
+        .login-profile-orbit::before { top: -3px; left: 50%; transform: translateX(-50%); }
+        .login-profile-orbit::after { bottom: -3px; left: 50%; transform: translateX(-50%); }
+        .login-profile-hex {
+          position: absolute;
+          width: 200px;
+          height: 200px;
+          border-radius: 999px;
+          border: 1px solid rgba(59,130,246,0.08);
+          animation: spinSlow 30s linear infinite reverse;
+        }
+        .login-title-line {
+          background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 30%, #38bdf8 60%, #8b5cf6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .login-title-line-stroke {
+          -webkit-text-stroke: 1.5px rgba(56,189,248,0.5);
+          letter-spacing: 0.05em;
+        }
         .login-glitch {
           position: relative;
           display: inline-block;
@@ -2770,6 +3008,25 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           background: rgba(6, 12, 22, 0.6);
           font-family: "Share Tech Mono", ui-monospace, monospace;
           letter-spacing: 0.12em;
+        }
+        .login-live {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 10px;
+          padding: 4px 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.3);
+          background: rgba(6, 12, 22, 0.6);
+          letter-spacing: 0.24em;
+        }
+        .login-live span {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: #22c55e;
+          box-shadow: 0 0 10px rgba(34,197,94,0.8);
+          animation: pulseDot 1.8s ease-in-out infinite;
         }
         .login-chip {
           display: flex;
@@ -2837,6 +3094,46 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           50% { transform: translateX(50%); }
           100% { transform: translateX(120%); }
         }
+        @keyframes orbFloat1 {
+          0%, 100% { transform: scale(1) translate(0, 0); }
+          50% { transform: scale(1.1) translate(12px, -16px); }
+        }
+        @keyframes orbFloat2 {
+          0%, 100% { transform: scale(1) translate(0, 0); }
+          50% { transform: scale(1.08) translate(-12px, 12px); }
+        }
+        @keyframes glitchFlash {
+          0% { opacity: 0; }
+          50% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+        @keyframes hScan {
+          0% { top: 0%; opacity: 0.8; }
+          100% { top: 100%; opacity: 0; }
+        }
+        @keyframes typeIn {
+          from { opacity: 0; transform: translateX(-10px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes bootLogoIn {
+          from { opacity: 0; transform: scale(0.6) rotate(-10deg); }
+          to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        @keyframes loadBar {
+          to { width: 100%; }
+        }
+        @keyframes ringGlow {
+          0%, 100% { box-shadow: 0 0 40px rgba(59,130,246,0.25), 0 0 80px rgba(139,92,246,0.15); }
+          50% { box-shadow: 0 0 60px rgba(59,130,246,0.4), 0 0 120px rgba(139,92,246,0.25); }
+        }
+        @keyframes ringSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes spinSlow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
         @keyframes scanline {
           0% { transform: translateY(-120%); }
           100% { transform: translateY(120%); }
@@ -2860,6 +3157,9 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         @keyframes pulseDot {
           0%, 100% { transform: scale(0.7); opacity: 0.6; }
           50% { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes fadeOut {
+          to { opacity: 0; }
         }
       `}</style>
     </motion.div>
