@@ -2381,13 +2381,23 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             filter: "blur(24px)",
           }}
         />
+        <motion.div
+          animate={{ backgroundPosition: ["0px 0px", "240px 240px"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: "repeating-linear-gradient(120deg, rgba(56,189,248,0.25) 0 1px, transparent 1px 22px)",
+            backgroundSize: "240px 240px",
+          }}
+        />
+        <div className="absolute inset-0 opacity-[0.05] hacker-noise" />
         <div className="absolute inset-0 pointer-events-none scanline" />
       </div>
 
       <motion.div
-        className="relative z-10 w-full max-w-2xl mx-4"
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="relative z-10 w-full max-w-md mx-4"
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       >
         <div
           className="absolute -inset-3 rounded-[28px] blur-2xl opacity-40"
@@ -2399,7 +2409,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           initial={{ scale: 0.92, y: 24, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
           transition={{ type: "spring", damping: 18, stiffness: 120 }}
-          className="relative grid md:grid-cols-[1.05fr_1.2fr] gap-6 p-8 rounded-[26px] shadow-2xl overflow-hidden"
+          className="relative w-full p-8 rounded-[26px] shadow-2xl overflow-hidden"
           style={{
             background: isDark 
               ? "rgba(10, 12, 20, 0.9)"
@@ -2639,6 +2649,12 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         }
         .animate-shake {
           animation: shake 0.5s ease-in-out;
+        }
+        .hacker-noise {
+          background-image:
+            repeating-linear-gradient(0deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 3px),
+            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 4px);
+          mix-blend-mode: screen;
         }
         @keyframes scanline {
           0% { transform: translateY(-100%); opacity: 0; }
