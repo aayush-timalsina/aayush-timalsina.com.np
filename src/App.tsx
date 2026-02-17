@@ -2301,6 +2301,34 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
   const [error, setError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isUnlocking, setIsUnlocking] = useState(false);
+  const sessionIdRef = useRef(`0x${Math.floor(1e12 + Math.random() * 9e12).toString(16).toUpperCase()}`);
+
+  const accessLog = [
+    { node: "gate-07", status: "GRANTED", time: "00:13:24" },
+    { node: "core-12", status: "VERIFIED", time: "00:13:11" },
+    { node: "mesh-02", status: "TRACE", time: "00:12:58" },
+    { node: "proxy-5", status: "BLOCKED", time: "00:12:41" },
+  ];
+
+  const threatQueue = [
+    { label: "Port scan intercepted", level: "LOW" },
+    { label: "Credential spoofing", level: "MED" },
+    { label: "Anomaly spike", level: "HIGH" },
+  ];
+
+  const nodeSignals = [
+    { node: "node-a9", strength: 82 },
+    { node: "node-b4", strength: 67 },
+    { node: "node-c1", strength: 91 },
+    { node: "node-f2", strength: 54 },
+  ];
+
+  const systemVitals = [
+    { label: "Cipher", value: "AES-256" },
+    { label: "Entropy", value: "98.2%" },
+    { label: "Uptime", value: "42:18:07" },
+    { label: "Protocol", value: "ZETA-9" },
+  ];
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -2320,162 +2348,518 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[200] overflow-hidden login-root"
       style={{
-        background: "radial-gradient(circle at top, rgba(14,165,233,0.12), transparent 45%), linear-gradient(135deg, #07090f 0%, #0b1220 45%, #05070d 100%)",
+        background: "radial-gradient(circle at top, rgba(14,165,233,0.12), transparent 45%), linear-gradient(135deg, #05070d 0%, #0b1120 50%, #02030a 100%)",
       }}
     >
       <div className="absolute inset-0 pointer-events-none login-grid" />
       <div className="absolute inset-0 pointer-events-none login-noise" />
       <div className="absolute inset-0 pointer-events-none login-sweep" />
+      <div className="absolute inset-0 pointer-events-none login-radial" />
+      <div className="absolute inset-0 pointer-events-none login-matrix" />
 
-      <motion.div
-        initial={{ scale: 0.94, y: 18, opacity: 0 }}
-        animate={{ scale: 1, y: 0, opacity: 1 }}
-        transition={{ type: "spring", damping: 18, stiffness: 120 }}
-        className={cn(
-          "relative w-full max-w-md mx-4 rounded-3xl p-7 shadow-2xl overflow-hidden",
-          isDark ? "bg-slate-950/80" : "bg-white/70"
-        )}
-        style={{
-          border: "1px solid rgba(56,189,248,0.3)",
-          backdropFilter: "blur(24px)",
-          boxShadow: "0 0 70px rgba(56,189,248,0.15), 0 30px 70px rgba(0,0,0,0.6)",
-        }}
-      >
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-4 top-4 w-10 h-10 border-l border-t border-cyan-400/50" />
-          <div className="absolute right-4 top-4 w-10 h-10 border-r border-t border-cyan-400/50" />
-          <div className="absolute left-4 bottom-4 w-10 h-10 border-l border-b border-cyan-400/50" />
-          <div className="absolute right-4 bottom-4 w-10 h-10 border-r border-b border-cyan-400/50" />
-        </div>
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
+        <div className="w-full max-w-6xl">
+          <div className="grid gap-6 lg:grid-cols-[1fr_auto_1fr] items-center">
+            <div className="hidden lg:flex flex-col gap-4">
+              <div className="login-panel">
+                <div className="login-panel-title">
+                  <Terminal className="w-4 h-4" />
+                  Access Log
+                </div>
+                <div className="space-y-3">
+                  {accessLog.map((log) => (
+                    <div key={log.node} className="flex items-center justify-between text-xs text-cyan-100/80">
+                      <div className="flex items-center gap-2">
+                        <span className="login-dot" />
+                        <span className="login-mono">{log.node}</span>
+                      </div>
+                      <div className="login-mono">{log.time}</div>
+                      <div className="login-tag">{log.status}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-        <div className="relative z-10 text-center">
-          <p className="text-xs tracking-[0.25em] text-cyan-300/70">SECURE ACCESS</p>
-          <h1 className="text-2xl font-bold text-white mt-2">CyberOS Login</h1>
-          <p className="text-xs text-cyan-200/60 mt-1">Encrypted session handshake</p>
-        </div>
+              <div className="login-panel">
+                <div className="login-panel-title">
+                  <Activity className="w-4 h-4" />
+                  System Integrity
+                </div>
+                <div className="space-y-3">
+                  {systemVitals.map((item) => (
+                    <div key={item.label} className="flex items-center justify-between text-xs text-cyan-100/80">
+                      <span className="login-mono">{item.label}</span>
+                      <span className="login-mono text-cyan-200/80">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="login-bars mt-4">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            </div>
 
-        <div className="relative z-10 flex flex-col items-center mt-6">
-          <div
-            className="w-24 h-24 rounded-2xl overflow-hidden border"
-            style={{ borderColor: "rgba(56,189,248,0.45)" }}
-          >
-            <img
-              src={PROFILE_IMAGE}
-              alt="Aayush Timalsina"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-                (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
-              }}
-            />
-            <User className="w-8 h-8 text-cyan-300 hidden" />
-          </div>
-          <div className="mt-3 text-white font-semibold">Aayush Timalsina</div>
-          <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
-        </div>
-
-        <motion.form
-          onSubmit={handleLogin}
-          className="relative z-10 mt-6 space-y-4"
-          animate={isUnlocking ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password..."
-              className={cn(
-                "w-full px-4 py-3 pr-12 rounded-xl outline-none text-center font-mono tracking-wider text-white placeholder-cyan-200/40",
-                error ? "border-2 border-red-500/50" : "border border-cyan-400/30 focus:border-cyan-300"
-              )}
-              style={{ background: "rgba(3, 6, 12, 0.7)" }}
-              autoFocus
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-cyan-200/60 hover:text-cyan-200"
-            >
-              {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-400 text-sm text-center"
-            >
-              Incorrect password. Try again.
-            </motion.p>
-          )}
-
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-white"
-            style={{
-              background: "linear-gradient(135deg, rgba(6,182,212,0.55), rgba(14,165,233,0.7))",
-              border: "1px solid rgba(56,189,248,0.35)",
-              boxShadow: "0 0 20px rgba(56,189,248,0.25)",
-            }}
-          >
-            <Shield className="w-5 h-5" />
-            Unlock System
-          </motion.button>
-        </motion.form>
-
-        <AnimatePresence>
-          {isUnlocking && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ background: "rgba(4, 8, 14, 0.9)" }}
+              initial={{ scale: 0.94, y: 18, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", damping: 18, stiffness: 120 }}
+              className={cn(
+                "relative w-full max-w-md mx-auto rounded-3xl p-7 shadow-2xl overflow-hidden login-card",
+                isDark ? "bg-slate-950/80" : "bg-white/70"
+              )}
             >
-              <motion.div
-                animate={{ scale: [1, 1.35, 1.7], opacity: [1, 0.6, 0] }}
-                transition={{ duration: 0.7 }}
-                className="w-20 h-20 rounded-full flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.7), rgba(14,165,233,0.7))" }}
+              <div className="absolute inset-0 pointer-events-none login-scanline" />
+              <div className="absolute inset-0 pointer-events-none login-frame" />
+
+              <div className="relative z-10 text-center">
+                <p className="text-xs tracking-[0.35em] text-cyan-300/70">SECURE ACCESS</p>
+                <h1 className="text-2xl font-semibold text-white mt-2 login-glitch" data-text="CYBEROS LOGIN">
+                  CYBEROS LOGIN
+                </h1>
+                <p className="text-xs text-cyan-200/60 mt-1 login-mono">Encrypted session handshake</p>
+                <div className="flex items-center justify-center gap-2 mt-3 text-[10px] text-cyan-200/70">
+                  <span className="login-pill">SESSION {sessionIdRef.current}</span>
+                  <span className="login-pill">ENCLAVE-11</span>
+                </div>
+              </div>
+
+              <div className="relative z-10 flex flex-col items-center mt-6">
+                <div className="login-avatar">
+                  <img
+                    src={PROFILE_IMAGE}
+                    alt="Aayush Timalsina"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                  <User className="w-8 h-8 text-cyan-300 hidden" />
+                </div>
+                <div className="mt-3 text-white font-semibold">Aayush Timalsina</div>
+                <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
+              </div>
+
+              <div className="relative z-10 mt-5 grid grid-cols-2 gap-3 text-[11px] text-cyan-100/70">
+                <div className="login-chip">
+                  <Shield className="w-3.5 h-3.5" />
+                  Multi-layer encryption
+                </div>
+                <div className="login-chip">
+                  <Eye className="w-3.5 h-3.5" />
+                  Behavior lock active
+                </div>
+                <div className="login-chip">
+                  <Cpu className="w-3.5 h-3.5" />
+                  Neural checks online
+                </div>
+                <div className="login-chip">
+                  <HardDrive className="w-3.5 h-3.5" />
+                  Vault synced 3/3
+                </div>
+              </div>
+
+              <motion.form
+                onSubmit={handleLogin}
+                className="relative z-10 mt-6 space-y-4"
+                animate={isUnlocking ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                <Unlock className="w-10 h-10 text-white" />
-              </motion.div>
+                <div className="relative">
+                  <div className="login-label">Access Key</div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password..."
+                    className={cn(
+                      "w-full px-4 py-3 pr-12 rounded-xl outline-none text-center login-mono text-white placeholder-cyan-200/40",
+                      error ? "border-2 border-red-500/50" : "border border-cyan-400/30 focus:border-cyan-300"
+                    )}
+                    style={{ background: "rgba(3, 6, 12, 0.7)" }}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-cyan-200/60 hover:text-cyan-200"
+                  >
+                    {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-[1fr_auto] gap-3 items-center">
+                  <div className="login-signal">
+                    <span className="login-signal-dot" />
+                    Signal integrity 94%
+                  </div>
+                  <div className="login-signal">
+                    <Wifi className="w-3.5 h-3.5" />
+                    Mesh route stable
+                  </div>
+                </div>
+
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-sm text-center"
+                  >
+                    Incorrect password. Try again.
+                  </motion.p>
+                )}
+
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-white"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(6,182,212,0.55), rgba(14,165,233,0.7))",
+                    border: "1px solid rgba(56,189,248,0.35)",
+                    boxShadow: "0 0 20px rgba(56,189,248,0.25)",
+                  }}
+                >
+                  <Shield className="w-5 h-5" />
+                  Unlock System
+                </motion.button>
+              </motion.form>
+
+              <div className="relative z-10 mt-5 flex items-center justify-between text-[10px] text-cyan-200/70">
+                <span className="login-mono">AUTH LAYER: QUANTUM</span>
+                <span className="login-status">
+                  <span />
+                  LIVE SYNC
+                </span>
+              </div>
+
+              <AnimatePresence>
+                {isUnlocking && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{ background: "rgba(4, 8, 14, 0.92)" }}
+                  >
+                    <motion.div
+                      animate={{ scale: [1, 1.35, 1.7], opacity: [1, 0.6, 0] }}
+                      transition={{ duration: 0.7 }}
+                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.7), rgba(14,165,233,0.7))" }}
+                    >
+                      <Unlock className="w-10 h-10 text-white" />
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+
+            <div className="hidden lg:flex flex-col gap-4">
+              <div className="login-panel">
+                <div className="login-panel-title">
+                  <Zap className="w-4 h-4" />
+                  Threat Monitor
+                </div>
+                <div className="space-y-2">
+                  {threatQueue.map((threat) => (
+                    <div key={threat.label} className="flex items-center justify-between text-xs">
+                      <span className="login-mono text-cyan-100/80">{threat.label}</span>
+                      <span className="login-tag">{threat.level}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="login-graph mt-4">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+
+              <div className="login-panel">
+                <div className="login-panel-title">
+                  <GitBranch className="w-4 h-4" />
+                  Network Nodes
+                </div>
+                <div className="space-y-3">
+                  {nodeSignals.map((node) => (
+                    <div key={node.node} className="space-y-1">
+                      <div className="flex items-center justify-between text-xs text-cyan-100/80">
+                        <span className="login-mono">{node.node}</span>
+                        <span className="login-mono">{node.strength}%</span>
+                      </div>
+                      <div className="login-progress">
+                        <div style={{ width: `${node.strength}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <style>{`
+        .login-root {
+          font-family: "Space Grotesk", sans-serif;
+        }
+        .login-mono {
+          font-family: "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          letter-spacing: 0.08em;
+        }
         .login-grid {
           background-image:
             linear-gradient(rgba(56,189,248,0.08) 1px, transparent 1px),
             linear-gradient(90deg, rgba(56,189,248,0.08) 1px, transparent 1px);
           background-size: 90px 90px;
-          opacity: 0.2;
+          opacity: 0.18;
         }
         .login-noise {
           background-image:
             repeating-linear-gradient(0deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 3px),
             repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 4px);
           mix-blend-mode: screen;
-          opacity: 0.2;
+          opacity: 0.25;
         }
         .login-sweep {
           background: linear-gradient(90deg, transparent 0%, rgba(56,189,248,0.25) 50%, transparent 100%);
           animation: loginSweep 9s ease-in-out infinite;
-          opacity: 0.2;
+          opacity: 0.25;
+        }
+        .login-radial {
+          background: radial-gradient(circle at 20% 20%, rgba(14,165,233,0.18), transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(34,211,238,0.2), transparent 45%);
+          opacity: 0.6;
+        }
+        .login-matrix {
+          background-image:
+            repeating-linear-gradient(180deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 28px),
+            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 32px);
+          opacity: 0.15;
+        }
+        .login-card {
+          border: 1px solid rgba(56,189,248,0.3);
+          backdrop-filter: blur(24px);
+          box-shadow: 0 0 70px rgba(56,189,248,0.15), 0 30px 70px rgba(0,0,0,0.6);
+        }
+        .login-frame::before,
+        .login-frame::after {
+          content: "";
+          position: absolute;
+          inset: 16px;
+          border: 1px solid rgba(56,189,248,0.15);
+          border-radius: 20px;
+          pointer-events: none;
+        }
+        .login-frame::after {
+          inset: 32px;
+          border-color: rgba(56,189,248,0.08);
+        }
+        .login-scanline {
+          background: linear-gradient(180deg, transparent 0%, rgba(56,189,248,0.18) 50%, transparent 100%);
+          animation: scanline 6s linear infinite;
+          opacity: 0.25;
+        }
+        .login-panel {
+          background: rgba(8, 12, 22, 0.75);
+          border: 1px solid rgba(56,189,248,0.2);
+          border-radius: 20px;
+          padding: 18px;
+          box-shadow: inset 0 0 30px rgba(56,189,248,0.08);
+        }
+        .login-panel-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          color: rgba(165,243,252,0.7);
+          margin-bottom: 12px;
+        }
+        .login-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(34,211,238,0.9);
+          box-shadow: 0 0 10px rgba(34,211,238,0.8);
+        }
+        .login-tag {
+          font-size: 10px;
+          padding: 2px 6px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.35);
+          color: rgba(165,243,252,0.85);
+        }
+        .login-bars {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 6px;
+        }
+        .login-bars span {
+          height: 42px;
+          border-radius: 999px;
+          background: linear-gradient(180deg, rgba(56,189,248,0.4), rgba(8, 12, 22, 0.6));
+          animation: pulseBars 2.4s ease-in-out infinite;
+        }
+        .login-bars span:nth-child(2) { animation-delay: 0.2s; }
+        .login-bars span:nth-child(3) { animation-delay: 0.4s; }
+        .login-bars span:nth-child(4) { animation-delay: 0.6s; }
+        .login-bars span:nth-child(5) { animation-delay: 0.8s; }
+        .login-graph {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 6px;
+        }
+        .login-graph span {
+          height: 32px;
+          border-radius: 6px;
+          background: linear-gradient(180deg, rgba(248,113,113,0.6), rgba(8, 12, 22, 0.5));
+          animation: pulseGraph 2.2s ease-in-out infinite;
+        }
+        .login-graph span:nth-child(2) { animation-delay: 0.25s; }
+        .login-graph span:nth-child(3) { animation-delay: 0.4s; }
+        .login-graph span:nth-child(4) { animation-delay: 0.55s; }
+        .login-graph span:nth-child(5) { animation-delay: 0.7s; }
+        .login-avatar {
+          width: 96px;
+          height: 96px;
+          border-radius: 20px;
+          overflow: hidden;
+          border: 1px solid rgba(56,189,248,0.45);
+          box-shadow: 0 0 25px rgba(56,189,248,0.2);
+        }
+        .login-glitch {
+          position: relative;
+          display: inline-block;
+          letter-spacing: 0.14em;
+        }
+        .login-glitch::before,
+        .login-glitch::after {
+          content: attr(data-text);
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          overflow: hidden;
+          color: rgba(56,189,248,0.8);
+          mix-blend-mode: screen;
+          clip-path: inset(0 0 0 0);
+        }
+        .login-glitch::before {
+          transform: translate(1px, -1px);
+          animation: glitchShift 2.6s infinite linear alternate-reverse;
+        }
+        .login-glitch::after {
+          transform: translate(-1px, 1px);
+          animation: glitchShift 1.9s infinite linear alternate-reverse;
+        }
+        .login-pill {
+          padding: 2px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.3);
+          background: rgba(6, 12, 22, 0.6);
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+          letter-spacing: 0.12em;
+        }
+        .login-chip {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(56,189,248,0.2);
+          background: rgba(6, 12, 22, 0.55);
+        }
+        .login-label {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: rgba(165,243,252,0.7);
+          margin-bottom: 6px;
+        }
+        .login-signal {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 10px;
+          padding: 6px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.2);
+          color: rgba(165,243,252,0.7);
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+        }
+        .login-signal-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(34,211,238,0.9);
+          box-shadow: 0 0 12px rgba(34,211,238,0.9);
+        }
+        .login-progress {
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(6, 12, 22, 0.7);
+          overflow: hidden;
+          border: 1px solid rgba(56,189,248,0.2);
+        }
+        .login-progress div {
+          height: 100%;
+          background: linear-gradient(90deg, rgba(56,189,248,0.6), rgba(34,211,238,0.9));
+          box-shadow: 0 0 14px rgba(56,189,248,0.6);
+        }
+        .login-status {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          letter-spacing: 0.18em;
+        }
+        .login-status span {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(34,211,238,0.9);
+          box-shadow: 0 0 12px rgba(34,211,238,0.9);
+          animation: pulseDot 1.8s ease-in-out infinite;
         }
         @keyframes loginSweep {
           0% { transform: translateX(-60%); }
           50% { transform: translateX(50%); }
           100% { transform: translateX(120%); }
+        }
+        @keyframes scanline {
+          0% { transform: translateY(-120%); }
+          100% { transform: translateY(120%); }
+        }
+        @keyframes glitchShift {
+          0% { clip-path: inset(0 0 80% 0); }
+          20% { clip-path: inset(10% 0 60% 0); }
+          40% { clip-path: inset(40% 0 20% 0); }
+          60% { clip-path: inset(60% 0 5% 0); }
+          80% { clip-path: inset(10% 0 60% 0); }
+          100% { clip-path: inset(0 0 80% 0); }
+        }
+        @keyframes pulseBars {
+          0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+          50% { transform: scaleY(1); opacity: 1; }
+        }
+        @keyframes pulseGraph {
+          0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+          50% { transform: scaleY(1); opacity: 1; }
+        }
+        @keyframes pulseDot {
+          0%, 100% { transform: scale(0.7); opacity: 0.6; }
+          50% { transform: scale(1.1); opacity: 1; }
         }
       `}</style>
     </motion.div>
