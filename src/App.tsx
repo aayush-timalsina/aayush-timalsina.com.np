@@ -2572,6 +2572,10 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                   </div>
                 </div>
 
+                <div className="text-center text-[11px] text-cyan-200/70">
+                  Password: <span className="login-mono text-cyan-100/90 login-password">&nbsp;TYPE-C</span>
+                </div>
+
                 {error && (
                   <motion.p
                     initial={{ opacity: 0, y: -8 }}
@@ -3027,6 +3031,13 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
           background: #22c55e;
           box-shadow: 0 0 10px rgba(34,197,94,0.8);
           animation: pulseDot 1.8s ease-in-out infinite;
+        }
+        .login-password {
+          padding: 2px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.45);
+          background: rgba(6, 12, 22, 0.7);
+          box-shadow: 0 0 18px rgba(56,189,248,0.5), inset 0 0 10px rgba(56,189,248,0.25);
         }
         .login-chip {
           display: flex;
