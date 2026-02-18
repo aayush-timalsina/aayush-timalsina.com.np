@@ -2317,6 +2317,47 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     { label: "Anomaly spike", level: "HIGH" },
   ];
 
+  const scriptLines = [
+    "net.scan --nodes=42 --latency=12ms",
+    "ids.trace --signature=polymorph",
+    "tls.handshake --cipher=AES-256",
+    "fw.rules sync --policy=zero-trust",
+    "anomaly.watch --threshold=0.84",
+    "mesh.route --optimize --hops=7",
+    "vault.verify --checksum=OK",
+    "packet.flow --qos=high",
+  ];
+
+  const scriptStream = [...scriptLines, ...scriptLines];
+
+  const networkNodes = [
+    { id: 0, x: 8, y: 16 },
+    { id: 1, x: 18, y: 28 },
+    { id: 2, x: 28, y: 18 },
+    { id: 3, x: 38, y: 30 },
+    { id: 4, x: 50, y: 22 },
+    { id: 5, x: 62, y: 32 },
+    { id: 6, x: 72, y: 18 },
+    { id: 7, x: 82, y: 30 },
+    { id: 8, x: 92, y: 20 },
+    { id: 9, x: 12, y: 58 },
+    { id: 10, x: 24, y: 68 },
+    { id: 11, x: 36, y: 56 },
+    { id: 12, x: 48, y: 72 },
+    { id: 13, x: 60, y: 60 },
+    { id: 14, x: 74, y: 70 },
+    { id: 15, x: 86, y: 58 },
+    { id: 16, x: 20, y: 88 },
+    { id: 17, x: 58, y: 88 },
+  ];
+
+  const networkEdges: Array<[number, number]> = [
+    [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8],
+    [1, 9], [2, 11], [3, 10], [4, 12], [5, 13], [6, 15],
+    [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15],
+    [10, 16], [12, 17], [9, 16], [14, 17],
+  ];
+
   const nodeSignals = [
     { node: "node-a9", strength: 82 },
     { node: "node-b4", strength: 67 },
@@ -2364,6 +2405,37 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       <div className="absolute inset-0 pointer-events-none login-sweep" />
       <div className="absolute inset-0 pointer-events-none login-radial" />
       <div className="absolute inset-0 pointer-events-none login-matrix" />
+      <div className="absolute inset-0 pointer-events-none login-network">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="netLine" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="rgba(34,211,238,0.08)" />
+              <stop offset="100%" stopColor="rgba(56,189,248,0.35)" />
+            </linearGradient>
+          </defs>
+          <g className="login-network-lines">
+            {networkEdges.map(([from, to]) => {
+              const start = networkNodes.find((node) => node.id === from);
+              const end = networkNodes.find((node) => node.id === to);
+              if (!start || !end) return null;
+              return (
+                <line
+                  key={`${from}-${to}`}
+                  x1={start.x}
+                  y1={start.y}
+                  x2={end.x}
+                  y2={end.y}
+                />
+              );
+            })}
+          </g>
+          <g className="login-network-nodes">
+            {networkNodes.map((node) => (
+              <circle key={node.id} cx={node.x} cy={node.y} r={0.9} />
+            ))}
+          </g>
+        </svg>
+      </div>
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-1" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-2" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-3" />
@@ -2386,6 +2458,53 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         <div className="login-typing-line">&gt; loading modules: [react, framer-motion, tailwind]</div>
         <div className="login-typing-line">&gt; connecting to aayush-timalsina.com.np</div>
         <div className="login-typing-line login-typing-ok">&gt; status: DEPLOYED ✓</div>
+      </div>
+
+      <div className="absolute left-8 bottom-10 hidden lg:block pointer-events-none login-script">
+        <div className="login-script-header">SCRIPT STREAM</div>
+        <div className="login-script-body">
+          <div className="login-script-track">
+            {scriptStream.map((line, index) => (
+              <div key={`${line}-${index}`} className="login-script-line">
+                &gt; {line}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute right-10 top-24 hidden lg:block pointer-events-none login-radar">
+        <div className="login-radar-sweep" />
+        <div className="login-radar-ring" />
+        <div className="login-radar-ring" />
+        <div className="login-radar-ring" />
+        <span className="login-radar-dot" />
+        <span className="login-radar-dot login-radar-dot-2" />
+        <span className="login-radar-dot login-radar-dot-3" />
+      </div>
+
+      <div className="absolute right-8 bottom-10 hidden lg:flex flex-col gap-3 pointer-events-none login-widget-group">
+        <div className="login-widget">
+          <div className="login-widget-title">Netflow</div>
+          <div className="login-widget-row">
+            <span>Bandwidth</span>
+            <span className="login-widget-value">842 Mbps</span>
+          </div>
+          <div className="login-widget-bar">
+            <span style={{ width: "82%" }} />
+          </div>
+        </div>
+        <div className="login-widget">
+          <div className="login-widget-title">Threat Index</div>
+          <div className="login-widget-row">
+            <span>Current</span>
+            <span className="login-widget-value">0.14</span>
+          </div>
+          <div className="login-widget-badges">
+            <span>ENCRYPTED</span>
+            <span>MONITORED</span>
+          </div>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -2689,6 +2808,28 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         }
         .login-grid {
           background-image:
+        .login-network {
+          opacity: 0.7;
+          mix-blend-mode: screen;
+          animation: networkFloat 18s ease-in-out infinite;
+        }
+        .login-network svg {
+          width: 100%;
+          height: 100%;
+        }
+        .login-network-lines line {
+          stroke: url(#netLine);
+          stroke-width: 0.25;
+          opacity: 0.7;
+        }
+        .login-network-nodes circle {
+          fill: rgba(34,211,238,0.9);
+          filter: drop-shadow(0 0 4px rgba(34,211,238,0.8));
+          animation: pulseDot 2.6s ease-in-out infinite;
+        }
+        .login-network-nodes circle:nth-child(odd) {
+          animation-delay: 0.6s;
+        }
             linear-gradient(rgba(56,189,248,0.08) 1px, transparent 1px),
             linear-gradient(90deg, rgba(56,189,248,0.08) 1px, transparent 1px);
           background-size: 90px 90px;
@@ -2779,6 +2920,130 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         .login-typing-line:nth-child(3) { animation-delay: 3.1s; }
         .login-typing-line:nth-child(4) { animation-delay: 3.3s; }
         .login-typing-ok { color: rgba(34,197,94,0.8); }
+        .login-script {
+          width: 260px;
+          border: 1px solid rgba(56,189,248,0.25);
+          border-radius: 16px;
+          background: rgba(4, 8, 14, 0.7);
+          box-shadow: 0 0 30px rgba(59,130,246,0.15);
+          overflow: hidden;
+        }
+        .login-script-header {
+          font-size: 10px;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          padding: 10px 12px;
+          color: rgba(165,243,252,0.7);
+          border-bottom: 1px solid rgba(56,189,248,0.2);
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+        }
+        .login-script-body {
+          height: 140px;
+          overflow: hidden;
+          padding: 12px;
+        }
+        .login-script-track {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          animation: scriptScroll 14s linear infinite;
+        }
+        .login-script-line {
+          font-size: 11px;
+          color: rgba(56,189,248,0.75);
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+        }
+        .login-radar {
+          width: 180px;
+          height: 180px;
+          border-radius: 999px;
+          border: 1px solid rgba(56,189,248,0.3);
+          background: radial-gradient(circle, rgba(34,211,238,0.1), transparent 65%);
+          box-shadow: 0 0 30px rgba(34,211,238,0.15);
+          position: relative;
+          overflow: hidden;
+        }
+        .login-radar-sweep {
+          position: absolute;
+          inset: -50%;
+          background: conic-gradient(from 0deg, rgba(34,211,238,0.35), transparent 35%);
+          animation: radarSweep 5.2s linear infinite;
+        }
+        .login-radar-ring {
+          position: absolute;
+          inset: 20px;
+          border-radius: 999px;
+          border: 1px dashed rgba(56,189,248,0.3);
+        }
+        .login-radar-ring:nth-of-type(2) { inset: 45px; opacity: 0.6; }
+        .login-radar-ring:nth-of-type(3) { inset: 70px; opacity: 0.4; }
+        .login-radar-dot {
+          position: absolute;
+          top: 30%;
+          left: 64%;
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(34,211,238,0.95);
+          box-shadow: 0 0 12px rgba(34,211,238,0.8);
+          animation: pulseDot 2s ease-in-out infinite;
+        }
+        .login-radar-dot-2 { top: 58%; left: 42%; animation-delay: 0.8s; }
+        .login-radar-dot-3 { top: 72%; left: 68%; animation-delay: 1.4s; }
+        .login-widget-group {
+          align-items: stretch;
+        }
+        .login-widget {
+          width: 220px;
+          border: 1px solid rgba(56,189,248,0.25);
+          border-radius: 16px;
+          background: rgba(4, 8, 14, 0.7);
+          padding: 12px;
+          box-shadow: 0 0 24px rgba(59,130,246,0.18);
+          font-family: "Share Tech Mono", ui-monospace, monospace;
+          color: rgba(165,243,252,0.8);
+        }
+        .login-widget-title {
+          font-size: 10px;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+        }
+        .login-widget-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 11px;
+          margin-bottom: 8px;
+        }
+        .login-widget-value {
+          color: rgba(34,211,238,0.9);
+        }
+        .login-widget-bar {
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(6, 12, 22, 0.7);
+          overflow: hidden;
+          border: 1px solid rgba(56,189,248,0.2);
+        }
+        .login-widget-bar span {
+          display: block;
+          height: 100%;
+          background: linear-gradient(90deg, rgba(56,189,248,0.6), rgba(34,211,238,0.9));
+          box-shadow: 0 0 12px rgba(56,189,248,0.5);
+        }
+        .login-widget-badges {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+          font-size: 9px;
+        }
+        .login-widget-badges span {
+          padding: 2px 6px;
+          border-radius: 999px;
+          border: 1px solid rgba(34,211,238,0.35);
+          color: rgba(34,211,238,0.8);
+          background: rgba(6, 12, 22, 0.6);
+        }
         .login-boot-logo {
           width: 80px;
           height: 80px;
@@ -3168,6 +3433,18 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         @keyframes pulseDot {
           0%, 100% { transform: scale(0.7); opacity: 0.6; }
           50% { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes networkFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-12px); }
+        }
+        @keyframes scriptScroll {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+        @keyframes radarSweep {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
         @keyframes fadeOut {
           to { opacity: 0; }
