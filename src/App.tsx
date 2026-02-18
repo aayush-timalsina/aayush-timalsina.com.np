@@ -2966,7 +2966,7 @@ function App() {
   const [currentSong, setCurrentSong] = useState({
     title: "Warning",
     artist: "Masoom Sharma, Swara Verma",
-    url: "https://example.com/warning.mp3" // User will replace with actual URL
+    url: "/audio/Warning.mp3"
   });
   const [customUrl, setCustomUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
