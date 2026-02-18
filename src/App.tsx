@@ -3268,135 +3268,35 @@ function App() {
           filter: `brightness(${brightness}%)`,
         }}
       >
-        {/* Live Animated Wallpaper */}
+        {/* Live Video Wallpaper */}
         <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
-          {/* Deep space base */}
-          <div className="absolute inset-0" style={{
-            background: isDark
-              ? "radial-gradient(ellipse at 20% 50%, #0d0221 0%, #0a0118 40%, #000000 100%)"
-              : "radial-gradient(ellipse at 20% 50%, #e8f4f8 0%, #dbeafe 40%, #f0f9ff 100%)"
-          }} />
-
-          {/* Aurora layer 1 */}
-          <div className="absolute inset-0" style={{
-            background: isDark
-              ? "radial-gradient(ellipse 120% 60% at 30% 40%, rgba(76,29,149,0.55) 0%, transparent 70%)"
-              : "radial-gradient(ellipse 120% 60% at 30% 40%, rgba(196,181,253,0.4) 0%, transparent 70%)",
-            animation: "aurora1 12s ease-in-out infinite alternate",
-          }} />
-          {/* Aurora layer 2 */}
-          <div className="absolute inset-0" style={{
-            background: isDark
-              ? "radial-gradient(ellipse 100% 70% at 70% 60%, rgba(6,182,212,0.35) 0%, transparent 65%)"
-              : "radial-gradient(ellipse 100% 70% at 70% 60%, rgba(103,232,249,0.35) 0%, transparent 65%)",
-            animation: "aurora2 15s ease-in-out infinite alternate",
-          }} />
-          {/* Aurora layer 3 */}
-          <div className="absolute inset-0" style={{
-            background: isDark
-              ? "radial-gradient(ellipse 80% 50% at 50% 80%, rgba(219,39,119,0.25) 0%, transparent 60%)"
-              : "radial-gradient(ellipse 80% 50% at 50% 80%, rgba(251,182,206,0.3) 0%, transparent 60%)",
-            animation: "aurora3 18s ease-in-out infinite alternate",
-          }} />
-          {/* Aurora layer 4 - green teal */}
-          <div className="absolute inset-0" style={{
-            background: isDark
-              ? "radial-gradient(ellipse 90% 40% at 80% 20%, rgba(16,185,129,0.2) 0%, transparent 60%)"
-              : "radial-gradient(ellipse 90% 40% at 80% 20%, rgba(167,243,208,0.3) 0%, transparent 60%)",
-            animation: "aurora4 20s ease-in-out infinite alternate",
-          }} />
-
-          {/* Floating orbs */}
-          {[
-            { size: 420, x: "15%", y: "20%", color: isDark ? "rgba(139,92,246,0.12)" : "rgba(196,181,253,0.2)", dur: "25s" },
-            { size: 320, x: "70%", y: "60%", color: isDark ? "rgba(6,182,212,0.1)" : "rgba(147,210,233,0.2)", dur: "30s" },
-            { size: 250, x: "45%", y: "75%", color: isDark ? "rgba(236,72,153,0.1)" : "rgba(251,182,206,0.2)", dur: "22s" },
-            { size: 180, x: "85%", y: "15%", color: isDark ? "rgba(16,185,129,0.08)" : "rgba(167,243,208,0.2)", dur: "28s" },
-          ].map((orb, i) => (
-            <div key={i} className="absolute rounded-full" style={{
-              width: orb.size, height: orb.size,
-              left: orb.x, top: orb.y,
-              background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
-              transform: "translate(-50%, -50%)",
-              animation: `orbFloat${i} ${orb.dur} ease-in-out infinite alternate`,
-              filter: "blur(40px)",
-            }} />
-          ))}
-
-          {/* Stars / particles */}
-          {[...Array(80)].map((_, i) => (
-            <div key={i} className="absolute rounded-full" style={{
-              width: Math.random() * 2 + 1,
-              height: Math.random() * 2 + 1,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              background: isDark ? "rgba(255,255,255,0.6)" : "rgba(100,100,200,0.3)",
-              animation: `starTwinkle ${2 + Math.random() * 4}s ease-in-out infinite alternate`,
-              animationDelay: `${Math.random() * 5}s`,
-            }} />
-          ))}
-
-          {/* Scanline overlay */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: isDark ? "brightness(0.75) saturate(1.1)" : "brightness(0.92) saturate(1.05)" }}
+          >
+            <source src="/video/videoplayback.webm" type="video/webm" />
+          </video>
+          {/* Vignette overlay */}
           <div className="absolute inset-0 pointer-events-none" style={{
-            backgroundImage: isDark
-              ? "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px)"
-              : "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.015) 3px, rgba(0,0,0,0.015) 6px)",
-          }} />
-
-          {/* Vignette */}
-          <div className="absolute inset-0" style={{
             background: isDark
-              ? "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.65) 100%)"
-              : "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,50,0.12) 100%)",
+              ? "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)"
+              : "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,20,0.25) 100%)",
+          }} />
+          {/* Subtle scanlines */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)",
           }} />
         </div>
-
-        <style>{`
-          @keyframes aurora1 {
-            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.8; }
-            50%  { transform: scale(1.15) translate(5%, -8%) rotate(5deg); opacity: 1; }
-            100% { transform: scale(0.95) translate(-5%, 5%) rotate(-3deg); opacity: 0.7; }
-          }
-          @keyframes aurora2 {
-            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.7; }
-            50%  { transform: scale(1.2) translate(-8%, 6%) rotate(-6deg); opacity: 0.9; }
-            100% { transform: scale(0.9) translate(8%, -4%) rotate(4deg); opacity: 0.8; }
-          }
-          @keyframes aurora3 {
-            0%   { transform: scale(1) translate(0%, 0%); opacity: 0.6; }
-            50%  { transform: scale(1.3) translate(6%, -10%); opacity: 0.8; }
-            100% { transform: scale(1.1) translate(-6%, 8%); opacity: 0.5; }
-          }
-          @keyframes aurora4 {
-            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.5; }
-            100% { transform: scale(1.25) translate(-10%, 10%) rotate(8deg); opacity: 0.8; }
-          }
-          @keyframes orbFloat0 {
-            0%   { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(calc(-50% + 40px), calc(-50% - 30px)) scale(1.1); }
-          }
-          @keyframes orbFloat1 {
-            0%   { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(calc(-50% - 50px), calc(-50% + 40px)) scale(0.9); }
-          }
-          @keyframes orbFloat2 {
-            0%   { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(calc(-50% + 30px), calc(-50% - 50px)) scale(1.15); }
-          }
-          @keyframes orbFloat3 {
-            0%   { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(calc(-50% - 35px), calc(-50% + 25px)) scale(0.85); }
-          }
-          @keyframes starTwinkle {
-            0%   { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.4); }
-          }
-        `}</style>
 
         <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
-          <div className="absolute inset-0 cyber-grid" style={{ opacity: isDark ? 0.08 : 0.04 }} />
-          <div className="absolute inset-0 cyber-sweep" style={{ opacity: isDark ? 0.12 : 0.06 }} />
+          <div className="absolute inset-0 cyber-grid" style={{ opacity: isDark ? 0.06 : 0.03 }} />
+          <div className="absolute inset-0 cyber-sweep" style={{ opacity: isDark ? 0.1 : 0.05 }} />
         </div>
+
 
         <div className="fixed top-12 right-6 z-[85]">
           <div
