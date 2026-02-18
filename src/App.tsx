@@ -2359,27 +2359,41 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         background: "radial-gradient(circle at top, rgba(14,165,233,0.12), transparent 45%), linear-gradient(135deg, #05070d 0%, #0b1120 50%, #02030a 100%)",
       }}
     >
-      <div className="absolute inset-0 pointer-events-none login-grid" />
-      <div className="absolute inset-0 pointer-events-none login-noise" />
-      <div className="absolute inset-0 pointer-events-none login-sweep" />
-      <div className="absolute inset-0 pointer-events-none login-radial" />
-      <div className="absolute inset-0 pointer-events-none login-matrix" />
+      {/* Animated gradient orbs */}
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-1" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-2" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-3" />
+      
+      {/* Subtle grid overlay */}
+      <div className="absolute inset-0 pointer-events-none login-grid" />
+      
+      {/* Scanlines */}
+      <div className="absolute left-0 right-0 h-0.5 login-hscan" />
+      <div className="absolute left-0 right-0 h-0.5 login-hscan login-hscan-2" />
+      <div className="absolute inset-0 pointer-events-none login-scanline-global" />
+      
+      {/* Floating particles */}
+      <div className="absolute inset-0 pointer-events-none login-particles">
+        <span className="login-particle" style={{ left: "15%", animationDelay: "0s" }} />
+        <span className="login-particle" style={{ left: "35%", animationDelay: "2s" }} />
+        <span className="login-particle" style={{ left: "55%", animationDelay: "4s" }} />
+        <span className="login-particle" style={{ left: "75%", animationDelay: "6s" }} />
+        <span className="login-particle" style={{ left: "92%", animationDelay: "8s" }} />
+      </div>
+      
+      {/* Corner brackets */}
       <div className="absolute inset-0 pointer-events-none login-corner login-corner-tl" />
       <div className="absolute inset-0 pointer-events-none login-corner login-corner-tr" />
       <div className="absolute inset-0 pointer-events-none login-corner login-corner-bl" />
       <div className="absolute inset-0 pointer-events-none login-corner login-corner-br" />
+      
+      {/* Side labels */}
       <span className="absolute left-6 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
         CyberOS v3.0
       </span>
       <span className="absolute right-6 top-1/2 -translate-y-1/2 rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
         Portfolio 2026
       </span>
-      <div className="absolute inset-0 pointer-events-none login-glitch" />
-      <div className="absolute left-0 right-0 h-0.5 login-hscan" />
-      <div className="absolute left-0 right-0 h-0.5 login-hscan login-hscan-2" />
 
       <div className="absolute inset-0 pointer-events-none login-typing">
         <div className="login-typing-line">&gt; initializing portfolio...</div>
