@@ -3268,23 +3268,134 @@ function App() {
           filter: `brightness(${brightness}%)`,
         }}
       >
-        {/* Desktop Background */}
-        <div
-          className="fixed inset-0 bg-cover bg-center transition-all duration-700"
-          style={{
-            backgroundImage: `url(${currentWallpaper})`,
-          }}
-        />
-        <div
-          className={cn(
-            "fixed inset-0 transition-opacity duration-500",
-            isDark ? "bg-black/40" : "bg-white/20"
-          )}
-        />
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute inset-0 cyber-grid" />
-          <div className="absolute inset-0 cyber-noise" />
-          <div className="absolute inset-0 cyber-sweep" />
+        {/* Live Animated Wallpaper */}
+        <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
+          {/* Deep space base */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse at 20% 50%, #0d0221 0%, #0a0118 40%, #000000 100%)"
+              : "radial-gradient(ellipse at 20% 50%, #e8f4f8 0%, #dbeafe 40%, #f0f9ff 100%)"
+          }} />
+
+          {/* Aurora layer 1 */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse 120% 60% at 30% 40%, rgba(76,29,149,0.55) 0%, transparent 70%)"
+              : "radial-gradient(ellipse 120% 60% at 30% 40%, rgba(196,181,253,0.4) 0%, transparent 70%)",
+            animation: "aurora1 12s ease-in-out infinite alternate",
+          }} />
+          {/* Aurora layer 2 */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse 100% 70% at 70% 60%, rgba(6,182,212,0.35) 0%, transparent 65%)"
+              : "radial-gradient(ellipse 100% 70% at 70% 60%, rgba(103,232,249,0.35) 0%, transparent 65%)",
+            animation: "aurora2 15s ease-in-out infinite alternate",
+          }} />
+          {/* Aurora layer 3 */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse 80% 50% at 50% 80%, rgba(219,39,119,0.25) 0%, transparent 60%)"
+              : "radial-gradient(ellipse 80% 50% at 50% 80%, rgba(251,182,206,0.3) 0%, transparent 60%)",
+            animation: "aurora3 18s ease-in-out infinite alternate",
+          }} />
+          {/* Aurora layer 4 - green teal */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse 90% 40% at 80% 20%, rgba(16,185,129,0.2) 0%, transparent 60%)"
+              : "radial-gradient(ellipse 90% 40% at 80% 20%, rgba(167,243,208,0.3) 0%, transparent 60%)",
+            animation: "aurora4 20s ease-in-out infinite alternate",
+          }} />
+
+          {/* Floating orbs */}
+          {[
+            { size: 420, x: "15%", y: "20%", color: isDark ? "rgba(139,92,246,0.12)" : "rgba(196,181,253,0.2)", dur: "25s" },
+            { size: 320, x: "70%", y: "60%", color: isDark ? "rgba(6,182,212,0.1)" : "rgba(147,210,233,0.2)", dur: "30s" },
+            { size: 250, x: "45%", y: "75%", color: isDark ? "rgba(236,72,153,0.1)" : "rgba(251,182,206,0.2)", dur: "22s" },
+            { size: 180, x: "85%", y: "15%", color: isDark ? "rgba(16,185,129,0.08)" : "rgba(167,243,208,0.2)", dur: "28s" },
+          ].map((orb, i) => (
+            <div key={i} className="absolute rounded-full" style={{
+              width: orb.size, height: orb.size,
+              left: orb.x, top: orb.y,
+              background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
+              transform: "translate(-50%, -50%)",
+              animation: `orbFloat${i} ${orb.dur} ease-in-out infinite alternate`,
+              filter: "blur(40px)",
+            }} />
+          ))}
+
+          {/* Stars / particles */}
+          {[...Array(80)].map((_, i) => (
+            <div key={i} className="absolute rounded-full" style={{
+              width: Math.random() * 2 + 1,
+              height: Math.random() * 2 + 1,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: isDark ? "rgba(255,255,255,0.6)" : "rgba(100,100,200,0.3)",
+              animation: `starTwinkle ${2 + Math.random() * 4}s ease-in-out infinite alternate`,
+              animationDelay: `${Math.random() * 5}s`,
+            }} />
+          ))}
+
+          {/* Scanline overlay */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            backgroundImage: isDark
+              ? "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px)"
+              : "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.015) 3px, rgba(0,0,0,0.015) 6px)",
+          }} />
+
+          {/* Vignette */}
+          <div className="absolute inset-0" style={{
+            background: isDark
+              ? "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.65) 100%)"
+              : "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,50,0.12) 100%)",
+          }} />
+        </div>
+
+        <style>{`
+          @keyframes aurora1 {
+            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.8; }
+            50%  { transform: scale(1.15) translate(5%, -8%) rotate(5deg); opacity: 1; }
+            100% { transform: scale(0.95) translate(-5%, 5%) rotate(-3deg); opacity: 0.7; }
+          }
+          @keyframes aurora2 {
+            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.7; }
+            50%  { transform: scale(1.2) translate(-8%, 6%) rotate(-6deg); opacity: 0.9; }
+            100% { transform: scale(0.9) translate(8%, -4%) rotate(4deg); opacity: 0.8; }
+          }
+          @keyframes aurora3 {
+            0%   { transform: scale(1) translate(0%, 0%); opacity: 0.6; }
+            50%  { transform: scale(1.3) translate(6%, -10%); opacity: 0.8; }
+            100% { transform: scale(1.1) translate(-6%, 8%); opacity: 0.5; }
+          }
+          @keyframes aurora4 {
+            0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); opacity: 0.5; }
+            100% { transform: scale(1.25) translate(-10%, 10%) rotate(8deg); opacity: 0.8; }
+          }
+          @keyframes orbFloat0 {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(calc(-50% + 40px), calc(-50% - 30px)) scale(1.1); }
+          }
+          @keyframes orbFloat1 {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(calc(-50% - 50px), calc(-50% + 40px)) scale(0.9); }
+          }
+          @keyframes orbFloat2 {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(calc(-50% + 30px), calc(-50% - 50px)) scale(1.15); }
+          }
+          @keyframes orbFloat3 {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(calc(-50% - 35px), calc(-50% + 25px)) scale(0.85); }
+          }
+          @keyframes starTwinkle {
+            0%   { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.4); }
+          }
+        `}</style>
+
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+          <div className="absolute inset-0 cyber-grid" style={{ opacity: isDark ? 0.08 : 0.04 }} />
+          <div className="absolute inset-0 cyber-sweep" style={{ opacity: isDark ? 0.12 : 0.06 }} />
         </div>
 
         <div className="fixed top-12 right-6 z-[85]">
@@ -3480,43 +3591,273 @@ function App() {
           </AnimatePresence>
         </div>
 
-        {/* Animated Wave Line - Above Dock */}
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[75]">
+        {/* Music Widget - Above Dock */}
+        <div className="fixed bottom-[88px] left-1/2 -translate-x-1/2 z-[75]">
+          {/* Collapsed Bar - always visible */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-end gap-1 px-6"
+            onClick={() => setShowUrlInput((v) => !v)}
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-2xl backdrop-blur-2xl border shadow-2xl select-none"
+            style={{
+              background: isDark
+                ? "linear-gradient(135deg, rgba(15,10,30,0.85) 0%, rgba(88,28,135,0.7) 50%, rgba(15,10,30,0.85) 100%)"
+                : "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(233,213,255,0.7) 50%, rgba(255,255,255,0.85) 100%)",
+              borderColor: isDark ? "rgba(139,92,246,0.35)" : "rgba(139,92,246,0.25)",
+              boxShadow: isDark
+                ? "0 0 24px rgba(139,92,246,0.25), 0 4px 20px rgba(0,0,0,0.5)"
+                : "0 0 24px rgba(139,92,246,0.15), 0 4px 20px rgba(0,0,0,0.1)",
+            }}
           >
-            {[...Array(40)].map((_, i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  height: [
-                    `${20 + Math.sin(i * 0.5) * 15}px`,
-                    `${40 + Math.sin(i * 0.5) * 25}px`,
-                    `${20 + Math.sin(i * 0.5) * 15}px`,
-                  ],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.05,
-                }}
-                className={cn(
-                  "w-1 rounded-full",
-                  isDark
-                    ? "bg-gradient-to-t from-cyan-500 via-purple-500 to-pink-500"
-                    : "bg-gradient-to-t from-cyan-400 via-purple-400 to-pink-400"
-                )}
-                style={{
-                  boxShadow: isDark
-                    ? "0 0 10px rgba(168, 85, 247, 0.5)"
-                    : "0 0 8px rgba(168, 85, 247, 0.3)",
-                }}
-              />
-            ))}
+            {/* Music icon + spinning disc */}
+            <motion.div
+              animate={{ rotate: isPlaying ? 360 : 0 }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="relative w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center"
+              style={{
+                background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #ec4899, #06b6d4)",
+                boxShadow: isPlaying ? "0 0 12px rgba(139,92,246,0.7)" : "none",
+              }}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-gray-900" />
+            </motion.div>
+
+            {/* Wave bars */}
+            <div className="flex items-end gap-[3px] h-5">
+              {[...Array(22)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  animate={isPlaying ? {
+                    height: [
+                      `${6 + Math.abs(Math.sin(i * 0.8)) * 10}px`,
+                      `${14 + Math.abs(Math.sin(i * 0.8)) * 8}px`,
+                      `${6 + Math.abs(Math.sin(i * 0.8)) * 10}px`,
+                    ],
+                  } : { height: `${4 + Math.abs(Math.sin(i * 0.8)) * 5}px` }}
+                  transition={{ duration: 0.6 + i * 0.04, repeat: Infinity, ease: "easeInOut", delay: i * 0.03 }}
+                  className="rounded-full flex-shrink-0"
+                  style={{
+                    width: "2px",
+                    background: isDark
+                      ? `hsl(${260 + i * 5}, 85%, ${55 + i * 1.5}%)`
+                      : `hsl(${260 + i * 5}, 70%, ${45 + i * 1.5}%)`,
+                    boxShadow: isPlaying ? `0 0 4px hsl(${260 + i * 5}, 85%, 60%)` : "none",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Song name marquee */}
+            <div className="w-28 overflow-hidden">
+              <motion.p
+                animate={{ x: isPlaying ? ["0%", "-100%"] : "0%" }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="text-xs font-medium whitespace-nowrap"
+                style={{ color: isDark ? "rgba(255,255,255,0.85)" : "rgba(30,20,60,0.85)" }}
+              >
+                {currentSong.title} — {currentSong.artist}
+              </motion.p>
+            </div>
+
+            {/* Play/Pause indicator dot */}
+            <motion.div
+              animate={{ scale: isPlaying ? [1, 1.4, 1] : 1, opacity: isPlaying ? [0.6, 1, 0.6] : 0.4 }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"
+            />
           </motion.div>
+
+          {/* Expanded Player Popup */}
+          <AnimatePresence>
+            {showUrlInput && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.92 }}
+                transition={{ type: "spring", damping: 22, stiffness: 280 }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-96 rounded-3xl overflow-hidden"
+                style={{
+                  background: isDark
+                    ? "linear-gradient(145deg, rgba(10,5,25,0.97) 0%, rgba(60,20,100,0.95) 50%, rgba(10,5,25,0.97) 100%)"
+                    : "linear-gradient(145deg, rgba(250,245,255,0.97) 0%, rgba(233,213,255,0.95) 50%, rgba(250,245,255,0.97) 100%)",
+                  border: isDark ? "1px solid rgba(139,92,246,0.3)" : "1px solid rgba(139,92,246,0.2)",
+                  boxShadow: isDark
+                    ? "0 0 60px rgba(139,92,246,0.3), 0 30px 60px rgba(0,0,0,0.7)"
+                    : "0 0 40px rgba(139,92,246,0.15), 0 20px 40px rgba(0,0,0,0.12)",
+                }}
+              >
+                <audio
+                  ref={audioRef}
+                  src={currentSong.url}
+                  onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
+                  onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
+                  onEnded={() => setIsPlaying(false)}
+                />
+
+                {/* Album art header */}
+                <div className="relative h-40 flex items-center justify-center overflow-hidden">
+                  {/* Background art blur */}
+                  <div className="absolute inset-0" style={{
+                    background: isDark
+                      ? "radial-gradient(ellipse at center, rgba(139,92,246,0.4) 0%, rgba(6,182,212,0.2) 50%, transparent 100%)"
+                      : "radial-gradient(ellipse at center, rgba(196,181,253,0.5) 0%, rgba(147,210,233,0.3) 50%, transparent 100%)",
+                  }} />
+                  {/* Rotating disc */}
+                  <motion.div
+                    animate={{ rotate: isPlaying ? 360 : 0 }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    className="relative z-10 w-28 h-28 rounded-full shadow-2xl"
+                    style={{
+                      background: "conic-gradient(from 0deg, #06b6d4 0%, #8b5cf6 30%, #ec4899 60%, #f59e0b 80%, #06b6d4 100%)",
+                      boxShadow: isPlaying
+                        ? "0 0 30px rgba(139,92,246,0.6), 0 0 60px rgba(6,182,212,0.3)"
+                        : "0 8px 32px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    <div className="absolute inset-3 rounded-full flex items-center justify-center"
+                      style={{ background: isDark ? "#0a0519" : "#f5f0ff" }}>
+                      <Music className="w-8 h-8" style={{ color: isDark ? "rgba(255,255,255,0.8)" : "rgba(88,28,135,0.8)" }} />
+                    </div>
+                    {/* Groove rings */}
+                    {[1.5, 2.5, 3.5].map((r, i) => (
+                      <div key={i} className="absolute rounded-full border border-white/5"
+                        style={{ inset: `${r * 8}px` }} />
+                    ))}
+                  </motion.div>
+                  {/* Equalizer bars behind disc */}
+                  {isPlaying && (
+                    <div className="absolute bottom-3 flex items-end gap-0.5">
+                      {[...Array(8)].map((_, i) => (
+                        <motion.div key={i}
+                          animate={{ height: [`${6 + i * 2}px`, `${16 + i * 3}px`, `${6 + i * 2}px`] }}
+                          transition={{ duration: 0.5 + i * 0.08, repeat: Infinity, ease: "easeInOut" }}
+                          className="w-1 rounded-full opacity-70"
+                          style={{ background: `hsl(${260 + i * 12}, 80%, 65%)` }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Song info */}
+                <div className="px-6 pt-4 pb-2 text-center">
+                  <h2 className="text-lg font-bold truncate" style={{ color: isDark ? "#fff" : "#1e0a3c" }}>
+                    {currentSong.title}
+                  </h2>
+                  <p className="text-sm mt-0.5" style={{ color: isDark ? "rgba(196,181,253,0.8)" : "rgba(88,28,135,0.7)" }}>
+                    {currentSong.artist}
+                  </p>
+                </div>
+
+                {/* Progress bar */}
+                <div className="px-6 pt-2">
+                  <input
+                    type="range" min="0" max={duration || 0} value={musicCurrentTime}
+                    onChange={(e) => {
+                      const t = parseFloat(e.target.value);
+                      setMusicCurrentTime(t);
+                      if (audioRef.current) audioRef.current.currentTime = t;
+                    }}
+                    className="w-full h-1 rounded-full appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #8b5cf6 ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(139,92,246,0.2) 0%)`,
+                      accentColor: "#8b5cf6",
+                    }}
+                  />
+                  <div className="flex justify-between mt-1">
+                    {[musicCurrentTime, duration].map((t, i) => (
+                      <span key={i} className="text-[10px] font-mono" style={{ color: isDark ? "rgba(255,255,255,0.45)" : "rgba(88,28,135,0.5)" }}>
+                        {isNaN(t) ? "0:00" : `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,"0")}`}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div className="flex items-center justify-center gap-5 px-6 py-3">
+                  {/* -10s */}
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
+                    className="p-2 rounded-full" style={{ color: isDark ? "rgba(196,181,253,0.8)" : "rgba(88,28,135,0.7)" }}>
+                    <RotateCcw className="w-5 h-5" />
+                  </motion.button>
+                  {/* Play/Pause */}
+                  <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }}
+                    onClick={() => {
+                      if (audioRef.current) {
+                        if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play(); }
+                        setIsPlaying(!isPlaying);
+                      }
+                    }}
+                    className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
+                    style={{
+                      background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                      boxShadow: "0 0 20px rgba(139,92,246,0.5)",
+                    }}>
+                    {isPlaying ? (
+                      <div className="flex gap-1.5">
+                        <div className="w-1.5 h-5 bg-white rounded-full" />
+                        <div className="w-1.5 h-5 bg-white rounded-full" />
+                      </div>
+                    ) : (
+                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[16px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                    )}
+                  </motion.button>
+                  {/* +10s */}
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
+                    className="p-2 rounded-full" style={{ color: isDark ? "rgba(196,181,253,0.8)" : "rgba(88,28,135,0.7)" }}>
+                    <RefreshCw className="w-5 h-5" />
+                  </motion.button>
+                </div>
+
+                {/* Volume */}
+                <div className="flex items-center gap-3 px-6 pb-3">
+                  <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: isDark ? "rgba(196,181,253,0.6)" : "rgba(88,28,135,0.5)" }} />
+                  <input type="range" min="0" max="1" step="0.01" value={playerVolume}
+                    onChange={(e) => {
+                      const v = parseFloat(e.target.value);
+                      setPlayerVolume(v);
+                      if (audioRef.current) audioRef.current.volume = v;
+                    }}
+                    className="flex-1 h-1 rounded-full appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #8b5cf6 ${playerVolume * 100}%, rgba(139,92,246,0.2) 0%)`,
+                      accentColor: "#8b5cf6",
+                    }}
+                  />
+                </div>
+
+                {/* Custom URL */}
+                <div className="px-4 pb-4 border-t" style={{ borderColor: isDark ? "rgba(139,92,246,0.15)" : "rgba(139,92,246,0.1)" }}>
+                  <div className="flex gap-2 mt-3">
+                    <input
+                      type="text" value={customUrl} onChange={(e) => setCustomUrl(e.target.value)}
+                      placeholder="Paste audio URL to load track…"
+                      className="flex-1 px-3 py-2 rounded-xl text-xs outline-none"
+                      style={{
+                        background: isDark ? "rgba(255,255,255,0.07)" : "rgba(88,28,135,0.06)",
+                        border: isDark ? "1px solid rgba(139,92,246,0.25)" : "1px solid rgba(139,92,246,0.2)",
+                        color: isDark ? "#fff" : "#1e0a3c",
+                      }}
+                    />
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (customUrl.trim()) {
+                          setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl });
+                          setCustomUrl("");
+                        }
+                      }}
+                      className="px-4 py-2 rounded-xl text-xs font-semibold text-white flex-shrink-0"
+                      style={{ background: "linear-gradient(135deg, #8b5cf6, #ec4899)" }}>
+                      <Plus className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Dock */}
