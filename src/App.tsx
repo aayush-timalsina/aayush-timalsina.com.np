@@ -2100,6 +2100,8 @@ const ControlCenter = ({
   setWifiEnabled,
   bluetoothEnabled,
   setBluetoothEnabled,
+  useVideoWallpaper,
+  setUseVideoWallpaper,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -2113,6 +2115,8 @@ const ControlCenter = ({
   setWifiEnabled: (v: boolean) => void;
   bluetoothEnabled: boolean;
   setBluetoothEnabled: (v: boolean) => void;
+  useVideoWallpaper: boolean;
+  setUseVideoWallpaper: (v: boolean) => void;
 }) => {
   return (
     <AnimatePresence>
@@ -2204,7 +2208,7 @@ const ControlCenter = ({
             <button
               onClick={() => setIsDark(!isDark)}
               className={cn(
-                "w-full p-4 rounded-xl flex items-center justify-between transition-all",
+                "w-full p-4 rounded-xl flex items-center justify-between transition-all mb-3",
                 isDark ? "bg-gray-700" : "bg-gray-100"
               )}
             >
@@ -2217,6 +2221,28 @@ const ControlCenter = ({
               <div className={cn("w-12 h-6 rounded-full p-1", isDark ? "bg-blue-500" : "bg-gray-300")}>
                 <motion.div
                   animate={{ x: isDark ? 24 : 0 }}
+                  className="w-4 h-4 rounded-full bg-white"
+                />
+              </div>
+            </button>
+
+            {/* Wallpaper Mode */}
+            <button
+              onClick={() => setUseVideoWallpaper(!useVideoWallpaper)}
+              className={cn(
+                "w-full p-4 rounded-xl flex items-center justify-between transition-all",
+                isDark ? "bg-gray-700" : "bg-gray-100"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Image className="w-5 h-5" />
+                <span className={cn("text-sm font-medium", isDark ? "text-white" : "text-gray-900")}>
+                  {useVideoWallpaper ? "Live Video" : "Static Image"}
+                </span>
+              </div>
+              <div className={cn("w-12 h-6 rounded-full p-1", useVideoWallpaper ? "bg-purple-500" : "bg-gray-300")}>
+                <motion.div
+                  animate={{ x: useVideoWallpaper ? 24 : 0 }}
                   className="w-4 h-4 rounded-full bg-white"
                 />
               </div>
@@ -2912,6 +2938,7 @@ function App() {
   const [volume, setVolume] = useState(70);
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
+  const [useVideoWallpaper, setUseVideoWallpaper] = useState(true);
   const [currentWallpaper, setCurrentWallpaper] = useState(DEFAULT_WALLPAPER);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
@@ -3268,39 +3295,49 @@ function App() {
           filter: `brightness(${brightness}%)`,
         }}
       >
-        {/* Live Video Wallpaper */}
-        <div className="fixed inset-0 overflow-hidden" style={{ 
-          zIndex: 0,
-          backgroundColor: isDark ? "#0a0118" : "#dbeafe"
-        }}>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ 
-              filter: isDark ? "brightness(0.75) saturate(1.1)" : "brightness(0.92) saturate(1.05)",
-              backgroundColor: isDark ? "#0a0118" : "#dbeafe"
+        {/* Wallpaper - Video or Static */}
+        {useVideoWallpaper ? (
+          <div className="fixed inset-0 overflow-hidden" style={{ 
+            zIndex: 0,
+            backgroundColor: isDark ? "#0a0118" : "#dbeafe"
+          }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ 
+                filter: isDark ? "brightness(0.75) saturate(1.1)" : "brightness(0.92) saturate(1.05)",
+                backgroundColor: isDark ? "#0a0118" : "#dbeafe"
+              }}
+              onError={(e) => console.error('Video failed to load:', e)}
+              onLoadedData={() => console.log('Video loaded successfully')}
+            >
+              <source src="/video/videoplayback.webm" type="video/webm" />
+              Your browser does not support the video tag.
+            </video>
+            {/* Vignette overlay */}
+            <div className="absolute inset-0 pointer-events-none" style={{
+              background: isDark
+                ? "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)"
+                : "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,20,0.25) 100%)",
+            }} />
+            {/* Subtle scanlines */}
+            <div className="absolute inset-0 pointer-events-none" style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)",
+            }} />
+          </div>
+        ) : (
+          <div
+            className="fixed inset-0 bg-cover bg-center transition-all duration-700"
+            style={{
+              backgroundImage: `url(${currentWallpaper})`,
+              zIndex: 0,
             }}
-            onError={(e) => console.error('Video failed to load:', e)}
-            onLoadedData={() => console.log('Video loaded successfully')}
-          >
-            <source src="/video/videoplayback.webm" type="video/webm" />
-            Your browser does not support the video tag.
-          </video>
-          {/* Vignette overlay */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: isDark
-              ? "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)"
-              : "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,20,0.25) 100%)",
-          }} />
-          {/* Subtle scanlines */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)",
-          }} />
-        </div>
+          />
+        )}
 
         <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
           <div className="absolute inset-0 cyber-grid" style={{ opacity: isDark ? 0.06 : 0.03 }} />
@@ -3427,6 +3464,8 @@ function App() {
           setWifiEnabled={setWifiEnabled}
           bluetoothEnabled={bluetoothEnabled}
           setBluetoothEnabled={setBluetoothEnabled}
+          useVideoWallpaper={useVideoWallpaper}
+          setUseVideoWallpaper={setUseVideoWallpaper}
         />
 
         {/* Desktop Area */}
