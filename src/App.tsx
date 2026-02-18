@@ -2295,6 +2295,358 @@ const MenuDropdown = ({
   );
 };
 
+// Premium Music Player Component
+const MusicPlayer = ({
+  isPlaying,
+  setIsPlaying,
+  currentSong,
+  setCurrentSong,
+  customUrl,
+  setCustomUrl,
+  showUrlInput,
+  setShowUrlInput,
+  musicCurrentTime,
+  setMusicCurrentTime,
+  duration,
+  setDuration,
+  playerVolume,
+  setPlayerVolume,
+  audioRef,
+  isDark
+}: {
+  isPlaying: boolean;
+  setIsPlaying: (val: boolean) => void;
+  currentSong: { title: string; artist: string; url: string };
+  setCurrentSong: (song: { title: string; artist: string; url: string }) => void;
+  customUrl: string;
+  setCustomUrl: (url: string) => void;
+  showUrlInput: boolean;
+  setShowUrlInput: (val: boolean) => void;
+  musicCurrentTime: number;
+  setMusicCurrentTime: (time: number) => void;
+  duration: number;
+  setDuration: (dur: number) => void;
+  playerVolume: number;
+  setPlayerVolume: (vol: number) => void;
+  audioRef: React.RefObject<HTMLAudioElement>;
+  isDark: boolean;
+}) => {
+  const handlePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setMusicCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(e.target.value);
+    setMusicCurrentTime(time);
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const vol = parseFloat(e.target.value);
+    setPlayerVolume(vol);
+    if (audioRef.current) {
+      audioRef.current.volume = vol;
+    }
+  };
+
+  const handleAddCustomUrl = () => {
+    if (customUrl.trim()) {
+      setCurrentSong({
+        title: "Custom Track",
+        artist: "Unknown Artist",
+        url: customUrl
+      });
+      setCustomUrl("");
+      setShowUrlInput(false);
+      setIsPlaying(false);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    if (!seconds || isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.3 }}
+      className="fixed top-20 right-6 z-[70] w-80"
+    >
+      <div className={cn(
+        "rounded-2xl backdrop-blur-2xl p-6 shadow-2xl",
+        isDark 
+          ? "bg-gradient-to-br from-gray-900/80 via-gray-800/70 to-gray-900/80 border border-cyan-500/20"
+          : "bg-gradient-to-br from-white/80 via-gray-50/70 to-white/80 border border-cyan-500/30"
+      )}>
+        {/* Glow Effect */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 blur-xl -z-10" />
+        
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500">
+              <Music className="w-4 h-4 text-white" />
+            </div>
+            <span className={cn(
+              "font-semibold text-sm",
+              isDark ? "text-white" : "text-gray-900"
+            )}>
+              Now Playing
+            </span>
+          </div>
+          <button
+            onClick={() => setShowUrlInput(!showUrlInput)}
+            className={cn(
+              "p-1.5 rounded-lg transition-all",
+              isDark 
+                ? "hover:bg-gray-700/50 text-gray-400 hover:text-cyan-400"
+                : "hover:bg-gray-200/50 text-gray-600 hover:text-cyan-600"
+            )}
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Custom URL Input */}
+        <AnimatePresence>
+          {showUrlInput && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mb-4 overflow-hidden"
+            >
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customUrl}
+                  onChange={(e) => setCustomUrl(e.target.value)}
+                  placeholder="Enter music URL..."
+                  className={cn(
+                    "flex-1 px-3 py-2 rounded-lg text-sm outline-none transition-all",
+                    isDark
+                      ? "bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500"
+                      : "bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-cyan-500"
+                  )}
+                  onKeyPress={(e) => e.key === 'Enter' && handleAddCustomUrl()}
+                />
+                <button
+                  onClick={handleAddCustomUrl}
+                  className="px-3 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                >
+                  Add
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Album Art / Visualizer */}
+        <div className="relative mb-4 aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              animate={{
+                scale: isPlaying ? [1, 1.2, 1] : 1,
+                rotate: isPlaying ? 360 : 0
+              }}
+              transition={{
+                scale: { repeat: Infinity, duration: 2 },
+                rotate: { repeat: Infinity, duration: 10, ease: "linear" }
+              }}
+              className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 flex items-center justify-center"
+            >
+              <Music className="w-16 h-16 text-white" />
+            </motion.div>
+          </div>
+          
+          {/* Animated bars when playing */}
+          {isPlaying && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  animate={{
+                    height: ["8px", `${Math.random() * 24 + 8}px`, "8px"]
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 0.8,
+                    delay: i * 0.1
+                  }}
+                  className="w-1 bg-white/80 rounded-full"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Song Info */}
+        <div className="text-center mb-4">
+          <h3 className={cn(
+            "font-bold text-lg mb-1 truncate",
+            isDark ? "text-white" : "text-gray-900"
+          )}>
+            {currentSong.title}
+          </h3>
+          <p className={cn(
+            "text-sm truncate",
+            isDark ? "text-gray-400" : "text-gray-600"
+          )}>
+            {currentSong.artist}
+          </p>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="mb-3">
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            value={musicCurrentTime}
+            onChange={handleSeek}
+            className="w-full h-1 rounded-full appearance-none cursor-pointer
+              [&::-webkit-slider-track]:bg-gray-600/30
+              [&::-webkit-slider-track]:rounded-full
+              [&::-webkit-slider-thumb]:appearance-none
+              [&::-webkit-slider-thumb]:w-3
+              [&::-webkit-slider-thumb]:h-3
+              [&::-webkit-slider-thumb]:rounded-full
+              [&::-webkit-slider-thumb]:bg-gradient-to-r
+              [&::-webkit-slider-thumb]:from-cyan-500
+              [&::-webkit-slider-thumb]:to-purple-500
+              [&::-webkit-slider-thumb]:cursor-pointer"
+          />
+          <div className="flex justify-between text-xs mt-1">
+            <span className={isDark ? "text-gray-500" : "text-gray-600"}>
+              {formatTime(musicCurrentTime)}
+            </span>
+            <span className={isDark ? "text-gray-500" : "text-gray-600"}>
+              {formatTime(duration)}
+            </span>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <button
+            onClick={() => {
+              if (audioRef.current) {
+                audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+              }
+            }}
+            className={cn(
+              "p-2 rounded-full transition-all",
+              isDark 
+                ? "hover:bg-gray-700/50 text-gray-400 hover:text-white"
+                : "hover:bg-gray-200/50 text-gray-600 hover:text-gray-900"
+            )}
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+          
+          <button
+            onClick={handlePlayPause}
+            className="p-4 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+          >
+            {isPlaying ? (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+          
+          <button
+            onClick={() => {
+              if (audioRef.current) {
+                audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
+              }
+            }}
+            className={cn(
+              "p-2 rounded-full transition-all",
+              isDark 
+                ? "hover:bg-gray-700/50 text-gray-400 hover:text-white"
+                : "hover:bg-gray-200/50 text-gray-600 hover:text-gray-900"
+            )}
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Volume Control */}
+        <div className="flex items-center gap-3">
+          <Volume2 className={cn(
+            "w-4 h-4",
+            isDark ? "text-gray-400" : "text-gray-600"
+          )} />
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={playerVolume}
+            onChange={handleVolumeChange}
+            className="flex-1 h-1 rounded-full appearance-none cursor-pointer
+              [&::-webkit-slider-track]:bg-gray-600/30
+              [&::-webkit-slider-track]:rounded-full
+              [&::-webkit-slider-thumb]:appearance-none
+              [&::-webkit-slider-thumb]:w-3
+              [&::-webkit-slider-thumb]:h-3
+              [&::-webkit-slider-thumb]:rounded-full
+              [&::-webkit-slider-thumb]:bg-gradient-to-r
+              [&::-webkit-slider-thumb]:from-cyan-500
+              [&::-webkit-slider-thumb]:to-purple-500
+              [&::-webkit-slider-thumb]:cursor-pointer"
+          />
+          <span className={cn(
+            "text-xs w-8 text-right",
+            isDark ? "text-gray-500" : "text-gray-600"
+          )}>
+            {Math.round(playerVolume * 100)}%
+          </span>
+        </div>
+
+        {/* Hidden Audio Element */}
+        <audio
+          ref={audioRef}
+          src={currentSong.url}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={() => setIsPlaying(false)}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
 // Login Screen Component  
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
   const [password, setPassword] = useState("");
@@ -2581,6 +2933,20 @@ function App() {
   const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [zIndexCounter, setZIndexCounter] = useState(2);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Music Player state
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState({
+    title: "Warning",
+    artist: "Masoom Sharma, Swara Verma",
+    url: "https://example.com/warning.mp3" // User will replace with actual URL
+  });
+  const [customUrl, setCustomUrl] = useState("");
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [musicCurrentTime, setMusicCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [playerVolume, setPlayerVolume] = useState(0.7);
+  const audioRef = useRef<HTMLAudioElement>(null);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -3064,6 +3430,26 @@ function App() {
               )
             ))}
           </AnimatePresence>
+
+          {/* Music Player */}
+          <MusicPlayer
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            currentSong={currentSong}
+            setCurrentSong={setCurrentSong}
+            customUrl={customUrl}
+            setCustomUrl={setCustomUrl}
+            showUrlInput={showUrlInput}
+            setShowUrlInput={setShowUrlInput}
+            musicCurrentTime={musicCurrentTime}
+            setMusicCurrentTime={setMusicCurrentTime}
+            duration={duration}
+            setDuration={setDuration}
+            playerVolume={playerVolume}
+            setPlayerVolume={setPlayerVolume}
+            audioRef={audioRef}
+            isDark={isDark}
+          />
 
           {/* Launchpad */}
           <AnimatePresence>
