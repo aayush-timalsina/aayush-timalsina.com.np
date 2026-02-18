@@ -3431,26 +3431,6 @@ function App() {
             ))}
           </AnimatePresence>
 
-          {/* Music Player */}
-          <MusicPlayer
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-            currentSong={currentSong}
-            setCurrentSong={setCurrentSong}
-            customUrl={customUrl}
-            setCustomUrl={setCustomUrl}
-            showUrlInput={showUrlInput}
-            setShowUrlInput={setShowUrlInput}
-            musicCurrentTime={musicCurrentTime}
-            setMusicCurrentTime={setMusicCurrentTime}
-            duration={duration}
-            setDuration={setDuration}
-            playerVolume={playerVolume}
-            setPlayerVolume={setPlayerVolume}
-            audioRef={audioRef}
-            isDark={isDark}
-          />
-
           {/* Launchpad */}
           <AnimatePresence>
             {showLaunchpad && (
@@ -3499,6 +3479,26 @@ function App() {
             )}
           </AnimatePresence>
         </div>
+
+        {/* Music Player - Above Dock */}
+        <MusicPlayer
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          currentSong={currentSong}
+          setCurrentSong={setCurrentSong}
+          customUrl={customUrl}
+          setCustomUrl={setCustomUrl}
+          showUrlInput={showUrlInput}
+          setShowUrlInput={setShowUrlInput}
+          musicCurrentTime={musicCurrentTime}
+          setMusicCurrentTime={setMusicCurrentTime}
+          duration={duration}
+          setDuration={setDuration}
+          playerVolume={playerVolume}
+          setPlayerVolume={setPlayerVolume}
+          audioRef={audioRef}
+          isDark={isDark}
+        />
 
         {/* Dock */}
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]">
