@@ -2409,51 +2409,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       </AnimatePresence>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
-        <div className="w-full max-w-6xl">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto_1fr] items-center">
-            <div className="hidden lg:flex flex-col gap-4">
-              <div className="login-panel">
-                <div className="login-panel-title">
-                  <Terminal className="w-4 h-4" />
-                  Access Log
-                </div>
-                <div className="space-y-3">
-                  {accessLog.map((log) => (
-                    <div key={log.node} className="flex items-center justify-between text-xs text-cyan-100/80">
-                      <div className="flex items-center gap-2">
-                        <span className="login-dot" />
-                        <span className="login-mono">{log.node}</span>
-                      </div>
-                      <div className="login-mono">{log.time}</div>
-                      <div className="login-tag">{log.status}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="login-panel">
-                <div className="login-panel-title">
-                  <Activity className="w-4 h-4" />
-                  System Integrity
-                </div>
-                <div className="space-y-3">
-                  {systemVitals.map((item) => (
-                    <div key={item.label} className="flex items-center justify-between text-xs text-cyan-100/80">
-                      <span className="login-mono">{item.label}</span>
-                      <span className="login-mono text-cyan-200/80">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="login-bars mt-4">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              </div>
-            </div>
-
+        <div className="w-full max-w-md">
             <motion.div
               initial={{ scale: 0.94, y: 18, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -2511,25 +2467,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                 <div className="text-xs uppercase tracking-[0.5em] text-cyan-200/60">Access Portal</div>
                 <div className="text-3xl font-semibold text-white mt-2 login-title-line">MY PORTFOLIO</div>
                 <div className="text-2xl font-semibold text-transparent mt-1 login-title-line-stroke">IS LIVE</div>
-              </div>
-
-              <div className="relative z-10 mt-5 grid grid-cols-2 gap-3 text-[11px] text-cyan-100/70">
-                <div className="login-chip">
-                  <Shield className="w-3.5 h-3.5" />
-                  Multi-layer encryption
-                </div>
-                <div className="login-chip">
-                  <Eye className="w-3.5 h-3.5" />
-                  Behavior lock active
-                </div>
-                <div className="login-chip">
-                  <Cpu className="w-3.5 h-3.5" />
-                  Neural checks online
-                </div>
-                <div className="login-chip">
-                  <HardDrive className="w-3.5 h-3.5" />
-                  Vault synced 3/3
-                </div>
               </div>
 
               <motion.form
@@ -2631,51 +2568,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                 )}
               </AnimatePresence>
             </motion.div>
-
-            <div className="hidden lg:flex flex-col gap-4">
-              <div className="login-panel">
-                <div className="login-panel-title">
-                  <Zap className="w-4 h-4" />
-                  Threat Monitor
-                </div>
-                <div className="space-y-2">
-                  {threatQueue.map((threat) => (
-                    <div key={threat.label} className="flex items-center justify-between text-xs">
-                      <span className="login-mono text-cyan-100/80">{threat.label}</span>
-                      <span className="login-tag">{threat.level}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="login-graph mt-4">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              </div>
-
-              <div className="login-panel">
-                <div className="login-panel-title">
-                  <GitBranch className="w-4 h-4" />
-                  Network Nodes
-                </div>
-                <div className="space-y-3">
-                  {nodeSignals.map((node) => (
-                    <div key={node.node} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs text-cyan-100/80">
-                        <span className="login-mono">{node.node}</span>
-                        <span className="login-mono">{node.strength}%</span>
-                      </div>
-                      <div className="login-progress">
-                        <div style={{ width: `${node.strength}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
