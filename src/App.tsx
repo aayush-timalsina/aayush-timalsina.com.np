@@ -2295,46 +2295,11 @@ const MenuDropdown = ({
   );
 };
 
-// Login Screen Component
+// Login Screen Component  
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [isUnlocking, setIsUnlocking] = useState(false);
-  const [booting, setBooting] = useState(true);
-  const sessionIdRef = useRef(`0x${Math.floor(1e12 + Math.random() * 9e12).toString(16).toUpperCase()}`);
-
-  const accessLog = [
-    { node: "gate-07", status: "GRANTED", time: "00:13:24" },
-    { node: "core-12", status: "VERIFIED", time: "00:13:11" },
-    { node: "mesh-02", status: "TRACE", time: "00:12:58" },
-    { node: "proxy-5", status: "BLOCKED", time: "00:12:41" },
-  ];
-
-  const threatQueue = [
-    { label: "Port scan intercepted", level: "LOW" },
-    { label: "Credential spoofing", level: "MED" },
-    { label: "Anomaly spike", level: "HIGH" },
-  ];
-
-  const nodeSignals = [
-    { node: "node-a9", strength: 82 },
-    { node: "node-b4", strength: 67 },
-    { node: "node-c1", strength: 91 },
-    { node: "node-f2", strength: 54 },
-  ];
-
-  const systemVitals = [
-    { label: "Cipher", value: "AES-256" },
-    { label: "Entropy", value: "98.2%" },
-    { label: "Uptime", value: "42:18:07" },
-    { label: "Protocol", value: "ZETA-9" },
-  ];
-
-  useEffect(() => {
-    const timer = setTimeout(() => setBooting(false), 2600);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -2342,10 +2307,10 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       setIsUnlocking(true);
       setTimeout(() => {
         onLogin();
-      }, 700);
+      }, 800);
     } else {
       setError(true);
-      setTimeout(() => setError(false), 900);
+      setTimeout(() => setError(false), 1000);
     }
   };
 
@@ -2354,731 +2319,236 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] overflow-hidden login-root"
+      className="fixed inset-0 z-[200] overflow-hidden"
       style={{
-        background: "radial-gradient(circle at top, rgba(14,165,233,0.12), transparent 45%), linear-gradient(135deg, #05070d 0%, #0b1120 50%, #02030a 100%)",
+        background: "linear-gradient(135deg, #0a0e1a 0%, #0f1629 50%, #050810 100%)",
       }}
     >
-      {/* Animated gradient orbs */}
-      <div className="absolute inset-0 pointer-events-none login-orb login-orb-1" />
-      <div className="absolute inset-0 pointer-events-none login-orb login-orb-2" />
-      <div className="absolute inset-0 pointer-events-none login-orb login-orb-3" />
+      {/* Animated background */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px)',
+        backgroundSize: '100px 100px',
+      }} />
       
-      {/* Subtle grid overlay */}
-      <div className="absolute inset-0 pointer-events-none login-grid" />
-      
-      {/* Scanlines */}
-      <div className="absolute left-0 right-0 h-0.5 login-hscan" />
-      <div className="absolute left-0 right-0 h-0.5 login-hscan login-hscan-2" />
-      <div className="absolute inset-0 pointer-events-none login-scanline-global" />
-      
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none login-particles">
-        <span className="login-particle" style={{ left: "15%", animationDelay: "0s" }} />
-        <span className="login-particle" style={{ left: "35%", animationDelay: "2s" }} />
-        <span className="login-particle" style={{ left: "55%", animationDelay: "4s" }} />
-        <span className="login-particle" style={{ left: "75%", animationDelay: "6s" }} />
-        <span className="login-particle" style={{ left: "92%", animationDelay: "8s" }} />
-      </div>
-      
-      {/* Corner brackets */}
-      <div className="absolute inset-0 pointer-events-none login-corner login-corner-tl" />
-      <div className="absolute inset-0 pointer-events-none login-corner login-corner-tr" />
-      <div className="absolute inset-0 pointer-events-none login-corner login-corner-bl" />
-      <div className="absolute inset-0 pointer-events-none login-corner login-corner-br" />
-      
-      {/* Side labels */}
-      <span className="absolute left-6 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
-        CyberOS v3.0
-      </span>
-      <span className="absolute right-6 top-1/2 -translate-y-1/2 rotate-90 text-[10px] tracking-[0.35em] text-cyan-300/30 login-mono">
-        Portfolio 2026
-      </span>
+      {/* Floating gradient orbs */}
+      <motion.div
+        className="absolute w-96 h-96 rounded-full opacity-20 blur-3xl"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4), transparent 70%)', top: '-10%', left: '-5%' }}
+        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute w-96 h-96 rounded-full opacity-15 blur-3xl"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%)', bottom: '-10%', right: '-5%' }}
+        animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      <div className="absolute inset-0 pointer-events-none login-typing">
-        <div className="login-typing-line">&gt; initializing portfolio...</div>
-        <div className="login-typing-line">&gt; loading modules: [react, framer-motion, tailwind]</div>
-        <div className="login-typing-line">&gt; connecting to aayush-timalsina.com.np</div>
-        <div className="login-typing-line login-typing-ok">&gt; status: DEPLOYED ✓</div>
-      </div>
-
-      <AnimatePresence>
-        {booting && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="absolute inset-0 z-[220] flex flex-col items-center justify-center bg-[#030308]"
-          >
-            <div className="login-boot-logo">
-              <Shield className="w-8 h-8 text-cyan-300" />
-            </div>
-            <div className="login-boot-text">CyberOS</div>
-            <div className="login-boot-bar">
-              <div className="login-boot-bar-fill" />
-            </div>
-            <div className="login-boot-status">Initializing secure environment...</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
-        <div className="w-full max-w-md">
-            <motion.div
-              initial={{ scale: 0.94, y: 18, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", damping: 18, stiffness: 120 }}
-              className={cn(
-                "relative w-full max-w-md mx-auto rounded-3xl p-7 shadow-2xl overflow-hidden login-card",
-                isDark ? "bg-slate-950/80" : "bg-white/70"
-              )}
-            >
-              <div className="absolute inset-0 pointer-events-none login-scanline" />
-              <div className="absolute inset-0 pointer-events-none login-frame" />
-
-              <div className="relative z-10 text-[11px] text-cyan-200/70 flex items-center justify-between login-mono">
-                <span>&gt; deploy --production</span>
-                <span className="login-live">
-                  <span />
-                  NOW LIVE
-                </span>
-              </div>
-
-              <div className="relative z-10 text-center">
-                <p className="text-xs tracking-[0.35em] text-cyan-300/70">SECURE ACCESS</p>
-                <h1 className="text-2xl font-semibold text-white mt-2 login-glitch" data-text="CYBEROS LOGIN">
-                  CYBEROS LOGIN
-                </h1>
-                <p className="text-xs text-cyan-200/60 mt-1 login-mono">Encrypted session handshake</p>
-                <div className="flex items-center justify-center gap-2 mt-3 text-[10px] text-cyan-200/70">
-                  <span className="login-pill">SESSION {sessionIdRef.current}</span>
-                  <span className="login-pill">ENCLAVE-11</span>
-                </div>
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center mt-6">
-                <div className="login-profile">
-                  <div className="login-profile-ring">
-                    <img
-                      src={PROFILE_IMAGE}
-                      alt="Aayush Timalsina"
-                      className="w-full h-full object-cover login-profile-img"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                        (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
-                      }}
-                    />
-                    <User className="w-8 h-8 text-cyan-300 hidden" />
-                  </div>
-                  <div className="login-profile-orbit" />
-                  <div className="login-profile-hex" />
-                </div>
-                <div className="mt-4 text-white font-semibold">Aayush Timalsina</div>
-                <div className="text-xs text-cyan-200/70">Cybersecurity Student</div>
-              </div>
-
-              <div className="relative z-10 mt-5 text-center">
-                <div className="text-xs uppercase tracking-[0.5em] text-cyan-200/60">Access Portal</div>
-                <div className="text-3xl font-semibold text-white mt-2 login-title-line">MY PORTFOLIO</div>
-                <div className="text-2xl font-semibold text-transparent mt-1 login-title-line-stroke">IS LIVE</div>
-              </div>
-
-              <motion.form
-                onSubmit={handleLogin}
-                className="relative z-10 mt-6 space-y-4"
-                animate={isUnlocking ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="relative">
-                  <div className="login-label">Access Key</div>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter password..."
-                    className={cn(
-                      "w-full px-4 py-3 pr-12 rounded-xl outline-none text-center login-mono text-white placeholder-cyan-200/40",
-                      error ? "border-2 border-red-500/50" : "border border-cyan-400/30 focus:border-cyan-300"
-                    )}
-                    style={{ background: "rgba(3, 6, 12, 0.7)" }}
-                    autoFocus
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-lg text-cyan-200/60 hover:text-cyan-200"
-                  >
-                    {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-[1fr_auto] gap-3 items-center">
-                  <div className="login-signal">
-                    <span className="login-signal-dot" />
-                    Signal integrity 94%
-                  </div>
-                  <div className="login-signal">
-                    <Wifi className="w-3.5 h-3.5" />
-                    Mesh route stable
-                  </div>
-                </div>
-
-                <div className="text-center text-[11px] text-cyan-200/70">
-                  Password: <span className="login-mono text-cyan-100/90 login-password">&nbsp;TYPE-C</span>
-                </div>
-
-                {error && (
-                  <motion.p
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-red-400 text-sm text-center"
-                  >
-                    Incorrect password. Try again.
-                  </motion.p>
-                )}
-
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 text-white"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(6,182,212,0.55), rgba(14,165,233,0.7))",
-                    border: "1px solid rgba(56,189,248,0.35)",
-                    boxShadow: "0 0 20px rgba(56,189,248,0.25)",
-                  }}
-                >
-                  <Shield className="w-5 h-5" />
-                  Unlock System
-                </motion.button>
-              </motion.form>
-
-              <div className="relative z-10 mt-5 flex items-center justify-between text-[10px] text-cyan-200/70">
-                <span className="login-mono">AUTH LAYER: QUANTUM</span>
-                <span className="login-status">
-                  <span />
-                  LIVE SYNC
-                </span>
-              </div>
-
-              <AnimatePresence>
-                {isUnlocking && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 flex items-center justify-center"
-                    style={{ background: "rgba(4, 8, 14, 0.92)" }}
-                  >
-                    <motion.div
-                      animate={{ scale: [1, 1.35, 1.7], opacity: [1, 0.6, 0] }}
-                      transition={{ duration: 0.7 }}
-                      className="w-20 h-20 rounded-full flex items-center justify-center"
-                      style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.7), rgba(14,165,233,0.7))" }}
-                    >
-                      <Unlock className="w-10 h-10 text-white" />
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+      {/* Top indicators */}
+      <div className="absolute top-8 left-8 flex flex-col gap-2 text-xs text-cyan-400/40 font-mono">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <span>SYSTEM ACTIVE</span>
         </div>
+        <div>v3.0.1</div>
       </div>
 
-      <style>{`
-        .login-root {
-          font-family: "Space Grotesk", sans-serif;
-        }
-        .login-mono {
-          font-family: "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-          letter-spacing: 0.08em;
-        }
-        .login-grid {
-          background-image:
-        .login-network {
-          opacity: 0.7;
-          mix-blend-mode: screen;
-          animation: networkFloat 18s ease-in-out infinite;
-        }
-        .login-network svg {
-          width: 100%;
-          height: 100%;
-        }
-        .login-network-lines line {
-          stroke: url(#netLine);
-          stroke-width: 0.25;
-          opacity: 0.7;
-        }
-        .login-network-nodes circle {
-          fill: rgba(34,211,238,0.9);
-          filter: drop-shadow(0 0 4px rgba(34,211,238,0.8));
-          animation: pulseDot 2.6s ease-in-out infinite;
-        }
-        .login-network-nodes circle:nth-child(odd) {
-          animation-delay: 0.6s;
-        }
-            linear-gradient(rgba(56,189,248,0.08) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(56,189,248,0.08) 1px, transparent 1px);
-          background-size: 90px 90px;
-          opacity: 0.18;
-        }
-        .login-noise {
-          background-image:
-            repeating-linear-gradient(0deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 3px),
-            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 4px);
-          mix-blend-mode: screen;
-          opacity: 0.25;
-        }
-        .login-sweep {
-          background: linear-gradient(90deg, transparent 0%, rgba(56,189,248,0.25) 50%, transparent 100%);
-          animation: loginSweep 9s ease-in-out infinite;
-          opacity: 0.25;
-        }
-        .login-radial {
-          background: radial-gradient(circle at 20% 20%, rgba(14,165,233,0.18), transparent 40%),
-            radial-gradient(circle at 80% 70%, rgba(34,211,238,0.2), transparent 45%);
-          opacity: 0.6;
-        }
-        .login-matrix {
-          background-image:
-            repeating-linear-gradient(180deg, rgba(56,189,248,0.06) 0 1px, transparent 1px 28px),
-            repeating-linear-gradient(90deg, rgba(14,165,233,0.04) 0 1px, transparent 1px 32px);
-          opacity: 0.15;
-        }
-        .login-orb {
-          opacity: 0.25;
-          filter: blur(90px);
-        }
-        .login-orb-1 {
-          background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%);
-          animation: orbFloat1 8s ease-in-out infinite;
-        }
-        .login-orb-2 {
-          background: radial-gradient(circle, rgba(139,92,246,0.18), transparent 70%);
-          animation: orbFloat2 10s ease-in-out infinite;
-        }
-        .login-orb-3 {
-          background: radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%);
-          animation: orbFloat1 9s ease-in-out infinite;
-        }
-        .login-orb-1 { inset: -10% auto auto -15%; width: 45vw; height: 45vw; position: absolute; }
-        .login-orb-2 { inset: 30% -20% auto auto; width: 55vw; height: 55vw; position: absolute; }
-        .login-orb-3 { inset: auto auto -10% 5%; width: 40vw; height: 40vw; position: absolute; }
-        .login-corner {
-          width: 30px;
-          height: 30px;
-          position: absolute;
-          opacity: 0.7;
-        }
-        .login-corner-tl { top: 24px; left: 24px; border-top: 2px solid rgba(59,130,246,0.4); border-left: 2px solid rgba(59,130,246,0.4); }
-        .login-corner-tr { top: 24px; right: 24px; border-top: 2px solid rgba(59,130,246,0.4); border-right: 2px solid rgba(59,130,246,0.4); }
-        .login-corner-bl { bottom: 24px; left: 24px; border-bottom: 2px solid rgba(139,92,246,0.4); border-left: 2px solid rgba(139,92,246,0.4); }
-        .login-corner-br { bottom: 24px; right: 24px; border-bottom: 2px solid rgba(139,92,246,0.4); border-right: 2px solid rgba(139,92,246,0.4); }
-        .login-glitch {
-          background: rgba(59,130,246,0.08);
-          opacity: 0;
-          animation: glitchFlash 0.12s ease-out 2.4s, glitchFlash 0.12s ease-out 4.6s, glitchFlash 0.12s ease-out 7s;
-        }
-        .login-hscan {
-          top: 0;
-          background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent);
-          opacity: 0.8;
-          animation: hScan 3s ease-in-out 2.5s forwards;
-          box-shadow: 0 0 20px rgba(59,130,246,0.3);
-        }
-        .login-hscan-2 {
-          animation-delay: 6s;
-        }
-        .login-typing {
-          padding: 60px 32px;
-          opacity: 0;
-          animation: fadeIn 0.3s ease-out 2.6s forwards, fadeOut 0.5s ease-out 3.8s forwards;
-        }
-        .login-typing-line {
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-          font-size: 12px;
-          color: rgba(59,130,246,0.5);
-          margin-bottom: 4px;
-          opacity: 0;
-          animation: typeIn 0.3s ease-out forwards;
-        }
-        .login-typing-line:nth-child(1) { animation-delay: 2.7s; }
-        .login-typing-line:nth-child(2) { animation-delay: 2.9s; }
-        .login-typing-line:nth-child(3) { animation-delay: 3.1s; }
-        .login-typing-line:nth-child(4) { animation-delay: 3.3s; }
-        .login-typing-ok { color: rgba(34,197,94,0.8); }
-        .login-script {
-          width: 260px;
-          border: 1px solid rgba(56,189,248,0.25);
-          border-radius: 16px;
-          background: rgba(4, 8, 14, 0.7);
-          box-shadow: 0 0 30px rgba(59,130,246,0.15);
-          overflow: hidden;
-        }
-        .login-script-header {
-          font-size: 10px;
-          letter-spacing: 0.3em;
-          text-transform: uppercase;
-          padding: 10px 12px;
-          color: rgba(165,243,252,0.7);
-          border-bottom: 1px solid rgba(56,189,248,0.2);
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-        }
-        .login-script-body {
-          height: 140px;
-          overflow: hidden;
-          padding: 12px;
-        }
-        .login-script-track {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          animation: scriptScroll 14s linear infinite;
-        }
-        .login-script-line {
-          font-size: 11px;
-          color: rgba(56,189,248,0.75);
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-        }
-        .login-radar {
-          width: 180px;
-          height: 180px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.3);
-          background: radial-gradient(circle, rgba(34,211,238,0.1), transparent 65%);
-          box-shadow: 0 0 30px rgba(34,211,238,0.15);
-          position: relative;
-          overflow: hidden;
-        }
-        .login-radar-sweep {
-          position: absolute;
-          inset: -50%;
-          background: conic-gradient(from 0deg, rgba(34,211,238,0.35), transparent 35%);
-          animation: radarSweep 5.2s linear infinite;
-        }
-        .login-radar-ring {
-          position: absolute;
-          inset: 20px;
-          border-radius: 999px;
-          border: 1px dashed rgba(56,189,248,0.3);
-        }
-        .login-radar-ring:nth-of-type(2) { inset: 45px; opacity: 0.6; }
-        .login-radar-ring:nth-of-type(3) { inset: 70px; opacity: 0.4; }
-        .login-radar-dot {
-          position: absolute;
-          top: 30%;
-          left: 64%;
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(34,211,238,0.95);
-          box-shadow: 0 0 12px rgba(34,211,238,0.8);
-          animation: pulseDot 2s ease-in-out infinite;
-        }
-        .login-radar-dot-2 { top: 58%; left: 42%; animation-delay: 0.8s; }
-        .login-radar-dot-3 { top: 72%; left: 68%; animation-delay: 1.4s; }
-        .login-widget-group {
-          align-items: stretch;
-        }
-        .login-widget {
-          width: 220px;
-          border: 1px solid rgba(56,189,248,0.25);
-          border-radius: 16px;
-          background: rgba(4, 8, 14, 0.7);
-          padding: 12px;
-          box-shadow: 0 0 24px rgba(59,130,246,0.18);
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-          color: rgba(165,243,252,0.8);
-        }
-        .login-widget-title {
-          font-size: 10px;
-          letter-spacing: 0.24em;
-          text-transform: uppercase;
-          margin-bottom: 8px;
-        }
-        .login-widget-row {
-          display: flex;
-          justify-content: space-between;
-          font-size: 11px;
-          margin-bottom: 8px;
-        }
-        .login-widget-value {
-          color: rgba(34,211,238,0.9);
-        }
-        .login-widget-bar {
-          height: 6px;
-          border-radius: 999px;
-        }
-        .login-boot-logo {
-          width: 80px;
-          height: 80px;
-          border: 2px solid rgba(56,189,248,0.5);
-          border-radius: 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 0 30px rgba(56,189,248,0.35), inset 0 0 20px rgba(56,189,248,0.1);
-          margin-bottom: 22px;
-          animation: bootLogoIn 0.6s ease-out 0.2s forwards;
-        }
-        .login-boot-text {
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-          letter-spacing: 0.6em;
-          text-transform: uppercase;
-          color: rgba(56,189,248,0.85);
-          font-size: 14px;
-          margin-bottom: 18px;
-          opacity: 0;
-          animation: fadeIn 0.4s ease-out 0.6s forwards;
-        }
-        .login-boot-bar {
-          width: 200px;
-          height: 3px;
-          background: rgba(56,189,248,0.15);
-          border-radius: 2px;
-          overflow: hidden;
-          opacity: 0;
-          animation: fadeIn 0.3s ease-out 0.9s forwards;
-        }
-        .login-boot-bar-fill {
-          height: 100%;
-          width: 0%;
-          background: linear-gradient(90deg, #38bdf8, #8b5cf6);
-          animation: loadBar 1.2s ease-out 1s forwards;
-          box-shadow: 0 0 10px rgba(56,189,248,0.5);
-        }
-        .login-boot-status {
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-          font-size: 11px;
-          color: rgba(59,130,246,0.4);
-          margin-top: 14px;
-          opacity: 0;
-          animation: fadeIn 0.3s ease-out 1.2s forwards;
-        }
-        .login-card {
-          border: 1px solid rgba(56,189,248,0.3);
-          backdrop-filter: blur(24px);
-          box-shadow: 0 0 70px rgba(56,189,248,0.15), 0 30px 70px rgba(0,0,0,0.6);
-        }
-        .login-frame::before,
-        .login-frame::after {
-          content: "";
-          position: absolute;
-          inset: 16px;
-          border: 1px solid rgba(56,189,248,0.15);
-          border-radius: 20px;
-          pointer-events: none;
-        }
-        .login-frame::after {
-          inset: 32px;
-          border-color: rgba(56,189,248,0.08);
-        }
-        .login-scanline {
-          background: linear-gradient(180deg, transparent 0%, rgba(56,189,248,0.18) 50%, transparent 100%);
-          animation: scanline 6s linear infinite;
-          opacity: 0.25;
-        }
-        .login-panel {
-          background: rgba(8, 12, 22, 0.75);
-          border: 1px solid rgba(56,189,248,0.2);
-          border-radius: 20px;
-          padding: 18px;
-          box-shadow: inset 0 0 30px rgba(56,189,248,0.08);
-        }
-        .login-panel-title {
-          display: flex;
-          align-items: center;
-          display: inline-block;
-          letter-spacing: 0.14em;
-        }
-        .login-glitch::before,
-        .login-glitch::after {
-          content: attr(data-text);
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          overflow: hidden;
-          color: rgba(56,189,248,0.8);
-          mix-blend-mode: screen;
-          clip-path: inset(0 0 0 0);
-        }
-        .login-glitch::before {
-          transform: translate(1px, -1px);
-          animation: glitchShift 2.6s infinite linear alternate-reverse;
-        }
-        .login-glitch::after {
-          transform: translate(-1px, 1px);
-          animation: glitchShift 1.9s infinite linear alternate-reverse;
-        }
-        .login-pill {
-          padding: 2px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.3);
-          background: rgba(6, 12, 22, 0.6);
-          font-family: "Share Tech Mono", ui-monospace, monospace;
-          letter-spacing: 0.12em;
-        }
-        .login-live {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 10px;
-          padding: 4px 10px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.3);
-          background: rgba(6, 12, 22, 0.6);
-          letter-spacing: 0.24em;
-        }
-        .login-live span {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: #22c55e;
-          box-shadow: 0 0 10px rgba(34,197,94,0.8);
-          animation: pulseDot 1.8s ease-in-out infinite;
-        }
-        .login-password {
-          padding: 2px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.45);
-          background: rgba(6, 12, 22, 0.7);
-          box-shadow: 0 0 18px rgba(56,189,248,0.5), inset 0 0 10px rgba(56,189,248,0.25);
-        }
-        .login-chip {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 10px;
-          border-radius: 12px;
-          border: 1px solid rgba(56,189,248,0.2);
-          background: rgba(6, 12, 22, 0.55);
-        }
-        .login-label {
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: rgba(165,243,252,0.7);
-          margin-bottom: 6px;
-        }
-        .login-signal {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 10px;
-          padding: 6px 8px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.2);
-          color: rgba(165,243,252,0.7);
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-        }
-        .login-signal-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(34,211,238,0.9);
-          box-shadow: 0 0 12px rgba(34,211,238,0.9);
-        }
-        .login-progress {
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(6, 12, 22, 0.7);
-          overflow: hidden;
-          border: 1px solid rgba(56,189,248,0.2);
-        }
-        .login-progress div {
-          height: 100%;
-          background: linear-gradient(90deg, rgba(56,189,248,0.6), rgba(34,211,238,0.9));
-          box-shadow: 0 0 14px rgba(56,189,248,0.6);
-        }
-        .login-status {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          letter-spacing: 0.18em;
-        }
-        .login-status span {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(34,211,238,0.9);
-          box-shadow: 0 0 12px rgba(34,211,238,0.9);
-          animation: pulseDot 1.8s ease-in-out infinite;
-        }
-        @keyframes loginSweep {
-          0% { transform: translateX(-60%); }
-          50% { transform: translateX(50%); }
-          100% { transform: translateX(120%); }
-        }
-        @keyframes orbFloat1 {
-          0%, 100% { transform: scale(1) translate(0, 0); }
-          50% { transform: scale(1.1) translate(12px, -16px); }
-        }
-        @keyframes orbFloat2 {
-          0%, 100% { transform: scale(1) translate(0, 0); }
-          50% { transform: scale(1.08) translate(-12px, 12px); }
-        }
-        @keyframes glitchFlash {
-          0% { opacity: 0; }
-          50% { opacity: 1; }
-          100% { opacity: 0; }
-        }
-        @keyframes hScan {
-          0% { top: 0%; opacity: 0.8; }
-          100% { top: 100%; opacity: 0; }
-        }
-        @keyframes typeIn {
-          from { opacity: 0; transform: translateX(-10px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes bootLogoIn {
-          from { opacity: 0; transform: scale(0.6) rotate(-10deg); }
-          to { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-        @keyframes loadBar {
-          to { width: 100%; }
-        }
-        @keyframes ringGlow {
-          0%, 100% { box-shadow: 0 0 40px rgba(59,130,246,0.25), 0 0 80px rgba(139,92,246,0.15); }
-          50% { box-shadow: 0 0 60px rgba(59,130,246,0.4), 0 0 120px rgba(139,92,246,0.25); }
-        }
-        @keyframes ringSpin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes spinSlow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes scanline {
-          0% { transform: translateY(-120%); }
-          100% { transform: translateY(120%); }
-        }
-        @keyframes glitchShift {
-          0% { clip-path: inset(0 0 80% 0); }
-          20% { clip-path: inset(10% 0 60% 0); }
-          40% { clip-path: inset(40% 0 20% 0); }
-          60% { clip-path: inset(60% 0 5% 0); }
-          80% { clip-path: inset(10% 0 60% 0); }
-          100% { clip-path: inset(0 0 80% 0); }
-        }
-        @keyframes pulseBars {
-          0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
-          50% { transform: scaleY(1); opacity: 1; }
-        }
-        @keyframes pulseGraph {
-          0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
-          50% { transform: scaleY(1); opacity: 1; }
-        }
-        @keyframes pulseDot {
-          0%, 100% { transform: scale(0.7); opacity: 0.6; }
-          50% { transform: scale(1.1); opacity: 1; }
-        }
-        @keyframes fadeOut {
-          to { opacity: 0; }
-        }
-      `}</style>
+      <div className="absolute top-8 right-8 text-xs text-cyan-400/40 font-mono text-right">
+        <div>PORT: 8443</div>
+        <div className="mt-1">TLS 1.3</div>
+      </div>
+
+      {/* Login card */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", damping: 20, stiffness: 100, delay: 0.1 }}
+          className="w-full max-w-md"
+        >
+          <div
+            className="relative rounded-2xl p-8 backdrop-blur-xl"
+            style={{
+              background: 'rgba(15, 23, 42, 0.6)',
+              border: '1px solid rgba(56,189,248,0.2)',
+              boxShadow: '0 0 80px rgba(56,189,248,0.1), 0 20px 60px rgba(0,0,0,0.5)',
+            }}
+          >
+            {/* Scanline */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none rounded-2xl"
+              style={{
+                background: 'linear-gradient(180deg, transparent 0%, rgba(56,189,248,0.1) 50%, transparent 100%)',
+                height: '100%',
+              }}
+              animate={{ y: ['-100%', '200%'] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-center justify-center mb-4"
+              >
+                <Shield className="w-12 h-12 text-cyan-400" strokeWidth={1.5} />
+              </motion.div>
+              
+              <motion.h1
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-3xl font-bold text-white mb-2"
+              >
+                CyberOS
+              </motion.h1>
+              
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="text-sm text-cyan-400/60 font-mono tracking-wider"
+              >
+                SECURE ACCESS PORTAL
+              </motion.p>
+            </div>
+
+            {/* Profile */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-col items-center mb-6"
+            >
+              <div
+                className="w-24 h-24 rounded-full mb-3 overflow-hidden"
+                style={{
+                  border: '2px solid rgba(56,189,248,0.3)',
+                  boxShadow: '0 0 30px rgba(56,189,248,0.2)',
+                }}
+              >
+                <img
+                  src={PROFILE_IMAGE}
+                  alt="Aayush Timalsina"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                  }}
+                />
+                <User className="w-10 h-10 text-cyan-300 hidden mx-auto mt-6" />
+              </div>
+              <h2 className="text-lg font-semibold text-white">Aayush Timalsina</h2>
+              <p className="text-xs text-cyan-400/50 mt-1">Cybersecurity Student</p>
+            </motion.div>
+
+            {/* Form */}
+            <motion.form
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: isUnlocking ? 0 : 1 }}
+              transition={{ delay: 0.6 }}
+              onSubmit={handleLogin}
+              className="space-y-6"
+            >
+              <div>
+                <label className="block text-xs text-cyan-400/70 mb-2 font-mono tracking-wider">
+                  ACCESS KEY
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border text-white placeholder-cyan-400/30 focus:outline-none focus:border-cyan-400/50 transition-all font-mono text-sm"
+                  style={{
+                    borderColor: error ? 'rgba(239,68,68,0.5)' : 'rgba(56,189,248,0.2)',
+                    boxShadow: error ? '0 0 20px rgba(239,68,68,0.2)' : '0 0 20px rgba(56,189,248,0.1)',
+                  }}
+                  autoFocus
+                  disabled={isUnlocking}
+                />
+                <AnimatePresence>
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-red-400 text-xs mt-2 font-mono"
+                    >
+                      ✗ Invalid credentials
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="text-center">
+                <p className="text-xs text-cyan-400/40 mb-4 font-mono">
+                  Password: <span className="text-cyan-400/70">TYPE-C</span>
+                </p>
+              </div>
+
+              <motion.button
+                type="submit"
+                disabled={isUnlocking}
+                whileHover={{ scale: isUnlocking ? 1 : 1.02 }}
+                whileTap={{ scale: isUnlocking ? 1 : 0.98 }}
+                className="w-full py-3 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2"
+                style={{
+                  background: isUnlocking 
+                    ? 'rgba(56,189,248,0.3)' 
+                    : 'linear-gradient(135deg, rgba(59,130,246,0.8), rgba(139,92,246,0.8))',
+                  boxShadow: isUnlocking 
+                    ? 'none' 
+                    : '0 0 30px rgba(59,130,246,0.3)',
+                  cursor: isUnlocking ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {isUnlocking ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    >
+                      <Shield className="w-5 h-5" />
+                    </motion.div>
+                    Authenticating...
+                  </>
+                ) : (
+                  <>
+                    <Unlock className="w-5 h-5" />
+                    Unlock System
+                  </>
+                )}
+              </motion.button>
+            </motion.form>
+
+            {/* Footer */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-8 pt-6 border-t border-cyan-400/10 flex items-center justify-between text-xs text-cyan-400/30 font-mono"
+            >
+              <span>ENCRYPTED</span>
+              <div className="flex items-center gap-1">
+                <div className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
+                <span>SECURE</span>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom info */}
+      <div className="absolute bottom-8 left-8 text-xs text-cyan-400/30 font-mono">
+        aayush-timalsina.com.np
+      </div>
+      
+      <div className="absolute bottom-8 right-8 text-xs text-cyan-400/30 font-mono">
+        © 2026
+      </div>
     </motion.div>
   );
 };
