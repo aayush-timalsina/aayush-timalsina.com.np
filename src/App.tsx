@@ -1,3 +1,4 @@
+import Login from "./Login";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -3267,7 +3268,7 @@ function App() {
       {/* Login Screen */}
       <AnimatePresence>
         {!isLoggedIn && (
-          <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
+         <Login onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
         )}
       </AnimatePresence>
 
