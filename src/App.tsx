@@ -3480,25 +3480,44 @@ function App() {
           </AnimatePresence>
         </div>
 
-        {/* Music Player - Above Dock */}
-        <MusicPlayer
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-          currentSong={currentSong}
-          setCurrentSong={setCurrentSong}
-          customUrl={customUrl}
-          setCustomUrl={setCustomUrl}
-          showUrlInput={showUrlInput}
-          setShowUrlInput={setShowUrlInput}
-          musicCurrentTime={musicCurrentTime}
-          setMusicCurrentTime={setMusicCurrentTime}
-          duration={duration}
-          setDuration={setDuration}
-          playerVolume={playerVolume}
-          setPlayerVolume={setPlayerVolume}
-          audioRef={audioRef}
-          isDark={isDark}
-        />
+        {/* Animated Wave Line - Above Dock */}
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[75]">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-end gap-1 px-6"
+          >
+            {[...Array(40)].map((_, i) => (
+              <motion.div
+                key={i}
+                animate={{
+                  height: [
+                    `${20 + Math.sin(i * 0.5) * 15}px`,
+                    `${40 + Math.sin(i * 0.5) * 25}px`,
+                    `${20 + Math.sin(i * 0.5) * 15}px`,
+                  ],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.05,
+                }}
+                className={cn(
+                  "w-1 rounded-full",
+                  isDark
+                    ? "bg-gradient-to-t from-cyan-500 via-purple-500 to-pink-500"
+                    : "bg-gradient-to-t from-cyan-400 via-purple-400 to-pink-400"
+                )}
+                style={{
+                  boxShadow: isDark
+                    ? "0 0 10px rgba(168, 85, 247, 0.5)"
+                    : "0 0 8px rgba(168, 85, 247, 0.3)",
+                }}
+              />
+            ))}
+          </motion.div>
+        </div>
 
         {/* Dock */}
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]">
