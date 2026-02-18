@@ -2338,7 +2338,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === " TYPE-C") {
+    if (password.trim() === "TYPE-C") {
       setIsUnlocking(true);
       setTimeout(() => {
         onLogin();
@@ -2555,7 +2555,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-cyan-200/60 hover:text-cyan-200"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 flex items-center justify-center rounded-lg text-cyan-200/60 hover:text-cyan-200"
                   >
                     {showPassword ? <Unlock className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
                   </button>
