@@ -3269,16 +3269,26 @@ function App() {
         }}
       >
         {/* Live Video Wallpaper */}
-        <div className="fixed inset-0 overflow-hidden" style={{ zIndex: 0 }}>
+        <div className="fixed inset-0 overflow-hidden" style={{ 
+          zIndex: 0,
+          backgroundColor: isDark ? "#0a0118" : "#dbeafe"
+        }}>
           <video
             autoPlay
             loop
             muted
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: isDark ? "brightness(0.75) saturate(1.1)" : "brightness(0.92) saturate(1.05)" }}
+            style={{ 
+              filter: isDark ? "brightness(0.75) saturate(1.1)" : "brightness(0.92) saturate(1.05)",
+              backgroundColor: isDark ? "#0a0118" : "#dbeafe"
+            }}
+            onError={(e) => console.error('Video failed to load:', e)}
+            onLoadedData={() => console.log('Video loaded successfully')}
           >
             <source src="/video/videoplayback.webm" type="video/webm" />
+            Your browser does not support the video tag.
           </video>
           {/* Vignette overlay */}
           <div className="absolute inset-0 pointer-events-none" style={{
