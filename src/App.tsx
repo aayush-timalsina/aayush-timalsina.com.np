@@ -1,4 +1,3 @@
-import Login from "./Login";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -2674,259 +2673,584 @@ const MusicPlayer = ({
   );
 };
 
-// Login Screen Component  
+// Login Screen Component - Animated Portfolio Launch
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [isUnlocking, setIsUnlocking] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password.trim() === "TYPE-C") {
-      setIsUnlocking(true);
-      setTimeout(() => {
-        onLogin();
-      }, 800);
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 1000);
-    }
-  };
-
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #0a0e1a 0%, #0f1629 50%, #050810 100%)",
-      }}
+      className="fixed inset-0 z-[200] overflow-hidden flex items-center justify-center"
+      style={{ background: '#000', fontFamily: 'Inter, sans-serif' }}
     >
-      {/* Animated background */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: 'linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px)',
-        backgroundSize: '100px 100px',
-      }} />
-      
-      {/* Floating gradient orbs */}
-      <motion.div
-        className="absolute w-96 h-96 rounded-full opacity-20 blur-3xl"
-        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.4), transparent 70%)', top: '-10%', left: '-5%' }}
-        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute w-96 h-96 rounded-full opacity-15 blur-3xl"
-        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%)', bottom: '-10%', right: '-5%' }}
-        animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Top indicators */}
-      <div className="absolute top-8 left-8 flex flex-col gap-2 text-xs text-cyan-400/40 font-mono">
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span>SYSTEM ACTIVE</span>
-        </div>
-        <div>v3.0.1</div>
-      </div>
-
-      <div className="absolute top-8 right-8 text-xs text-cyan-400/40 font-mono text-right">
-        <div>PORT: 8443</div>
-        <div className="mt-1">TLS 1.3</div>
-      </div>
-
-      {/* Login card */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+      <div className="w-full h-full max-w-[1080px] max-h-[1920px] relative overflow-hidden" style={{ background: '#030308' }}>
+        
+        {/* Background Base */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", damping: 20, stiffness: 100, delay: 0.1 }}
-          className="w-full max-w-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0.2 }}
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(160deg, #06060f 0%, #0a0a1a 20%, #0d0f2b 40%, #0a0c20 60%, #08081a 80%, #050510 100%)',
+          }}
+        />
+
+        {/* Grid Overlay */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, delay: 0.5 }}
+          className="absolute inset-0 z-[1]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        {/* Scanlines */}
+        <div
+          className="absolute inset-0 z-[2] pointer-events-none"
+          style={{
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px)',
+          }}
+        />
+
+        {/* Glowing Orbs */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, delay: 1 }}
+          className="absolute w-[50vw] h-[50vw] rounded-full z-[1] blur-[80px] top-[5%] left-[-10%]"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%)' }}
         >
-          <div
-            className="relative rounded-2xl p-8 backdrop-blur-xl"
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], x: [0, 10, 0], y: [0, -15, 0] }}
+            transition={{ duration: 6, delay: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="w-full h-full"
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, delay: 1.5 }}
+          className="absolute w-[60vw] h-[60vw] rounded-full z-[1] blur-[80px] top-[35%] right-[-15%]"
+          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)' }}
+        >
+          <motion.div
+            animate={{ scale: [1, 1.1, 1], x: [0, -10, 0], y: [0, 10, 0] }}
+            transition={{ duration: 8, delay: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-full h-full"
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, delay: 2 }}
+          className="absolute w-[40vw] h-[40vw] rounded-full z-[1] blur-[80px] bottom-[10%] left-[5%]"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)' }}
+        >
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], x: [0, 10, 0], y: [0, -15, 0] }}
+            transition={{ duration: 7, delay: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="w-full h-full"
+          />
+        </motion.div>
+
+        {/* Corner Brackets */}
+        {[
+          { pos: 'top-6 left-6', border: 'border-t-2 border-l-2 border-blue-500/40', delay: 1.5 },
+          { pos: 'top-6 right-6', border: 'border-t-2 border-r-2 border-blue-500/40', delay: 1.7 },
+          { pos: 'bottom-6 left-6', border: 'border-b-2 border-l-2 border-purple-500/40', delay: 1.9 },
+          { pos: 'bottom-6 right-6', border: 'border-b-2 border-r-2 border-purple-500/40', delay: 2.1 },
+        ].map((corner, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: corner.delay }}
+            className={`absolute w-[30px] h-[30px] z-[15] ${corner.pos} ${corner.border}`}
+          />
+        ))}
+
+        {/* Side Text */}
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 3 }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-blue-500/20 tracking-[4px] uppercase z-10"
+          style={{ fontFamily: 'JetBrains Mono, monospace' }}
+        >
+          CyberOS v3.0
+        </motion.span>
+
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 3 }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-[10px] text-blue-500/20 tracking-[4px] uppercase z-10"
+          style={{ fontFamily: 'JetBrains Mono, monospace' }}
+        >
+          Portfolio 2026
+        </motion.span>
+
+        {/* Floating Particles */}
+        {[
+          { size: 3, top: '12%', left: '10%', delay: 2, color: '#3b82f6' },
+          { size: 2, top: '22%', right: '15%', delay: 2.3, color: '#8b5cf6' },
+          { size: 3, top: '48%', left: '6%', delay: 2.6, color: '#3b82f6' },
+          { size: 4, top: '65%', right: '8%', delay: 2.9, color: '#3b82f6' },
+          { size: 2, top: '80%', left: '20%', delay: 3.2, color: '#8b5cf6' },
+          { size: 3, top: '35%', left: '88%', delay: 3.5, color: '#3b82f6' },
+        ].map((p, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            transition={{ duration: 1, delay: p.delay }}
+            className="absolute rounded-full z-[3]"
             style={{
-              background: 'rgba(15, 23, 42, 0.6)',
-              border: '1px solid rgba(56,189,248,0.2)',
-              boxShadow: '0 0 80px rgba(56,189,248,0.1), 0 20px 60px rgba(0,0,0,0.5)',
+              width: p.size, height: p.size,
+              top: p.top, left: p.left || undefined, right: p.right || undefined,
+              background: p.color,
             }}
           >
-            {/* Scanline */}
             <motion.div
-              className="absolute inset-0 pointer-events-none rounded-2xl"
-              style={{
-                background: 'linear-gradient(180deg, transparent 0%, rgba(56,189,248,0.1) 50%, transparent 100%)',
-                height: '100%',
+              animate={{
+                y: [0, -15, -5, -20, 0],
+                x: [0, 8, -5, 12, 0],
               }}
-              animate={{ y: ['-100%', '200%'] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="w-full h-full"
             />
+          </motion.div>
+        ))}
 
-            {/* Header */}
-            <div className="text-center mb-8">
+        {/* Glitch Flash */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: [0, 1, 0, 0, 1, 0, 0, 1, 0],
+          }}
+          transition={{
+            times: [0, 0.05, 0.1, 0.4, 0.45, 0.5, 0.7, 0.75, 0.8],
+            duration: 10,
+            delay: 2.4,
+          }}
+          className="absolute inset-0 z-[200] pointer-events-none"
+          style={{ background: 'rgba(59,130,246,0.08)' }}
+        />
+
+        {/* Horizontal Scan Lines */}
+        <motion.div
+          initial={{ top: '0%', opacity: 0.8 }}
+          animate={{ top: '100%', opacity: 0 }}
+          transition={{ duration: 3, delay: 2.5, ease: "easeInOut" }}
+          className="absolute left-0 right-0 h-[2px] z-[150]"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent)',
+            boxShadow: '0 0 20px rgba(59,130,246,0.3)',
+          }}
+        />
+
+        <motion.div
+          initial={{ top: '0%', opacity: 0.8 }}
+          animate={{ top: '100%', opacity: 0 }}
+          transition={{ duration: 3, delay: 6, ease: "easeInOut" }}
+          className="absolute left-0 right-0 h-[2px] z-[150]"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent)',
+            boxShadow: '0 0 20px rgba(59,130,246,0.3)',
+          }}
+        />
+
+        {/* Typing Lines Overlay */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 1, 0] }}
+          transition={{ times: [0, 0.1, 0.8, 1], duration: 1.5, delay: 2.6 }}
+          className="absolute top-0 left-0 right-0 z-[90] px-8 py-16"
+          style={{ fontFamily: 'JetBrains Mono, monospace' }}
+        >
+          {[
+            { text: '> initializing portfolio...', delay: 2.7 },
+            { text: '> loading modules: [react, framer-motion, tailwind]', delay: 2.9 },
+            { text: '> connecting to aayush-timalsina.com.np', delay: 3.1 },
+            { text: '> status: DEPLOYED ✓', delay: 3.3, color: '#22c55e' },
+          ].map((line, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: line.delay }}
+              className="text-xs mb-1"
+              style={{ color: line.color || 'rgba(59,130,246,0.5)' }}
+            >
+              {line.text}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Boot Screen */}
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.8, delay: 2.5 }}
+          className="absolute inset-0 z-[100] flex flex-col items-center justify-center"
+          style={{ background: '#030308', pointerEvents: 'none' }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="w-20 h-20 border-[3px] border-blue-500 rounded-2xl flex items-center justify-center mb-6"
+            style={{ boxShadow: '0 0 30px rgba(59,130,246,0.3), inset 0 0 20px rgba(59,130,246,0.1)' }}
+          >
+            <Shield className="w-10 h-10 text-blue-500" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="text-sm text-blue-500 tracking-[6px] uppercase mb-6"
+            style={{ fontFamily: 'JetBrains Mono, monospace' }}
+          >
+            CyberOS
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 1.2 }}
+            className="w-[200px] h-[3px] rounded-sm overflow-hidden"
+            style={{ background: 'rgba(59,130,246,0.15)' }}
+          >
+            <motion.div
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 1.2, delay: 1.3 }}
+              className="h-full rounded-sm"
+              style={{
+                background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
+                boxShadow: '0 0 10px rgba(59,130,246,0.5)',
+              }}
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 1.5 }}
+            className="text-[11px] text-blue-500/40 mt-4"
+            style={{ fontFamily: 'JetBrains Mono, monospace' }}
+          >
+            Initializing secure environment...
+          </motion.div>
+        </motion.div>
+
+        {/* Main Content */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-between px-8 py-16">
+          
+          {/* Top Section */}
+          <div className="flex flex-col items-center w-full">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 3 }}
+              className="text-xs text-blue-400/60 tracking-[2px]"
+              style={{ fontFamily: 'JetBrains Mono, monospace' }}
+            >
+              &gt; deploy --production
+              <motion.span
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="inline-block w-[9px] h-4 bg-blue-400/70 ml-1 align-middle"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 3.5 }}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full mt-4"
+              style={{
+                background: 'rgba(59,130,246,0.08)',
+                border: '1px solid rgba(59,130,246,0.2)',
+              }}
+            >
               <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center justify-center mb-4"
-              >
-                <Shield className="w-12 h-12 text-cyan-400" strokeWidth={1.5} />
-              </motion.div>
-              
-              <motion.h1
-                initial={{ y: -10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-3xl font-bold text-white mb-2"
-              >
-                CyberOS
-              </motion.h1>
-              
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="text-sm text-cyan-400/60 font-mono tracking-wider"
-              >
-                SECURE ACCESS PORTAL
-              </motion.p>
-            </div>
+                animate={{ boxShadow: ['0 0 10px rgba(34,197,94,0.6)', '0 0 18px rgba(34,197,94,0.9)', '0 0 10px rgba(34,197,94,0.6)'] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-2 h-2 rounded-full bg-green-500"
+              />
+              <span className="text-xs text-gray-400 tracking-[3px] uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                Now Live
+              </span>
+            </motion.div>
+          </div>
 
+          {/* Middle Section */}
+          <div className="flex flex-col items-center w-full flex-1 justify-center">
+            
             {/* Profile */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-col items-center mb-6"
+              initial={{ opacity: 0, scale: 0.6, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 1, delay: 4 }}
+              className="relative mb-9"
             >
-              <div
-                className="w-24 h-24 rounded-full mb-3 overflow-hidden"
-                style={{
-                  border: '2px solid rgba(56,189,248,0.3)',
-                  boxShadow: '0 0 30px rgba(56,189,248,0.2)',
+              <motion.div
+                animate={{
+                  background: [
+                    'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)',
+                    'conic-gradient(from 360deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)',
+                  ],
                 }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                className="w-40 h-40 rounded-full p-[3px]"
+                style={{ boxShadow: '0 0 40px rgba(59,130,246,0.25), 0 0 80px rgba(139,92,246,0.15)' }}
               >
                 <img
                   src={PROFILE_IMAGE}
                   alt="Aayush Timalsina"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
-                  }}
+                  className="w-full h-full rounded-full object-cover border-[3px] border-[#0a0a1a]"
                 />
-                <User className="w-10 h-10 text-cyan-300 hidden mx-auto mt-6" />
-              </div>
-              <h2 className="text-lg font-semibold text-white">Aayush Timalsina</h2>
-              <p className="text-xs text-cyan-400/50 mt-1">Cybersecurity Student</p>
+              </motion.div>
+
+              {/* Decoration Ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[200px] h-[200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-blue-500/15"
+              >
+                <div className="absolute w-1.5 h-1.5 rounded-full bg-blue-500 top-[-3px] left-1/2 -translate-x-1/2" style={{ boxShadow: '0 0 10px rgba(59,130,246,0.8)' }} />
+                <div className="absolute w-1.5 h-1.5 rounded-full bg-blue-500 bottom-[-3px] left-1/2 -translate-x-1/2" style={{ boxShadow: '0 0 10px rgba(59,130,246,0.8)' }} />
+              </motion.div>
+
+              {/* Hex Ring */}
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[220px] h-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/8"
+              />
             </motion.div>
 
-            {/* Form */}
-            <motion.form
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: isUnlocking ? 0 : 1 }}
-              transition={{ delay: 0.6 }}
-              onSubmit={handleLogin}
-              className="space-y-6"
+            {/* Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 5 }}
+              className="text-[15px] font-normal text-slate-400/80 tracking-[8px] uppercase mb-3"
             >
-              <div>
-                <label className="block text-xs text-cyan-400/70 mb-2 font-mono tracking-wider">
-                  ACCESS KEY
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
-                  className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border text-white placeholder-cyan-400/30 focus:outline-none focus:border-cyan-400/50 transition-all font-mono text-sm"
-                  style={{
-                    borderColor: error ? 'rgba(239,68,68,0.5)' : 'rgba(56,189,248,0.2)',
-                    boxShadow: error ? '0 0 20px rgba(239,68,68,0.2)' : '0 0 20px rgba(56,189,248,0.1)',
-                  }}
-                  autoFocus
-                  disabled={isUnlocking}
-                />
-                <AnimatePresence>
-                  {error && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-red-400 text-xs mt-2 font-mono"
-                    >
-                      ✗ Invalid credentials
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </div>
+              Finally
+            </motion.div>
 
-              <div className="text-center">
-                <p className="text-xs text-cyan-400/40 mb-4 font-mono">
-                  Password: <span className="text-cyan-400/70">TYPE-C</span>
-                </p>
-              </div>
-
-              <motion.button
-                type="submit"
-                disabled={isUnlocking}
-                whileHover={{ scale: isUnlocking ? 1 : 1.02 }}
-                whileTap={{ scale: isUnlocking ? 1 : 0.98 }}
-                className="w-full py-3 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2"
+            <div className="text-center mb-5">
+              <motion.div
+                initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1, delay: 5.3 }}
+                className="text-5xl font-black leading-tight tracking-tight mb-1"
                 style={{
-                  background: isUnlocking 
-                    ? 'rgba(56,189,248,0.3)' 
-                    : 'linear-gradient(135deg, rgba(59,130,246,0.8), rgba(139,92,246,0.8))',
-                  boxShadow: isUnlocking 
-                    ? 'none' 
-                    : '0 0 30px rgba(59,130,246,0.3)',
-                  cursor: isUnlocking ? 'not-allowed' : 'pointer',
+                  background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 30%, #3b82f6 60%, #8b5cf6 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
                 }}
               >
-                {isUnlocking ? (
-                  <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Shield className="w-5 h-5" />
-                    </motion.div>
-                    Authenticating...
-                  </>
-                ) : (
-                  <>
-                    <Unlock className="w-5 h-5" />
-                    Unlock System
-                  </>
-                )}
-              </motion.button>
-            </motion.form>
+                My Portfolio
+              </motion.div>
 
-            {/* Footer */}
+              <motion.div
+                initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1, delay: 5.6 }}
+                className="text-[44px] font-black leading-tight"
+                style={{
+                  color: 'transparent',
+                  WebkitTextStroke: '1.5px rgba(59,130,246,0.5)',
+                }}
+              >
+                Is Out!
+              </motion.div>
+            </div>
+
+            {/* Name */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 6.2 }}
+              className="text-center mb-7"
+            >
+              <div className="text-2xl font-bold text-white mb-1.5">Aayush Timalsina</div>
+              <div className="text-xs text-blue-500 tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                // Cybersecurity Student
+              </div>
+            </motion.div>
+
+            {/* Divider */}
+            <motion.div
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: '100px' }}
+              transition={{ duration: 0.8, delay: 6.8 }}
+              className="h-[2px] my-6 relative"
+              style={{ background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)' }}
+            >
+              <div
+                className="absolute w-2 h-2 border-2 border-blue-500 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{ background: '#0a0a1a' }}
+              />
+            </motion.div>
+
+            {/* URL Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1, delay: 7.2 }}
+              className="w-full max-w-md px-7 py-6 rounded-2xl text-center relative overflow-hidden mb-6"
+              style={{
+                background: 'rgba(15,15,30,0.7)',
+                border: '1px solid rgba(59,130,246,0.15)',
+                backdropFilter: 'blur(20px)',
+              }}
+            >
+              <motion.div
+                initial={{ left: '-100%' }}
+                animate={{ left: '100%' }}
+                transition={{ duration: 2, delay: 7.5 }}
+                className="absolute top-0 right-0 h-[1px]"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.6), rgba(139,92,246,0.6), transparent)' }}
+              />
+
+              <div
+                className="absolute inset-0 z-[-1]"
+                style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.03) 0%, transparent 50%, rgba(139,92,246,0.03) 100%)' }}
+              />
+
+              <motion.div
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute inset-[-20px] z-[-1]"
+                style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 70%)' }}
+              />
+
+              <div className="text-[10px] text-slate-400/50 tracking-[5px] uppercase mb-3" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                Visit Now
+              </div>
+
+              <div className="text-lg font-semibold text-white tracking-wide" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                <span className="text-blue-500">www.</span>aayush-timalsina<span className="text-blue-500">.com.np</span>
+              </div>
+            </motion.div>
+
+            {/* Tech Tags */}
+            <div className="flex gap-2 flex-wrap justify-center mb-6">
+              {[
+                { text: '🛡️ Cybersecurity', delay: 8 },
+                { text: '🔍 Pen Testing', delay: 8.15 },
+                { text: '💻 Ethical Hacking', delay: 8.3 },
+                { text: '🐧 Linux', delay: 8.45 },
+              ].map((tag, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.5, delay: tag.delay }}
+                  className="px-3.5 py-1.5 rounded-md text-[11px] text-slate-400/70"
+                  style={{
+                    fontFamily: 'JetBrains Mono, monospace',
+                    background: 'rgba(59,130,246,0.06)',
+                    border: '1px solid rgba(59,130,246,0.1)',
+                  }}
+                >
+                  {tag.text}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="flex flex-col items-center w-full">
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 9 }}
+              onClick={onLogin}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-3 px-9 py-3.5 rounded-full relative overflow-hidden cursor-pointer"
+              style={{
+                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                border: '1px solid rgba(59,130,246,0.3)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <motion.div
+                initial={{ left: '-100%' }}
+                animate={{ left: '200%' }}
+                transition={{ duration: 3, delay: 9.5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-0 w-full h-full"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }}
+              />
+
+              <motion.div
+                animate={{
+                  boxShadow: ['0 0 20px rgba(59,130,246,0.15)', '0 0 40px rgba(59,130,246,0.3)', '0 0 20px rgba(59,130,246,0.15)'],
+                }}
+                transition={{ duration: 2, delay: 10, repeat: Infinity }}
+                className="absolute inset-0 rounded-full pointer-events-none"
+              />
+
+              <span className="text-[15px] font-semibold text-white/85 tracking-[3px] uppercase">Click Here</span>
+              
+              <motion.svg
+                animate={{ x: [0, 6, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="w-5 h-5 text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+              </motion.svg>
+            </motion.button>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 8, 0] }}
+              transition={{ opacity: { duration: 0.5, delay: 9.5 }, y: { duration: 2, delay: 10, repeat: Infinity, ease: "easeInOut" } }}
+              className="mt-5 flex flex-col items-center gap-0.5"
+            >
+              <svg className="w-6 h-6 text-blue-500/50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+              <svg className="w-6 h-6 text-blue-500/50 opacity-40 -mt-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+              <svg className="w-6 h-6 text-blue-500/50 opacity-20 -mt-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+              <span className="text-[10px] text-slate-400/40 tracking-[3px] uppercase mt-2" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                Swipe Up
+              </span>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="mt-8 pt-6 border-t border-cyan-400/10 flex items-center justify-between text-xs text-cyan-400/30 font-mono"
+              transition={{ duration: 0.5, delay: 10 }}
+              className="text-[10px] text-blue-500/20 tracking-[2px] mt-5"
+              style={{ fontFamily: 'JetBrains Mono, monospace' }}
             >
-              <span>ENCRYPTED</span>
-              <div className="flex items-center gap-1">
-                <div className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
-                <span>SECURE</span>
-              </div>
+              © 2026 CyberOS
             </motion.div>
           </div>
-        </motion.div>
-      </div>
+        </div>
 
-      {/* Bottom info */}
-      <div className="absolute bottom-8 left-8 text-xs text-cyan-400/30 font-mono">
-        aayush-timalsina.com.np
-      </div>
-      
-      <div className="absolute bottom-8 right-8 text-xs text-cyan-400/30 font-mono">
-        © 2026
       </div>
     </motion.div>
   );
@@ -2961,6 +3285,20 @@ function App() {
   const [showLaunchpad, setShowLaunchpad] = useState(false);
   const [zIndexCounter, setZIndexCounter] = useState(2);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Music Player state
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSong, setCurrentSong] = useState({
+    title: "Warning",
+    artist: "Masoom Sharma, Swara Verma",
+    url: "/audio/Warning.mp3"
+  });
+  const [customUrl, setCustomUrl] = useState("");
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [musicCurrentTime, setMusicCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [playerVolume, setPlayerVolume] = useState(0.7);
+  const audioRef = useRef<HTMLAudioElement>(null);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -3268,7 +3606,7 @@ function App() {
       {/* Login Screen */}
       <AnimatePresence>
         {!isLoggedIn && (
-         <Login onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
+          <LoginScreen onLogin={() => setIsLoggedIn(true)} isDark={isDark} />
         )}
       </AnimatePresence>
 
@@ -3521,6 +3859,273 @@ function App() {
                       </span>
                     </motion.button>
                   ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Music Widget - Above Dock */}
+        <div className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
+          {/* Collapsed Bar - Minimal & Clean */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={() => setShowUrlInput((v) => !v)}
+            className="cursor-pointer flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-3xl border select-none"
+            style={{
+              background: isDark
+                ? "linear-gradient(135deg, rgba(15,10,30,0.25) 0%, rgba(88,28,135,0.15) 100%)"
+                : "linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(233,213,255,0.2) 100%)",
+              borderColor: isDark ? "rgba(139,92,246,0.2)" : "rgba(139,92,246,0.12)",
+              boxShadow: isDark
+                ? "0 8px 32px rgba(139,92,246,0.15), 0 0 1px rgba(255,255,255,0.1)"
+                : "0 8px 32px rgba(139,92,246,0.08), 0 0 1px rgba(255,255,255,0.3)",
+              backdropFilter: "blur(20px)",
+            }}
+          >
+            {/* Animated Vinyl */}
+            <motion.div
+              animate={{ rotate: isPlaying ? 360 : 0 }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
+              style={{
+                background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #ec4899, #06b6d4)",
+                boxShadow: isPlaying 
+                  ? "0 0 20px rgba(139,92,246,0.7), inset -2px -2px 8px rgba(0,0,0,0.3), inset 2px 2px 8px rgba(255,255,255,0.2)"
+                  : "0 0 10px rgba(139,92,246,0.3), inset -2px -2px 4px rgba(0,0,0,0.2)",
+              }}
+            >
+              <div className="w-3 h-3 rounded-full" style={{ background: isDark ? "#0a0519" : "#f5f0ff", boxShadow: "0 0 8px rgba(139,92,246,0.5)" }} />
+            </motion.div>
+
+            {/* Song info */}
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold truncate" style={{ color: isDark ? "rgba(255,255,255,0.95)" : "rgba(30,20,60,0.95)" }}>
+                {currentSong.title}
+              </p>
+              <p className="text-[11px] truncate" style={{ color: isDark ? "rgba(196,181,253,0.7)" : "rgba(88,28,135,0.6)" }}>
+                {currentSong.artist}
+              </p>
+            </div>
+
+            {/* Compact Controls */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (audioRef.current) {
+                  if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play(); }
+                  setIsPlaying(!isPlaying);
+                }
+              }}
+              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+              style={{
+                background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                boxShadow: "0 4px 12px rgba(139,92,246,0.4)",
+              }}
+            >
+              {isPlaying ? (
+                <div className="flex gap-1">
+                  <div className="w-1 h-3 bg-white rounded-full" />
+                  <div className="w-1 h-3 bg-white rounded-full" />
+                </div>
+              ) : (
+                <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-0.5" />
+              )}
+            </motion.button>
+
+            {/* Status Indicator */}
+            <motion.div
+              animate={{ opacity: isPlaying ? [0.5, 1, 0.5] : 0.3 }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{
+                background: isPlaying ? "#10b981" : "#6b7280",
+                boxShadow: isPlaying ? "0 0 8px rgba(16,185,129,0.6)" : "none",
+              }}
+            />
+          </motion.div>
+
+          {/* Expanded Player Popup - Premium Real Player */}
+          <AnimatePresence>
+            {showUrlInput && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.92 }}
+                transition={{ type: "spring", damping: 22, stiffness: 280 }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute bottom-full mb-6 left-1/2 -translate-x-1/2 w-80 rounded-2xl overflow-hidden backdrop-blur-xl"
+                style={{
+                  background: isDark
+                    ? "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)"
+                    : "linear-gradient(180deg, #f8f8f8 0%, #efefef 100%)",
+                  border: isDark 
+                    ? "1px solid rgba(255,255,255,0.1)" 
+                    : "1px solid rgba(0,0,0,0.08)",
+                  boxShadow: isDark
+                    ? "0 20px 60px rgba(0,0,0,0.6)"
+                    : "0 20px 60px rgba(0,0,0,0.15)",
+                }}
+              >
+                <audio
+                  ref={audioRef}
+                  src={currentSong.url}
+                  onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
+                  onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
+                  onEnded={() => setIsPlaying(false)}
+                />
+
+                {/* Large Album Art */}
+                <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden"
+                  style={{
+                    background: isDark
+                      ? "linear-gradient(135deg, #111827 0%, #1a1a2e 100%)"
+                      : "linear-gradient(135deg, #e5e5e5 0%, #d5d5d5 100%)",
+                  }}>
+                  <motion.div
+                    animate={{ scale: isPlaying ? 1.05 : 1 }}
+                    transition={{ duration: 0.6 }}
+                    className="w-48 h-48 rounded-lg flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                      boxShadow: isPlaying ? "0 0 40px rgba(139,92,246,0.5)" : "0 8px 32px rgba(0,0,0,0.3)",
+                    }}>
+                    <Music className="w-20 h-20 text-white opacity-80" />
+                  </motion.div>
+                </div>
+
+                {/* Song Info */}
+                <div className="px-6 pt-6 pb-3">
+                  <h2 className="text-xl font-bold truncate" style={{ color: isDark ? "#fff" : "#000" }}>
+                    {currentSong.title}
+                  </h2>
+                  <p className="text-sm mt-1 truncate" style={{ color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)" }}>
+                    {currentSong.artist}
+                  </p>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="px-6 py-4">
+                  <input
+                    type="range" min="0" max={duration || 0} value={musicCurrentTime}
+                    onChange={(e) => {
+                      const t = parseFloat(e.target.value);
+                      setMusicCurrentTime(t);
+                      if (audioRef.current) audioRef.current.currentTime = t;
+                    }}
+                    className="w-full h-1 rounded-full appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #8b5cf6 ${duration ? (musicCurrentTime / duration) * 100 : 0}%, ${isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"} 0%)`,
+                      accentColor: "#8b5cf6",
+                    }}
+                  />
+                  <div className="flex justify-between mt-2">
+                    <span className="text-xs font-mono" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>
+                      {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime/60)}:${String(Math.floor(musicCurrentTime%60)).padStart(2,"0")}`}
+                    </span>
+                    <span className="text-xs font-mono" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>
+                      {isNaN(duration) ? "0:00" : `${Math.floor(duration/60)}:${String(Math.floor(duration%60)).padStart(2,"0")}`}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Main Controls */}
+                <div className="flex items-center justify-center gap-6 px-6 pb-4">
+                  {/* Previous/Rewind */}
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
+                    className="p-3 rounded-full transition-colors"
+                    style={{
+                      color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
+                      background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
+                    }}>
+                    <RotateCcw className="w-5 h-5" />
+                  </motion.button>
+
+                  {/* Play/Pause - Main */}
+                  <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      if (audioRef.current) {
+                        if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play(); }
+                        setIsPlaying(!isPlaying);
+                      }
+                    }}
+                    className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
+                    style={{
+                      background: "#8b5cf6",
+                      boxShadow: "0 8px 24px rgba(139,92,246,0.4)",
+                    }}>
+                    {isPlaying ? (
+                      <div className="flex gap-1.5 ml-0.5">
+                        <div className="w-1.5 h-6 bg-white rounded-full" />
+                        <div className="w-1.5 h-6 bg-white rounded-full" />
+                      </div>
+                    ) : (
+                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[16px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                    )}
+                  </motion.button>
+
+                  {/* Next/Forward */}
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
+                    className="p-3 rounded-full transition-colors"
+                    style={{
+                      color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
+                      background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
+                    }}>
+                    <RefreshCw className="w-5 h-5" />
+                  </motion.button>
+                </div>
+
+                {/* Volume Control */}
+                <div className="flex items-center gap-3 px-6 pb-4"
+                  style={{ borderBottom: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)" }}>
+                  <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }} />
+                  <input type="range" min="0" max="1" step="0.01" value={playerVolume}
+                    onChange={(e) => {
+                      const v = parseFloat(e.target.value);
+                      setPlayerVolume(v);
+                      if (audioRef.current) audioRef.current.volume = v;
+                    }}
+                    className="flex-1 h-1 rounded-full appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #8b5cf6 ${playerVolume * 100}%, ${isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"} 0%)`,
+                      accentColor: "#8b5cf6",
+                    }}
+                  />
+                </div>
+
+                {/* Custom URL Input */}
+                <div className="px-6 py-4">
+                  <label className="text-xs font-semibold block mb-2" style={{ color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)" }}>
+                    Load Custom Track
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text" value={customUrl} onChange={(e) => setCustomUrl(e.target.value)}
+                      placeholder="Paste URL..."
+                      className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
+                      style={{
+                        background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)",
+                        border: isDark ? "1px solid rgba(255,255,255,0.15)" : "1px solid rgba(0,0,0,0.1)",
+                        color: isDark ? "#fff" : "#000",
+                      }}
+                    />
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (customUrl.trim()) {
+                          setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl });
+                          setCustomUrl("");
+                        }
+                      }}
+                      className="px-4 py-2 rounded-lg text-sm font-semibold text-white flex-shrink-0 transition-all"
+                      style={{ background: "#8b5cf6" }}>
+                      Add
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
             )}
