@@ -2317,47 +2317,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     { label: "Anomaly spike", level: "HIGH" },
   ];
 
-  const scriptLines = [
-    "net.scan --nodes=42 --latency=12ms",
-    "ids.trace --signature=polymorph",
-    "tls.handshake --cipher=AES-256",
-    "fw.rules sync --policy=zero-trust",
-    "anomaly.watch --threshold=0.84",
-    "mesh.route --optimize --hops=7",
-    "vault.verify --checksum=OK",
-    "packet.flow --qos=high",
-  ];
-
-  const scriptStream = [...scriptLines, ...scriptLines];
-
-  const networkNodes = [
-    { id: 0, x: 8, y: 16 },
-    { id: 1, x: 18, y: 28 },
-    { id: 2, x: 28, y: 18 },
-    { id: 3, x: 38, y: 30 },
-    { id: 4, x: 50, y: 22 },
-    { id: 5, x: 62, y: 32 },
-    { id: 6, x: 72, y: 18 },
-    { id: 7, x: 82, y: 30 },
-    { id: 8, x: 92, y: 20 },
-    { id: 9, x: 12, y: 58 },
-    { id: 10, x: 24, y: 68 },
-    { id: 11, x: 36, y: 56 },
-    { id: 12, x: 48, y: 72 },
-    { id: 13, x: 60, y: 60 },
-    { id: 14, x: 74, y: 70 },
-    { id: 15, x: 86, y: 58 },
-    { id: 16, x: 20, y: 88 },
-    { id: 17, x: 58, y: 88 },
-  ];
-
-  const networkEdges: Array<[number, number]> = [
-    [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8],
-    [1, 9], [2, 11], [3, 10], [4, 12], [5, 13], [6, 15],
-    [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [14, 15],
-    [10, 16], [12, 17], [9, 16], [14, 17],
-  ];
-
   const nodeSignals = [
     { node: "node-a9", strength: 82 },
     { node: "node-b4", strength: 67 },
@@ -2405,37 +2364,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       <div className="absolute inset-0 pointer-events-none login-sweep" />
       <div className="absolute inset-0 pointer-events-none login-radial" />
       <div className="absolute inset-0 pointer-events-none login-matrix" />
-      <div className="absolute inset-0 pointer-events-none login-network">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="netLine" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.08)" />
-              <stop offset="100%" stopColor="rgba(56,189,248,0.35)" />
-            </linearGradient>
-          </defs>
-          <g className="login-network-lines">
-            {networkEdges.map(([from, to]) => {
-              const start = networkNodes.find((node) => node.id === from);
-              const end = networkNodes.find((node) => node.id === to);
-              if (!start || !end) return null;
-              return (
-                <line
-                  key={`${from}-${to}`}
-                  x1={start.x}
-                  y1={start.y}
-                  x2={end.x}
-                  y2={end.y}
-                />
-              );
-            })}
-          </g>
-          <g className="login-network-nodes">
-            {networkNodes.map((node) => (
-              <circle key={node.id} cx={node.x} cy={node.y} r={0.9} />
-            ))}
-          </g>
-        </svg>
-      </div>
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-1" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-2" />
       <div className="absolute inset-0 pointer-events-none login-orb login-orb-3" />
@@ -2458,53 +2386,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         <div className="login-typing-line">&gt; loading modules: [react, framer-motion, tailwind]</div>
         <div className="login-typing-line">&gt; connecting to aayush-timalsina.com.np</div>
         <div className="login-typing-line login-typing-ok">&gt; status: DEPLOYED ✓</div>
-      </div>
-
-      <div className="absolute left-8 bottom-10 hidden lg:block pointer-events-none login-script">
-        <div className="login-script-header">SCRIPT STREAM</div>
-        <div className="login-script-body">
-          <div className="login-script-track">
-            {scriptStream.map((line, index) => (
-              <div key={`${line}-${index}`} className="login-script-line">
-                &gt; {line}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute right-10 top-24 hidden lg:block pointer-events-none login-radar">
-        <div className="login-radar-sweep" />
-        <div className="login-radar-ring" />
-        <div className="login-radar-ring" />
-        <div className="login-radar-ring" />
-        <span className="login-radar-dot" />
-        <span className="login-radar-dot login-radar-dot-2" />
-        <span className="login-radar-dot login-radar-dot-3" />
-      </div>
-
-      <div className="absolute right-8 bottom-10 hidden lg:flex flex-col gap-3 pointer-events-none login-widget-group">
-        <div className="login-widget">
-          <div className="login-widget-title">Netflow</div>
-          <div className="login-widget-row">
-            <span>Bandwidth</span>
-            <span className="login-widget-value">842 Mbps</span>
-          </div>
-          <div className="login-widget-bar">
-            <span style={{ width: "82%" }} />
-          </div>
-        </div>
-        <div className="login-widget">
-          <div className="login-widget-title">Threat Index</div>
-          <div className="login-widget-row">
-            <span>Current</span>
-            <span className="login-widget-value">0.14</span>
-          </div>
-          <div className="login-widget-badges">
-            <span>ENCRYPTED</span>
-            <span>MONITORED</span>
-          </div>
-        </div>
       </div>
 
       <AnimatePresence>
@@ -3021,28 +2902,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         .login-widget-bar {
           height: 6px;
           border-radius: 999px;
-          background: rgba(6, 12, 22, 0.7);
-          overflow: hidden;
-          border: 1px solid rgba(56,189,248,0.2);
-        }
-        .login-widget-bar span {
-          display: block;
-          height: 100%;
-          background: linear-gradient(90deg, rgba(56,189,248,0.6), rgba(34,211,238,0.9));
-          box-shadow: 0 0 12px rgba(56,189,248,0.5);
-        }
-        .login-widget-badges {
-          display: flex;
-          gap: 6px;
-          flex-wrap: wrap;
-          font-size: 9px;
-        }
-        .login-widget-badges span {
-          padding: 2px 6px;
-          border-radius: 999px;
-          border: 1px solid rgba(34,211,238,0.35);
-          color: rgba(34,211,238,0.8);
-          background: rgba(6, 12, 22, 0.6);
         }
         .login-boot-logo {
           width: 80px;
@@ -3123,130 +2982,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         .login-panel-title {
           display: flex;
           align-items: center;
-          gap: 8px;
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.18em;
-          color: rgba(165,243,252,0.7);
-          margin-bottom: 12px;
-        }
-        .login-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(34,211,238,0.9);
-          box-shadow: 0 0 10px rgba(34,211,238,0.8);
-        }
-        .login-tag {
-          font-size: 10px;
-          padding: 2px 6px;
-          border-radius: 999px;
-          border: 1px solid rgba(56,189,248,0.35);
-          color: rgba(165,243,252,0.85);
-        }
-        .login-bars {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 6px;
-        }
-        .login-bars span {
-          height: 42px;
-          border-radius: 999px;
-          background: linear-gradient(180deg, rgba(56,189,248,0.4), rgba(8, 12, 22, 0.6));
-          animation: pulseBars 2.4s ease-in-out infinite;
-        }
-        .login-bars span:nth-child(2) { animation-delay: 0.2s; }
-        .login-bars span:nth-child(3) { animation-delay: 0.4s; }
-        .login-bars span:nth-child(4) { animation-delay: 0.6s; }
-        .login-bars span:nth-child(5) { animation-delay: 0.8s; }
-        .login-graph {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 6px;
-        }
-        .login-graph span {
-          height: 32px;
-          border-radius: 6px;
-          background: linear-gradient(180deg, rgba(248,113,113,0.6), rgba(8, 12, 22, 0.5));
-          animation: pulseGraph 2.2s ease-in-out infinite;
-        }
-        .login-graph span:nth-child(2) { animation-delay: 0.25s; }
-        .login-graph span:nth-child(3) { animation-delay: 0.4s; }
-        .login-graph span:nth-child(4) { animation-delay: 0.55s; }
-        .login-graph span:nth-child(5) { animation-delay: 0.7s; }
-        .login-avatar {
-          width: 96px;
-          height: 96px;
-          border-radius: 20px;
-          overflow: hidden;
-          border: 1px solid rgba(56,189,248,0.45);
-          box-shadow: 0 0 25px rgba(56,189,248,0.2);
-        }
-        .login-profile {
-          position: relative;
-          width: 160px;
-          height: 160px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .login-profile-ring {
-          width: 140px;
-          height: 140px;
-          border-radius: 999px;
-          padding: 3px;
-          background: conic-gradient(from 0deg, #38bdf8, #8b5cf6, #ec4899, #38bdf8);
-          animation: ringSpin 6s linear infinite, ringGlow 4s ease-in-out infinite;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 0 40px rgba(59,130,246,0.25);
-        }
-        .login-profile-img {
-          width: 100%;
-          height: 100%;
-          border-radius: 999px;
-          border: 3px solid #0a0a1a;
-        }
-        .login-profile-orbit {
-          position: absolute;
-          width: 180px;
-          height: 180px;
-          border-radius: 999px;
-          border: 1px dashed rgba(59,130,246,0.18);
-          animation: spinSlow 18s linear infinite;
-        }
-        .login-profile-orbit::before,
-        .login-profile-orbit::after {
-          content: "";
-          position: absolute;
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: #38bdf8;
-          box-shadow: 0 0 10px rgba(59,130,246,0.8);
-        }
-        .login-profile-orbit::before { top: -3px; left: 50%; transform: translateX(-50%); }
-        .login-profile-orbit::after { bottom: -3px; left: 50%; transform: translateX(-50%); }
-        .login-profile-hex {
-          position: absolute;
-          width: 200px;
-          height: 200px;
-          border-radius: 999px;
-          border: 1px solid rgba(59,130,246,0.08);
-          animation: spinSlow 30s linear infinite reverse;
-        }
-        .login-title-line {
-          background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 30%, #38bdf8 60%, #8b5cf6 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .login-title-line-stroke {
-          -webkit-text-stroke: 1.5px rgba(56,189,248,0.5);
-          letter-spacing: 0.05em;
-        }
-        .login-glitch {
-          position: relative;
           display: inline-block;
           letter-spacing: 0.14em;
         }
@@ -3433,18 +3168,6 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         @keyframes pulseDot {
           0%, 100% { transform: scale(0.7); opacity: 0.6; }
           50% { transform: scale(1.1); opacity: 1; }
-        }
-        @keyframes networkFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-        @keyframes scriptScroll {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(-50%); }
-        }
-        @keyframes radarSweep {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
         }
         @keyframes fadeOut {
           to { opacity: 0; }
