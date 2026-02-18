@@ -3547,15 +3547,16 @@ function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             onClick={() => setShowUrlInput((v) => !v)}
-            className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-2xl backdrop-blur-2xl border shadow-2xl select-none"
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-2xl backdrop-blur-3xl border shadow-2xl select-none"
             style={{
               background: isDark
-                ? "linear-gradient(135deg, rgba(15,10,30,0.85) 0%, rgba(88,28,135,0.7) 50%, rgba(15,10,30,0.85) 100%)"
-                : "linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(233,213,255,0.7) 50%, rgba(255,255,255,0.85) 100%)",
-              borderColor: isDark ? "rgba(139,92,246,0.35)" : "rgba(139,92,246,0.25)",
+                ? "linear-gradient(135deg, rgba(15,10,30,0.35) 0%, rgba(88,28,135,0.25) 50%, rgba(15,10,30,0.35) 100%)"
+                : "linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(233,213,255,0.35) 50%, rgba(255,255,255,0.45) 100%)",
+              borderColor: isDark ? "rgba(139,92,246,0.25)" : "rgba(139,92,246,0.15)",
               boxShadow: isDark
-                ? "0 0 24px rgba(139,92,246,0.25), 0 4px 20px rgba(0,0,0,0.5)"
-                : "0 0 24px rgba(139,92,246,0.15), 0 4px 20px rgba(0,0,0,0.1)",
+                ? "0 0 40px rgba(139,92,246,0.2), 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)"
+                : "0 0 30px rgba(139,92,246,0.12), 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4)",
+              backdropFilter: "blur(16px)",
             }}
           >
             {/* Music icon + spinning disc */}
@@ -3565,10 +3566,10 @@ function App() {
               className="relative w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center"
               style={{
                 background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #ec4899, #06b6d4)",
-                boxShadow: isPlaying ? "0 0 12px rgba(139,92,246,0.7)" : "none",
+                boxShadow: isPlaying ? "0 0 16px rgba(139,92,246,0.8), 0 0 32px rgba(6,182,212,0.4)" : "0 0 8px rgba(139,92,246,0.3)",
               }}
             >
-              <div className="w-2.5 h-2.5 rounded-full bg-gray-900" />
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: isDark ? "#0a0519" : "#f5f0ff" }} />
             </motion.div>
 
             {/* Wave bars */}
@@ -3588,9 +3589,9 @@ function App() {
                   style={{
                     width: "2px",
                     background: isDark
-                      ? `hsl(${260 + i * 5}, 85%, ${55 + i * 1.5}%)`
-                      : `hsl(${260 + i * 5}, 70%, ${45 + i * 1.5}%)`,
-                    boxShadow: isPlaying ? `0 0 4px hsl(${260 + i * 5}, 85%, 60%)` : "none",
+                      ? `hsl(${260 + i * 5}, 85%, ${60 + i * 1.5}%)`
+                      : `hsl(${260 + i * 5}, 75%, ${50 + i * 1.5}%)`,
+                    boxShadow: isPlaying ? `0 0 6px hsl(${260 + i * 5}, 85%, 65%), 0 0 12px hsl(${260 + i * 5}, 75%, 55%)` : "none",
                   }}
                 />
               ))}
@@ -3602,7 +3603,7 @@ function App() {
                 animate={{ x: isPlaying ? ["0%", "-100%"] : "0%" }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 className="text-xs font-medium whitespace-nowrap"
-                style={{ color: isDark ? "rgba(255,255,255,0.85)" : "rgba(30,20,60,0.85)" }}
+                style={{ color: isDark ? "rgba(255,255,255,0.9)" : "rgba(30,20,60,0.9)" }}
               >
                 {currentSong.title} — {currentSong.artist}
               </motion.p>
@@ -3613,6 +3614,9 @@ function App() {
               animate={{ scale: isPlaying ? [1, 1.4, 1] : 1, opacity: isPlaying ? [0.6, 1, 0.6] : 0.4 }}
               transition={{ duration: 1.5, repeat: Infinity }}
               className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"
+              style={{
+                boxShadow: isPlaying ? "0 0 8px rgba(52,211,153,0.8)" : "none",
+              }}
             />
           </motion.div>
 
@@ -3625,15 +3629,18 @@ function App() {
                 exit={{ opacity: 0, y: 20, scale: 0.92 }}
                 transition={{ type: "spring", damping: 22, stiffness: 280 }}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-96 rounded-3xl overflow-hidden"
+                className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-96 rounded-3xl overflow-hidden backdrop-blur-3xl"
                 style={{
                   background: isDark
-                    ? "linear-gradient(145deg, rgba(10,5,25,0.97) 0%, rgba(60,20,100,0.95) 50%, rgba(10,5,25,0.97) 100%)"
-                    : "linear-gradient(145deg, rgba(250,245,255,0.97) 0%, rgba(233,213,255,0.95) 50%, rgba(250,245,255,0.97) 100%)",
-                  border: isDark ? "1px solid rgba(139,92,246,0.3)" : "1px solid rgba(139,92,246,0.2)",
+                    ? "linear-gradient(145deg, rgba(10,5,25,0.45) 0%, rgba(60,20,100,0.35) 50%, rgba(10,5,25,0.45) 100%)"
+                    : "linear-gradient(145deg, rgba(250,245,255,0.5) 0%, rgba(233,213,255,0.4) 50%, rgba(250,245,255,0.5) 100%)",
+                  border: isDark 
+                    ? "1px solid rgba(139,92,246,0.3), 0 0 1px rgba(255,255,255,0.1)" 
+                    : "1px solid rgba(139,92,246,0.25), 0 0 1px rgba(255,255,255,0.5)",
                   boxShadow: isDark
-                    ? "0 0 60px rgba(139,92,246,0.3), 0 30px 60px rgba(0,0,0,0.7)"
-                    : "0 0 40px rgba(139,92,246,0.15), 0 20px 40px rgba(0,0,0,0.12)",
+                    ? "0 0 80px rgba(139,92,246,0.25), 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"
+                    : "0 0 60px rgba(139,92,246,0.15), 0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(20px)",
                 }}
               >
                 <audio
