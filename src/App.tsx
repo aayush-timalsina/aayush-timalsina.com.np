@@ -2674,584 +2674,458 @@ const MusicPlayer = ({
 };
 
 // Login Screen Component - Animated Portfolio Launch
+// Login Screen Component - OS-style password login
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
+  const [phase, setPhase] = useState<'boot' | 'lock'>('boot');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // After boot animation, switch to lock screen
+  useEffect(() => {
+    const t = setTimeout(() => setPhase('lock'), 3200);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Auto-focus input when lock screen appears
+  useEffect(() => {
+    if (phase === 'lock') {
+      setTimeout(() => inputRef.current?.focus(), 400);
+    }
+  }, [phase]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'TYPE-C') {
+      setUnlocking(true);
+      setTimeout(() => onLogin(), 1000);
+    } else {
+      setError(true);
+      setPassword('');
+      setTimeout(() => setError(false), 800);
+    }
+  };
+
+  const timeStr = currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  const dateStr = currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.6 }}
       className="fixed inset-0 z-[200] overflow-hidden"
-      style={{ background: '#000', fontFamily: 'Inter, sans-serif' }}
+      style={{ fontFamily: 'Inter, sans-serif' }}
     >
-      <div className="w-full h-full relative overflow-hidden" style={{ background: '#030308' }}>
-        
-        {/* Background Base */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, delay: 0.2 }}
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(160deg, #06060f 0%, #0a0a1a 20%, #0d0f2b 40%, #0a0c20 60%, #08081a 80%, #050510 100%)',
-          }}
-        />
+      {/* Background */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, #020210 0%, #050520 30%, #0a0530 60%, #08041a 100%)',
+        }}
+      />
 
-        {/* Grid Overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 0.5 }}
-          className="absolute inset-0 z-[1]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
+      {/* Animated grid */}
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}
+      />
 
-        {/* Scanlines */}
-        <div
-          className="absolute inset-0 z-[2] pointer-events-none"
-          style={{
-            background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px)',
-          }}
-        />
+      {/* Scanlines */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 3px)',
+        }}
+      />
 
-        {/* Glowing Orbs */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, delay: 1 }}
-          className="absolute w-[50vw] h-[50vw] rounded-full z-[1] blur-[80px] top-[5%] left-[-10%]"
-          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%)' }}
-        >
+      {/* Glowing orbs */}
+      <div className="absolute w-[700px] h-[700px] rounded-full z-[1] blur-[120px] top-[-100px] left-[-150px]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)' }} />
+      <div className="absolute w-[600px] h-[600px] rounded-full z-[1] blur-[120px] bottom-[-50px] right-[-100px]"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)' }} />
+      <div className="absolute w-[400px] h-[400px] rounded-full z-[1] blur-[80px] top-[40%] left-[40%]"
+        style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)' }} />
+
+      {/* Corner brackets */}
+      {[
+        { pos: 'top-5 left-5', border: 'border-t-2 border-l-2' },
+        { pos: 'top-5 right-5', border: 'border-t-2 border-r-2' },
+        { pos: 'bottom-5 left-5', border: 'border-b-2 border-l-2' },
+        { pos: 'bottom-5 right-5', border: 'border-b-2 border-r-2' },
+      ].map((c, i) => (
+        <div key={i} className={`absolute w-8 h-8 z-[10] ${c.pos} ${c.border} border-blue-500/30`} />
+      ))}
+
+      {/* ── BOOT PHASE ── */}
+      <AnimatePresence>
+        {phase === 'boot' && (
           <motion.div
-            animate={{ scale: [1, 1.15, 1], x: [0, 10, 0], y: [0, -15, 0] }}
-            transition={{ duration: 6, delay: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="w-full h-full"
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, delay: 1.5 }}
-          className="absolute w-[60vw] h-[60vw] rounded-full z-[1] blur-[80px] top-[35%] right-[-15%]"
-          style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)' }}
-        >
-          <motion.div
-            animate={{ scale: [1, 1.1, 1], x: [0, -10, 0], y: [0, 10, 0] }}
-            transition={{ duration: 8, delay: 3.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-full h-full"
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 2, delay: 2 }}
-          className="absolute w-[40vw] h-[40vw] rounded-full z-[1] blur-[80px] bottom-[10%] left-[5%]"
-          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)' }}
-        >
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], x: [0, 10, 0], y: [0, -15, 0] }}
-            transition={{ duration: 7, delay: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="w-full h-full"
-          />
-        </motion.div>
-
-        {/* Corner Brackets */}
-        {[
-          { pos: 'top-6 left-6', border: 'border-t-2 border-l-2 border-blue-500/40', delay: 1.5 },
-          { pos: 'top-6 right-6', border: 'border-t-2 border-r-2 border-blue-500/40', delay: 1.7 },
-          { pos: 'bottom-6 left-6', border: 'border-b-2 border-l-2 border-purple-500/40', delay: 1.9 },
-          { pos: 'bottom-6 right-6', border: 'border-b-2 border-r-2 border-purple-500/40', delay: 2.1 },
-        ].map((corner, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: corner.delay }}
-            className={`absolute w-[30px] h-[30px] z-[15] ${corner.pos} ${corner.border}`}
-          />
-        ))}
-
-        {/* Side Text */}
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 3 }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-blue-500/20 tracking-[4px] uppercase z-10"
-          style={{ fontFamily: 'JetBrains Mono, monospace' }}
-        >
-          CyberOS v3.0
-        </motion.span>
-
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 3 }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-[10px] text-blue-500/20 tracking-[4px] uppercase z-10"
-          style={{ fontFamily: 'JetBrains Mono, monospace' }}
-        >
-          Portfolio 2026
-        </motion.span>
-
-        {/* Floating Particles */}
-        {[
-          { size: 3, top: '12%', left: '10%', delay: 2, color: '#3b82f6' },
-          { size: 2, top: '22%', right: '15%', delay: 2.3, color: '#8b5cf6' },
-          { size: 3, top: '48%', left: '6%', delay: 2.6, color: '#3b82f6' },
-          { size: 4, top: '65%', right: '8%', delay: 2.9, color: '#3b82f6' },
-          { size: 2, top: '80%', left: '20%', delay: 3.2, color: '#8b5cf6' },
-          { size: 3, top: '35%', left: '88%', delay: 3.5, color: '#3b82f6' },
-        ].map((p, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ duration: 1, delay: p.delay }}
-            className="absolute rounded-full z-[3]"
-            style={{
-              width: p.size, height: p.size,
-              top: p.top, left: p.left || undefined, right: p.right || undefined,
-              background: p.color,
-            }}
+            key="boot"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="absolute inset-0 z-[50] flex flex-col items-center justify-center"
           >
             <motion.div
-              animate={{
-                y: [0, -15, -5, -20, 0],
-                x: [0, 8, -5, 12, 0],
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="w-full h-full"
-            />
-          </motion.div>
-        ))}
-
-        {/* Glitch Flash */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: [0, 1, 0, 0, 1, 0, 0, 1, 0],
-          }}
-          transition={{
-            times: [0, 0.05, 0.1, 0.4, 0.45, 0.5, 0.7, 0.75, 0.8],
-            duration: 10,
-            delay: 2.4,
-          }}
-          className="absolute inset-0 z-[200] pointer-events-none"
-          style={{ background: 'rgba(59,130,246,0.08)' }}
-        />
-
-        {/* Horizontal Scan Lines */}
-        <motion.div
-          initial={{ top: '0%', opacity: 0.8 }}
-          animate={{ top: '100%', opacity: 0 }}
-          transition={{ duration: 3, delay: 2.5, ease: "easeInOut" }}
-          className="absolute left-0 right-0 h-[2px] z-[150]"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent)',
-            boxShadow: '0 0 20px rgba(59,130,246,0.3)',
-          }}
-        />
-
-        <motion.div
-          initial={{ top: '0%', opacity: 0.8 }}
-          animate={{ top: '100%', opacity: 0 }}
-          transition={{ duration: 3, delay: 6, ease: "easeInOut" }}
-          className="absolute left-0 right-0 h-[2px] z-[150]"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), rgba(139,92,246,0.3), transparent)',
-            boxShadow: '0 0 20px rgba(59,130,246,0.3)',
-          }}
-        />
-
-        {/* Typing Lines Overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 1, 0] }}
-          transition={{ times: [0, 0.1, 0.8, 1], duration: 1.5, delay: 2.6 }}
-          className="absolute top-0 left-0 right-0 z-[90] px-8 py-16"
-          style={{ fontFamily: 'JetBrains Mono, monospace' }}
-        >
-          {[
-            { text: '> initializing portfolio...', delay: 2.7 },
-            { text: '> loading modules: [react, framer-motion, tailwind]', delay: 2.9 },
-            { text: '> connecting to aayush-timalsina.com.np', delay: 3.1 },
-            { text: '> status: DEPLOYED ✓', delay: 3.3, color: '#22c55e' },
-          ].map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: line.delay }}
-              className="text-xs mb-1"
-              style={{ color: line.color || 'rgba(59,130,246,0.5)' }}
-            >
-              {line.text}
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Boot Screen */}
-        <motion.div
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 0.8, delay: 2.5 }}
-          className="absolute inset-0 z-[100] flex flex-col items-center justify-center"
-          style={{ background: '#030308', pointerEvents: 'none' }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="w-20 h-20 border-[3px] border-blue-500 rounded-2xl flex items-center justify-center mb-6"
-            style={{ boxShadow: '0 0 30px rgba(59,130,246,0.3), inset 0 0 20px rgba(59,130,246,0.1)' }}
-          >
-            <Shield className="w-10 h-10 text-blue-500" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="text-sm text-blue-500 tracking-[6px] uppercase mb-6"
-            style={{ fontFamily: 'JetBrains Mono, monospace' }}
-          >
-            CyberOS
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 1.2 }}
-            className="w-[200px] h-[3px] rounded-sm overflow-hidden"
-            style={{ background: 'rgba(59,130,246,0.15)' }}
-          >
-            <motion.div
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 1.2, delay: 1.3 }}
-              className="h-full rounded-sm"
+              initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="w-24 h-24 rounded-2xl flex items-center justify-center mb-8"
               style={{
-                background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
-                boxShadow: '0 0 10px rgba(59,130,246,0.5)',
+                border: '2px solid rgba(59,130,246,0.6)',
+                background: 'rgba(59,130,246,0.08)',
+                boxShadow: '0 0 40px rgba(59,130,246,0.3), inset 0 0 30px rgba(59,130,246,0.08)',
               }}
-            />
-          </motion.div>
+            >
+              <Shield className="w-12 h-12 text-blue-400" />
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 1.5 }}
-            className="text-[11px] text-blue-500/40 mt-4"
-            style={{ fontFamily: 'JetBrains Mono, monospace' }}
-          >
-            Initializing secure environment...
-          </motion.div>
-        </motion.div>
-
-        {/* Main Content */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-between px-8 py-16">
-          
-          {/* Top Section */}
-          <div className="flex flex-col items-center w-full">
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 3 }}
-              className="text-xs text-blue-400/60 tracking-[2px]"
+              initial={{ opacity: 0, letterSpacing: '0px' }}
+              animate={{ opacity: 1, letterSpacing: '10px' }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-blue-400 font-bold text-2xl uppercase mb-2"
               style={{ fontFamily: 'JetBrains Mono, monospace' }}
             >
-              &gt; deploy --production
-              <motion.span
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-                className="inline-block w-[9px] h-4 bg-blue-400/70 ml-1 align-middle"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 3.5 }}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full mt-4"
-              style={{
-                background: 'rgba(59,130,246,0.08)',
-                border: '1px solid rgba(59,130,246,0.2)',
-              }}
-            >
-              <motion.div
-                animate={{ boxShadow: ['0 0 10px rgba(34,197,94,0.6)', '0 0 18px rgba(34,197,94,0.9)', '0 0 10px rgba(34,197,94,0.6)'] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-2 h-2 rounded-full bg-green-500"
-              />
-              <span className="text-xs text-gray-400 tracking-[3px] uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                Now Live
-              </span>
-            </motion.div>
-          </div>
-
-          {/* Middle Section */}
-          <div className="flex flex-col items-center w-full flex-1 justify-center">
-            
-            {/* Profile */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              transition={{ duration: 1, delay: 4 }}
-              className="relative mb-9"
-            >
-              <motion.div
-                animate={{
-                  background: [
-                    'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)',
-                    'conic-gradient(from 360deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)',
-                  ],
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                className="w-40 h-40 rounded-full p-[3px]"
-                style={{ boxShadow: '0 0 40px rgba(59,130,246,0.25), 0 0 80px rgba(139,92,246,0.15)' }}
-              >
-                <img
-                  src={PROFILE_IMAGE}
-                  alt="Aayush Timalsina"
-                  className="w-full h-full rounded-full object-cover border-[3px] border-[#0a0a1a]"
-                />
-              </motion.div>
-
-              {/* Decoration Ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute w-[200px] h-[200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-blue-500/15"
-              >
-                <div className="absolute w-1.5 h-1.5 rounded-full bg-blue-500 top-[-3px] left-1/2 -translate-x-1/2" style={{ boxShadow: '0 0 10px rgba(59,130,246,0.8)' }} />
-                <div className="absolute w-1.5 h-1.5 rounded-full bg-blue-500 bottom-[-3px] left-1/2 -translate-x-1/2" style={{ boxShadow: '0 0 10px rgba(59,130,246,0.8)' }} />
-              </motion.div>
-
-              {/* Hex Ring */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-                className="absolute w-[220px] h-[220px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-500/8"
-              />
-            </motion.div>
-
-            {/* Heading */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 5 }}
-              className="text-[15px] font-normal text-slate-400/80 tracking-[8px] uppercase mb-3"
-            >
-              Finally
-            </motion.div>
-
-            <div className="text-center mb-5">
-              <motion.div
-                initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 1, delay: 5.3 }}
-                className="text-5xl font-black leading-tight tracking-tight mb-1"
-                style={{
-                  background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 30%, #3b82f6 60%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                My Portfolio
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 1, delay: 5.6 }}
-                className="text-[44px] font-black leading-tight"
-                style={{
-                  color: 'transparent',
-                  WebkitTextStroke: '1.5px rgba(59,130,246,0.5)',
-                }}
-              >
-                Is Out!
-              </motion.div>
-            </div>
-
-            {/* Name */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 6.2 }}
-              className="text-center mb-7"
-            >
-              <div className="text-2xl font-bold text-white mb-1.5">Aayush Timalsina</div>
-              <div className="text-xs text-blue-500 tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                // Cybersecurity Student
-              </div>
-            </motion.div>
-
-            {/* Divider */}
-            <motion.div
-              initial={{ opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: '100px' }}
-              transition={{ duration: 0.8, delay: 6.8 }}
-              className="h-[2px] my-6 relative"
-              style={{ background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)' }}
-            >
-              <div
-                className="absolute w-2 h-2 border-2 border-blue-500 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{ background: '#0a0a1a' }}
-              />
-            </motion.div>
-
-            {/* URL Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1, delay: 7.2 }}
-              className="w-full max-w-md px-7 py-6 rounded-2xl text-center relative overflow-hidden mb-6"
-              style={{
-                background: 'rgba(15,15,30,0.7)',
-                border: '1px solid rgba(59,130,246,0.15)',
-                backdropFilter: 'blur(20px)',
-              }}
-            >
-              <motion.div
-                initial={{ left: '-100%' }}
-                animate={{ left: '100%' }}
-                transition={{ duration: 2, delay: 7.5 }}
-                className="absolute top-0 right-0 h-[1px]"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.6), rgba(139,92,246,0.6), transparent)' }}
-              />
-
-              <div
-                className="absolute inset-0 z-[-1]"
-                style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.03) 0%, transparent 50%, rgba(139,92,246,0.03) 100%)' }}
-              />
-
-              <motion.div
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-[-20px] z-[-1]"
-                style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 70%)' }}
-              />
-
-              <div className="text-[10px] text-slate-400/50 tracking-[5px] uppercase mb-3" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                Visit Now
-              </div>
-
-              <div className="text-lg font-semibold text-white tracking-wide" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                <span className="text-blue-500">www.</span>aayush-timalsina<span className="text-blue-500">.com.np</span>
-              </div>
-            </motion.div>
-
-            {/* Tech Tags */}
-            <div className="flex gap-2 flex-wrap justify-center mb-6">
-              {[
-                { text: '🛡️ Cybersecurity', delay: 8 },
-                { text: '🔍 Pen Testing', delay: 8.15 },
-                { text: '💻 Ethical Hacking', delay: 8.3 },
-                { text: '🐧 Linux', delay: 8.45 },
-              ].map((tag, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.5, delay: tag.delay }}
-                  className="px-3.5 py-1.5 rounded-md text-[11px] text-slate-400/70"
-                  style={{
-                    fontFamily: 'JetBrains Mono, monospace',
-                    background: 'rgba(59,130,246,0.06)',
-                    border: '1px solid rgba(59,130,246,0.1)',
-                  }}
-                >
-                  {tag.text}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="flex flex-col items-center w-full">
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 9 }}
-              onClick={onLogin}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-3 px-9 py-3.5 rounded-full relative overflow-hidden cursor-pointer"
-              style={{
-                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
-                border: '1px solid rgba(59,130,246,0.3)',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <motion.div
-                initial={{ left: '-100%' }}
-                animate={{ left: '200%' }}
-                transition={{ duration: 3, delay: 9.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 w-full h-full"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }}
-              />
-
-              <motion.div
-                animate={{
-                  boxShadow: ['0 0 20px rgba(59,130,246,0.15)', '0 0 40px rgba(59,130,246,0.3)', '0 0 20px rgba(59,130,246,0.15)'],
-                }}
-                transition={{ duration: 2, delay: 10, repeat: Infinity }}
-                className="absolute inset-0 rounded-full pointer-events-none"
-              />
-
-              <span className="text-[15px] font-semibold text-white/85 tracking-[3px] uppercase">Click Here</span>
-              
-              <motion.svg
-                animate={{ x: [0, 6, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-5 h-5 text-blue-500"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-              </motion.svg>
-            </motion.button>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: [0, 8, 0] }}
-              transition={{ opacity: { duration: 0.5, delay: 9.5 }, y: { duration: 2, delay: 10, repeat: Infinity, ease: "easeInOut" } }}
-              className="mt-5 flex flex-col items-center gap-0.5"
-            >
-              <svg className="w-6 h-6 text-blue-500/50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-              <svg className="w-6 h-6 text-blue-500/50 opacity-40 -mt-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-              <svg className="w-6 h-6 text-blue-500/50 opacity-20 -mt-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-              <span className="text-[10px] text-slate-400/40 tracking-[3px] uppercase mt-2" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                Swipe Up
-              </span>
+              CyberOS
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 10 }}
-              className="text-[10px] text-blue-500/20 tracking-[2px] mt-5"
+              transition={{ duration: 0.4, delay: 1.1 }}
+              className="text-blue-500/40 text-xs tracking-[3px] mb-10"
               style={{ fontFamily: 'JetBrains Mono, monospace' }}
             >
-              © 2026 CyberOS
+              v3.0 — Secure Boot
             </motion.div>
-          </div>
-        </div>
 
-      </div>
+            {/* Progress bar */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 1.3 }}
+              className="w-64 h-[3px] rounded-full overflow-hidden mb-4"
+              style={{ background: 'rgba(59,130,246,0.1)' }}
+            >
+              <motion.div
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 1.6, delay: 1.4, ease: 'easeInOut' }}
+                className="h-full rounded-full"
+                style={{
+                  background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
+                  boxShadow: '0 0 12px rgba(59,130,246,0.6)',
+                }}
+              />
+            </motion.div>
+
+            {/* Boot log lines */}
+            <div className="flex flex-col gap-1 items-start w-64">
+              {[
+                { text: '✓ kernel loaded', delay: 1.4, color: '#22c55e' },
+                { text: '✓ security modules initialized', delay: 1.7, color: '#22c55e' },
+                { text: '✓ firewall active', delay: 2.0, color: '#22c55e' },
+                { text: '> awaiting authentication...', delay: 2.4, color: '#3b82f6' },
+              ].map((l, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: l.delay }}
+                  className="text-[11px]"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', color: l.color }}
+                >
+                  {l.text}
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── LOCK SCREEN PHASE ── */}
+      <AnimatePresence>
+        {phase === 'lock' && (
+          <motion.div
+            key="lock"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: unlocking ? 0 : 1, scale: unlocking ? 1.04 : 1 }}
+            transition={{ duration: unlocking ? 0.5 : 0.6 }}
+            className="absolute inset-0 z-[50] flex flex-col items-center justify-center px-6"
+          >
+            {/* Time & date */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-center mb-10 select-none"
+            >
+              <div
+                className="font-black leading-none mb-2"
+                style={{
+                  fontSize: 'clamp(72px, 14vw, 120px)',
+                  background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #818cf8 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  letterSpacing: '-2px',
+                  textShadow: 'none',
+                  filter: 'drop-shadow(0 0 30px rgba(99,102,241,0.4))',
+                }}
+              >
+                {timeStr}
+              </div>
+              <div className="text-slate-400 text-sm tracking-[3px] uppercase" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                {dateStr}
+              </div>
+            </motion.div>
+
+            {/* Profile */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.25, type: 'spring', stiffness: 180 }}
+              className="relative mb-5"
+            >
+              <motion.div
+                animate={{ background: ['conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)', 'conic-gradient(from 360deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)'] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+                className="w-28 h-28 rounded-full p-[3px]"
+                style={{ boxShadow: '0 0 40px rgba(99,102,241,0.35)' }}
+              >
+                <img src={PROFILE_IMAGE} alt="Aayush Timalsina" className="w-full h-full rounded-full object-cover border-[3px] border-[#050520]" />
+              </motion.div>
+              {/* Orbit ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+                className="absolute w-[150px] h-[150px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-blue-500/20"
+              >
+                <div className="absolute w-2 h-2 rounded-full bg-blue-500 top-[-4px] left-1/2 -translate-x-1/2" style={{ boxShadow: '0 0 8px #3b82f6' }} />
+              </motion.div>
+            </motion.div>
+
+            {/* Name */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-center mb-8"
+            >
+              <div className="text-white text-xl font-bold mb-1">Aayush Timalsina</div>
+              <div className="text-blue-400/70 text-xs tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                // Cybersecurity Student
+              </div>
+            </motion.div>
+
+            {/* ── PASSWORD HINT ── Big, unmissable */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55, type: 'spring', stiffness: 150 }}
+              className="relative mb-8 select-none"
+            >
+              {/* Glow backdrop */}
+              <div
+                className="absolute inset-0 rounded-2xl blur-2xl"
+                style={{ background: 'rgba(99,102,241,0.25)', transform: 'scale(1.1)' }}
+              />
+              <div
+                className="relative px-10 py-5 rounded-2xl text-center"
+                style={{
+                  background: 'rgba(15,10,40,0.75)',
+                  border: '1px solid rgba(99,102,241,0.4)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 0 40px rgba(99,102,241,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
+                }}
+              >
+                <div
+                  className="text-[11px] tracking-[5px] uppercase mb-3"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', color: 'rgba(148,163,184,0.6)' }}
+                >
+                  🔐 Access Password
+                </div>
+                <motion.div
+                  animate={{
+                    textShadow: [
+                      '0 0 20px rgba(99,102,241,0.8), 0 0 40px rgba(99,102,241,0.4)',
+                      '0 0 30px rgba(139,92,246,0.9), 0 0 60px rgba(139,92,246,0.5)',
+                      '0 0 20px rgba(99,102,241,0.8), 0 0 40px rgba(99,102,241,0.4)',
+                    ],
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="font-black tracking-widest"
+                  style={{
+                    fontSize: 'clamp(36px, 8vw, 56px)',
+                    background: 'linear-gradient(135deg, #a5b4fc 0%, #c084fc 40%, #f0abfc 70%, #a5b4fc 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    letterSpacing: '8px',
+                  }}
+                >
+                  TYPE-C
+                </motion.div>
+                <div className="flex items-center justify-center gap-2 mt-3">
+                  <motion.div
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                  />
+                  <span className="text-[10px] text-slate-500 tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    Enter this to unlock
+                  </span>
+                  <motion.div
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.75 }}
+                    className="w-1.5 h-1.5 rounded-full bg-indigo-400"
+                  />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── PASSWORD INPUT ── */}
+            <motion.form
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              onSubmit={handleSubmit}
+              className="w-full max-w-sm"
+            >
+              <motion.div
+                animate={error ? { x: [-8, 8, -8, 8, -5, 5, 0] } : { x: 0 }}
+                transition={{ duration: 0.4 }}
+                className="relative mb-4"
+              >
+                <div
+                  className="relative flex items-center rounded-2xl overflow-hidden"
+                  style={{
+                    background: 'rgba(10,8,30,0.7)',
+                    border: error
+                      ? '1.5px solid rgba(239,68,68,0.7)'
+                      : unlocking
+                      ? '1.5px solid rgba(34,197,94,0.7)'
+                      : '1.5px solid rgba(99,102,241,0.35)',
+                    boxShadow: error
+                      ? '0 0 20px rgba(239,68,68,0.2)'
+                      : unlocking
+                      ? '0 0 20px rgba(34,197,94,0.3)'
+                      : '0 0 15px rgba(99,102,241,0.1)',
+                    backdropFilter: 'blur(16px)',
+                    transition: 'border-color 0.3s, box-shadow 0.3s',
+                  }}
+                >
+                  <Lock
+                    className="ml-4 flex-shrink-0"
+                    style={{ width: 16, height: 16, color: error ? '#ef4444' : unlocking ? '#22c55e' : 'rgba(99,102,241,0.7)' }}
+                  />
+                  <input
+                    ref={inputRef}
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password..."
+                    disabled={unlocking}
+                    className="flex-1 bg-transparent py-4 px-3 text-white text-sm outline-none placeholder-slate-600"
+                    style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: showPassword ? '2px' : '4px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="mr-4 flex-shrink-0 text-slate-600 hover:text-slate-400 transition-colors"
+                    tabIndex={-1}
+                  >
+                    <Eye style={{ width: 16, height: 16 }} />
+                  </button>
+                </div>
+
+                {/* Error message */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute -bottom-6 left-0 text-red-400 text-xs"
+                      style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                    >
+                      ✗ Access denied — incorrect password
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+
+              {/* Submit button */}
+              <motion.button
+                type="submit"
+                disabled={unlocking || password.length === 0}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full py-4 rounded-2xl font-bold text-sm tracking-[4px] uppercase relative overflow-hidden mt-2"
+                style={{
+                  background: unlocking
+                    ? 'linear-gradient(135deg, rgba(34,197,94,0.3), rgba(34,197,94,0.2))'
+                    : 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.2))',
+                  border: unlocking ? '1.5px solid rgba(34,197,94,0.5)' : '1.5px solid rgba(99,102,241,0.4)',
+                  color: unlocking ? '#86efac' : '#a5b4fc',
+                  boxShadow: unlocking ? '0 0 20px rgba(34,197,94,0.2)' : '0 0 20px rgba(99,102,241,0.15)',
+                  backdropFilter: 'blur(10px)',
+                  cursor: unlocking || password.length === 0 ? 'not-allowed' : 'pointer',
+                  opacity: password.length === 0 ? 0.5 : 1,
+                }}
+              >
+                {/* Shimmer sweep */}
+                {!unlocking && (
+                  <motion.div
+                    initial={{ left: '-100%' }}
+                    animate={{ left: '200%' }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+                    className="absolute top-0 h-full w-1/3 pointer-events-none"
+                    style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }}
+                  />
+                )}
+                {unlocking ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 0.7, repeat: Infinity, ease: 'linear' }}
+                      className="w-4 h-4 border-2 border-green-400/30 border-t-green-400 rounded-full"
+                    />
+                    Unlocking...
+                  </span>
+                ) : (
+                  <span>Unlock →</span>
+                )}
+              </motion.button>
+            </motion.form>
+
+            {/* Bottom hint */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="mt-10 text-center"
+            >
+              <span className="text-[10px] text-slate-600 tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                © 2026 CyberOS — aayush-timalsina.com.np
+              </span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
