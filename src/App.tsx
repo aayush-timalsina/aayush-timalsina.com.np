@@ -2679,10 +2679,10 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] overflow-hidden flex items-center justify-center"
+      className="fixed inset-0 z-[200] overflow-hidden"
       style={{ background: '#000', fontFamily: 'Inter, sans-serif' }}
     >
-      <div className="w-full h-full max-w-[1080px] max-h-[1920px] relative overflow-hidden" style={{ background: '#030308' }}>
+      <div className="w-full h-full relative overflow-hidden" style={{ background: '#030308' }}>
         
         {/* Background Base */}
         <motion.div
