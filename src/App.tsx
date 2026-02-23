@@ -3201,10 +3201,28 @@ function App() {
   const [duration, setDuration] = useState(0);
   const [playerVolume, setPlayerVolume] = useState(0.7);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const musicPlayerRef = useRef<HTMLDivElement>(null);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 32 });
+
+  // Click outside handler for music player
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showMusicExpanded && musicPlayerRef.current && !musicPlayerRef.current.contains(event.target as Node)) {
+        setShowMusicExpanded(false);
+      }
+    };
+
+    if (showMusicExpanded) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMusicExpanded]);
 
   // Menu configurations
   const getMenuItems = (menuName: string) => {
@@ -3778,7 +3796,7 @@ function App() {
         </div>
 
         {/* Music Widget - Above Dock */}
-        <div className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
+        <div ref={musicPlayerRef} className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
 
           {/* Hidden Audio Element - always mounted so autoplay works */}
           <audio
