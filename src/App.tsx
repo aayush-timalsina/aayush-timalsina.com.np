@@ -1135,7 +1135,7 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
-          to_email: 'aayushtimalsina789@gmail.com'
+          to_email: 'tanjirogod777@gmail.com'
         },
         publicKey
       );
@@ -1160,7 +1160,7 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <a
-            href="mailto:aayushtimalsina789@gmail.com"
+            href="mailto:tanjirogod777@gmail.com"
             className={cn(
               "p-4 rounded-xl flex items-center gap-4 transition-all hover:scale-105",
               isDark ? "bg-gray-800" : "bg-white shadow-sm"
@@ -1172,7 +1172,7 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
             <div>
               <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>Email</p>
               <p className={cn("font-medium text-sm", isDark ? "text-white" : "text-gray-900")}>
-                aayushtimalsina789@gmail.com
+                tanjirogod777@gmail.com
               </p>
             </div>
           </a>
