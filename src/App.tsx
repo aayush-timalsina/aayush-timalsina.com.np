@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from '@emailjs/browser';
 import {
   Terminal,
   User,
@@ -66,6 +67,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "./utils/cn";
+import profileImage from "./images/LOck screen and home.jpg";
+import aboutImage from "./images/About me.jpg";
 
 // File System Types
 interface FileSystemNode {
@@ -114,8 +117,8 @@ interface Wallpaper {
 }
 
 // Constants
-const PROFILE_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/480347813_569555419398127_972680757615671058_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=dziFfm82pYkQ7kNvwFJNyrU&_nc_oc=AdnGHiO7a2zVBYjBJNqNjwdAmxJa8Syn2St16y5usHBzsh6hhgvTd1Yg4qxx6kf9fDM&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=FIRXfGn4xwDZQGPIbVzwwg&oh=00_AfsukNJBBKGMIFTH-ZlQhrHQLb0LIO1onoB49G1RljLQBA&oe=69960C19";
-const ABOUT_IMAGE = "https://scontent.fktm19-1.fna.fbcdn.net/v/t39.30808-6/565717911_757399067280427_4804829451481773559_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wEZv58m8FD4Q7kNvwEBMUTM&_nc_oc=AdkvSmFOG6aDRZETa-P6EXC0c45-KP1UsQjPZ_R2eXPjZ1fzPcX1QNNiZmwHBFTzhZ0&_nc_zt=23&_nc_ht=scontent.fktm19-1.fna&_nc_gid=NvsFZTZD3mElNoPgjO-DFA&oh=00_AfvOGPieAs-JcBHNTg-khTk1ISyQaRklAW-Rv7Kr4e35vA&oe=6995FF4B";
+const PROFILE_IMAGE = profileImage;
+const ABOUT_IMAGE = aboutImage;
 const DEFAULT_WALLPAPER = "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=80";
 
 const WALLPAPERS: Wallpaper[] = [
@@ -1117,11 +1120,35 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
-    setTimeout(() => setSubmitted(false), 3000);
+
+    try {
+      // EmailJS Configuration
+      const serviceId = 'service_0itg1br';
+      const templateId = 'template_bu3wlcd';
+      const publicKey = 'my_zelCqv0OoFBSzK';
+
+      // Send email using EmailJS
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_email: 'aayushtimalsina789@gmail.com'
+        },
+        publicKey
+      );
+
+      setIsSubmitting(false);
+      setSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      setIsSubmitting(false);
+      alert('Failed to send message. Please try again or email directly.');
+    }
   };
 
   return (
@@ -3169,6 +3196,7 @@ function App() {
   });
   const [customUrl, setCustomUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
+  const [showMusicExpanded, setShowMusicExpanded] = useState(false);
   const [musicCurrentTime, setMusicCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playerVolume, setPlayerVolume] = useState(0.7);
@@ -3258,6 +3286,16 @@ function App() {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Auto-play music on login
+  useEffect(() => {
+    if (isLoggedIn && audioRef.current) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      }
+    }
+  }, [isLoggedIn]);
 
   // Window management functions
   const openWindow = (type: WindowState["type"], title: string) => {
@@ -3741,263 +3779,275 @@ function App() {
 
         {/* Music Widget - Above Dock */}
         <div className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
-          {/* Collapsed Bar - Minimal & Clean */}
+
+          {/* Hidden Audio Element - always mounted so autoplay works */}
+          <audio
+            ref={audioRef}
+            src={currentSong.url}
+            onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
+            onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
+            onEnded={() => setIsPlaying(false)}
+          />
+
+          {/* Collapsed Mini Bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            onClick={() => setShowUrlInput((v) => !v)}
-            className="cursor-pointer flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-3xl border select-none"
+            onClick={() => setShowMusicExpanded((v) => !v)}
+            className="cursor-pointer flex items-center gap-3 px-5 py-2.5 rounded-full select-none"
             style={{
-              background: isDark
-                ? "linear-gradient(135deg, rgba(15,10,30,0.25) 0%, rgba(88,28,135,0.15) 100%)"
-                : "linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(233,213,255,0.2) 100%)",
-              borderColor: isDark ? "rgba(139,92,246,0.2)" : "rgba(139,92,246,0.12)",
-              boxShadow: isDark
-                ? "0 8px 32px rgba(139,92,246,0.15), 0 0 1px rgba(255,255,255,0.1)"
-                : "0 8px 32px rgba(139,92,246,0.08), 0 0 1px rgba(255,255,255,0.3)",
-              backdropFilter: "blur(20px)",
+              background: "rgba(8, 8, 12, 0.82)",
+              border: "1px solid rgba(255,255,255,0.11)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 1px rgba(255,255,255,0.07)",
+              backdropFilter: "blur(24px)",
+              minWidth: "300px",
             }}
           >
-            {/* Animated Vinyl */}
+            {/* Spinning Vinyl */}
             <motion.div
               animate={{ rotate: isPlaying ? 360 : 0 }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center"
               style={{
-                background: "conic-gradient(from 0deg, #06b6d4, #8b5cf6, #ec4899, #06b6d4)",
-                boxShadow: isPlaying 
-                  ? "0 0 20px rgba(139,92,246,0.7), inset -2px -2px 8px rgba(0,0,0,0.3), inset 2px 2px 8px rgba(255,255,255,0.2)"
-                  : "0 0 10px rgba(139,92,246,0.3), inset -2px -2px 4px rgba(0,0,0,0.2)",
+                background: "conic-gradient(from 0deg, #1c1c1c 0deg, #444 45deg, #1c1c1c 90deg, #555 135deg, #1c1c1c 180deg, #444 225deg, #1c1c1c 270deg, #555 315deg, #1c1c1c 360deg)",
+                boxShadow: isPlaying ? "0 0 14px rgba(255,255,255,0.18)" : "0 2px 8px rgba(0,0,0,0.5)",
               }}
             >
-              <div className="w-3 h-3 rounded-full" style={{ background: isDark ? "#0a0519" : "#f5f0ff", boxShadow: "0 0 8px rgba(139,92,246,0.5)" }} />
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#f0f0f0" }} />
             </motion.div>
 
-            {/* Song info */}
+            {/* Song Info */}
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold truncate" style={{ color: isDark ? "rgba(255,255,255,0.95)" : "rgba(30,20,60,0.95)" }}>
-                {currentSong.title}
-              </p>
-              <p className="text-[11px] truncate" style={{ color: isDark ? "rgba(196,181,253,0.7)" : "rgba(88,28,135,0.6)" }}>
-                {currentSong.artist}
-              </p>
+              <p className="text-xs font-semibold truncate" style={{ color: "rgba(255,255,255,0.92)" }}>{currentSong.title}</p>
+              <p className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.45)" }}>{currentSong.artist}</p>
             </div>
 
-            {/* Compact Controls */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (audioRef.current) {
-                  if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play(); }
-                  setIsPlaying(!isPlaying);
-                }
-              }}
-              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{
-                background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
-                boxShadow: "0 4px 12px rgba(139,92,246,0.4)",
-              }}
-            >
-              {isPlaying ? (
-                <div className="flex gap-1">
-                  <div className="w-1 h-3 bg-white rounded-full" />
-                  <div className="w-1 h-3 bg-white rounded-full" />
-                </div>
-              ) : (
-                <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-0.5" />
-              )}
-            </motion.button>
+            {/* Waveform Bars */}
+            <div className="flex items-center gap-px flex-shrink-0" style={{ width: 40, height: 24 }}>
+              {[0.5, 0.8, 0.6, 1.0, 0.7, 0.9, 0.55].map((base, i) => (
+                <motion.div
+                  key={i}
+                  animate={isPlaying ? {
+                    scaleY: [base, base + 0.6, base - 0.2, base + 0.8, base],
+                  } : { scaleY: 0.25 }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 0.55 + i * 0.07,
+                    ease: "easeInOut",
+                    delay: i * 0.06,
+                  }}
+                  className="rounded-full origin-bottom"
+                  style={{
+                    width: "3px",
+                    height: "18px",
+                    background: isPlaying ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.25)",
+                  }}
+                />
+              ))}
+            </div>
 
-            {/* Status Indicator */}
-            <motion.div
-              animate={{ opacity: isPlaying ? [0.5, 1, 0.5] : 0.3 }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{
-                background: isPlaying ? "#10b981" : "#6b7280",
-                boxShadow: isPlaying ? "0 0 8px rgba(16,185,129,0.6)" : "none",
-              }}
-            />
+            {/* Controls */}
+            <div className="flex items-center gap-0.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+              {/* Back */}
+              <motion.button
+                aria-label="Rewind 10 seconds"
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.88 }}
+                onClick={(e) => { e.stopPropagation(); if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
+                className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+                style={{ color: "rgba(255,255,255,0.65)" }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+              </motion.button>
+
+              {/* Play/Pause */}
+              <motion.button
+                aria-label={isPlaying ? "Pause" : "Play"}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (audioRef.current) {
+                    if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
+                    else { audioRef.current.play(); setIsPlaying(true); }
+                  }
+                }}
+                className="w-8 h-8 rounded-full flex items-center justify-center mx-0.5"
+                style={{ background: "rgba(255,255,255,0.92)", boxShadow: "0 2px 10px rgba(255,255,255,0.18)" }}
+              >
+                {isPlaying ? (
+                  <div className="flex gap-1">
+                    <div className="w-1 h-3.5 rounded-full" style={{ background: "#111" }} />
+                    <div className="w-1 h-3.5 rounded-full" style={{ background: "#111" }} />
+                  </div>
+                ) : (
+                  <div className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[9px] ml-0.5" style={{ borderLeftColor: "#111" }} />
+                )}
+              </motion.button>
+
+              {/* Next */}
+              <motion.button
+                aria-label="Skip forward 10 seconds"
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.88 }}
+                onClick={(e) => { e.stopPropagation(); if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
+                className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+                style={{ color: "rgba(255,255,255,0.65)" }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
+              </motion.button>
+            </div>
           </motion.div>
 
-          {/* Expanded Player Popup - Premium Real Player */}
+          {/* Expanded Player Popup */}
           <AnimatePresence>
-            {showUrlInput && (
+            {showMusicExpanded && (
               <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.92 }}
+                initial={{ opacity: 0, y: 14, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.92 }}
-                transition={{ type: "spring", damping: 22, stiffness: 280 }}
+                exit={{ opacity: 0, y: 14, scale: 0.97 }}
+                transition={{ type: "spring", damping: 26, stiffness: 320 }}
                 onClick={(e) => e.stopPropagation()}
-                className="absolute bottom-full mb-6 left-1/2 -translate-x-1/2 w-80 rounded-2xl overflow-hidden backdrop-blur-xl"
+                className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-80 rounded-2xl overflow-hidden"
                 style={{
-                  background: isDark
-                    ? "linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)"
-                    : "linear-gradient(180deg, #f8f8f8 0%, #efefef 100%)",
-                  border: isDark 
-                    ? "1px solid rgba(255,255,255,0.1)" 
-                    : "1px solid rgba(0,0,0,0.08)",
-                  boxShadow: isDark
-                    ? "0 20px 60px rgba(0,0,0,0.6)"
-                    : "0 20px 60px rgba(0,0,0,0.15)",
+                  background: "#0c0c10",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  boxShadow: "0 24px 64px rgba(0,0,0,0.75), 0 0 0 0.5px rgba(255,255,255,0.04)",
                 }}
               >
-                <audio
-                  ref={audioRef}
-                  src={currentSong.url}
-                  onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
-                  onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
-                  onEnded={() => setIsPlaying(false)}
-                />
-
-                {/* Large Album Art */}
-                <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden"
-                  style={{
-                    background: isDark
-                      ? "linear-gradient(135deg, #111827 0%, #1a1a2e 100%)"
-                      : "linear-gradient(135deg, #e5e5e5 0%, #d5d5d5 100%)",
-                  }}>
+                {/* Album Art / Visualizer */}
+                <div
+                  className="relative w-full flex items-center justify-center overflow-hidden"
+                  style={{ height: "200px", background: "linear-gradient(160deg, #111114 0%, #1a1a1e 100%)" }}
+                >
+                  {/* Background waveform */}
+                  {isPlaying && (
+                    <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-px opacity-15 overflow-hidden" style={{ height: "100%" }}>
+                      {[...Array(36)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          animate={{ scaleY: [0.2, Math.random() * 0.7 + 0.3, 0.15, Math.random() * 0.9 + 0.1, 0.2] }}
+                          transition={{ repeat: Infinity, duration: 0.7 + Math.random() * 0.5, ease: "easeInOut", delay: i * 0.02 }}
+                          style={{ width: "5px", background: "white", borderRadius: "3px 3px 0 0", height: "100%", transformOrigin: "bottom" }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {/* Vinyl Record */}
                   <motion.div
-                    animate={{ scale: isPlaying ? 1.05 : 1 }}
-                    transition={{ duration: 0.6 }}
-                    className="w-48 h-48 rounded-lg flex items-center justify-center"
+                    animate={{ rotate: isPlaying ? 360 : 0 }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                    className="relative z-10 rounded-full"
                     style={{
-                      background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
-                      boxShadow: isPlaying ? "0 0 40px rgba(139,92,246,0.5)" : "0 8px 32px rgba(0,0,0,0.3)",
-                    }}>
-                    <Music className="w-20 h-20 text-white opacity-80" />
+                      width: 120, height: 120,
+                      background: "conic-gradient(from 0deg, #141414 0deg, #2c2c2c 30deg, #141414 60deg, #383838 90deg, #141414 120deg, #2c2c2c 150deg, #141414 180deg, #383838 210deg, #141414 240deg, #2c2c2c 270deg, #141414 300deg, #383838 330deg, #141414 360deg)",
+                      boxShadow: isPlaying ? "0 0 28px rgba(255,255,255,0.13), 0 0 50px rgba(255,255,255,0.05)" : "0 4px 20px rgba(0,0,0,0.6)",
+                    }}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: "#f0f0f0" }}>
+                        <Music className="w-5 h-5 text-black" />
+                      </div>
+                    </div>
                   </motion.div>
                 </div>
 
                 {/* Song Info */}
-                <div className="px-6 pt-6 pb-3">
-                  <h2 className="text-xl font-bold truncate" style={{ color: isDark ? "#fff" : "#000" }}>
-                    {currentSong.title}
-                  </h2>
-                  <p className="text-sm mt-1 truncate" style={{ color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)" }}>
-                    {currentSong.artist}
-                  </p>
+                <div className="px-6 pt-5 pb-2">
+                  <h2 className="text-base font-bold truncate" style={{ color: "#fff" }}>{currentSong.title}</h2>
+                  <p className="text-sm mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.45)" }}>{currentSong.artist}</p>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="px-6 py-4">
+                <div className="px-6 py-3">
                   <input
+                    aria-label="Seek position"
                     type="range" min="0" max={duration || 0} value={musicCurrentTime}
-                    onChange={(e) => {
-                      const t = parseFloat(e.target.value);
-                      setMusicCurrentTime(t);
-                      if (audioRef.current) audioRef.current.currentTime = t;
-                    }}
-                    className="w-full h-1 rounded-full appearance-none cursor-pointer"
+                    onChange={(e) => { const t = parseFloat(e.target.value); setMusicCurrentTime(t); if (audioRef.current) audioRef.current.currentTime = t; }}
+                    className="w-full appearance-none cursor-pointer rounded-full"
                     style={{
-                      background: `linear-gradient(to right, #8b5cf6 ${duration ? (musicCurrentTime / duration) * 100 : 0}%, ${isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"} 0%)`,
-                      accentColor: "#8b5cf6",
+                      height: "3px",
+                      background: `linear-gradient(to right, rgba(255,255,255,0.9) ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255,255,255,0.13) 0%)`,
+                      accentColor: "white",
                     }}
                   />
-                  <div className="flex justify-between mt-2">
-                    <span className="text-xs font-mono" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>
-                      {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime/60)}:${String(Math.floor(musicCurrentTime%60)).padStart(2,"0")}`}
+                  <div className="flex justify-between mt-1.5">
+                    <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.35)" }}>
+                      {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
                     </span>
-                    <span className="text-xs font-mono" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }}>
-                      {isNaN(duration) ? "0:00" : `${Math.floor(duration/60)}:${String(Math.floor(duration%60)).padStart(2,"0")}`}
+                    <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.35)" }}>
+                      {isNaN(duration) ? "0:00" : `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, "0")}`}
                     </span>
                   </div>
                 </div>
 
-                {/* Main Controls */}
-                <div className="flex items-center justify-center gap-6 px-6 pb-4">
-                  {/* Previous/Rewind */}
-                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                {/* Controls */}
+                <div className="flex items-center justify-center gap-4 px-6 pb-5">
+                  <motion.button aria-label="Rewind 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                     onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
-                    className="p-3 rounded-full transition-colors"
-                    style={{
-                      color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
-                      background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-                    }}>
-                    <RotateCcw className="w-5 h-5" />
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
                   </motion.button>
 
-                  {/* Play/Pause - Main */}
-                  <motion.button whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      if (audioRef.current) {
-                        if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play(); }
-                        setIsPlaying(!isPlaying);
-                      }
-                    }}
-                    className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
-                    style={{
-                      background: "#8b5cf6",
-                      boxShadow: "0 8px 24px rgba(139,92,246,0.4)",
-                    }}>
+                  <motion.button aria-label={isPlaying ? "Pause" : "Play"} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
+                    onClick={() => { if (audioRef.current) { if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); } else { audioRef.current.play(); setIsPlaying(true); } } }}
+                    className="w-14 h-14 rounded-full flex items-center justify-center"
+                    style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 4px 20px rgba(255,255,255,0.18)" }}>
                     {isPlaying ? (
-                      <div className="flex gap-1.5 ml-0.5">
-                        <div className="w-1.5 h-6 bg-white rounded-full" />
-                        <div className="w-1.5 h-6 bg-white rounded-full" />
+                      <div className="flex gap-1.5">
+                        <div className="w-1.5 h-5 rounded-full bg-black" />
+                        <div className="w-1.5 h-5 rounded-full bg-black" />
                       </div>
                     ) : (
-                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[16px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                      <div className="w-0 h-0 border-t-[9px] border-t-transparent border-b-[9px] border-b-transparent border-l-[15px] ml-1" style={{ borderLeftColor: "#000" }} />
                     )}
                   </motion.button>
 
-                  {/* Next/Forward */}
-                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}
+                  <motion.button aria-label="Skip forward 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                     onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
-                    className="p-3 rounded-full transition-colors"
-                    style={{
-                      color: isDark ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)",
-                      background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)",
-                    }}>
-                    <RefreshCw className="w-5 h-5" />
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
                   </motion.button>
                 </div>
 
-                {/* Volume Control */}
-                <div className="flex items-center gap-3 px-6 pb-4"
-                  style={{ borderBottom: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.08)" }}>
-                  <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)" }} />
-                  <input type="range" min="0" max="1" step="0.01" value={playerVolume}
-                    onChange={(e) => {
-                      const v = parseFloat(e.target.value);
-                      setPlayerVolume(v);
-                      if (audioRef.current) audioRef.current.volume = v;
-                    }}
-                    className="flex-1 h-1 rounded-full appearance-none cursor-pointer"
+                {/* Volume */}
+                <div className="flex items-center gap-3 px-6 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                  {playerVolume === 0 ? <VolumeX className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} /> : playerVolume < 0.5 ? <Volume1 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} /> : <Volume2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} />}
+                  <input aria-label="Volume control" type="range" min="0" max="1" step="0.01" value={playerVolume}
+                    onChange={(e) => { const v = parseFloat(e.target.value); setPlayerVolume(v); if (audioRef.current) audioRef.current.volume = v; }}
+                    className="flex-1 appearance-none cursor-pointer rounded-full"
                     style={{
-                      background: `linear-gradient(to right, #8b5cf6 ${playerVolume * 100}%, ${isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.15)"} 0%)`,
-                      accentColor: "#8b5cf6",
+                      height: "3px",
+                      background: `linear-gradient(to right, rgba(255,255,255,0.88) ${playerVolume * 100}%, rgba(255,255,255,0.12) 0%)`,
+                      accentColor: "white",
                     }}
                   />
+                  <Volume2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} />
                 </div>
 
-                {/* Custom URL Input */}
+                {/* Custom URL */}
                 <div className="px-6 py-4">
-                  <label className="text-xs font-semibold block mb-2" style={{ color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)" }}>
-                    Load Custom Track
-                  </label>
+                  <p className="text-[11px] font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>Custom Track</p>
                   <div className="flex gap-2">
                     <input
                       type="text" value={customUrl} onChange={(e) => setCustomUrl(e.target.value)}
-                      placeholder="Paste URL..."
-                      className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
-                      style={{
-                        background: isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)",
-                        border: isDark ? "1px solid rgba(255,255,255,0.15)" : "1px solid rgba(0,0,0,0.1)",
-                        color: isDark ? "#fff" : "#000",
-                      }}
-                    />
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        if (customUrl.trim()) {
+                      placeholder="Paste audio URL..."
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && customUrl.trim()) {
                           setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl });
                           setCustomUrl("");
                         }
                       }}
-                      className="px-4 py-2 rounded-lg text-sm font-semibold text-white flex-shrink-0 transition-all"
-                      style={{ background: "#8b5cf6" }}>
-                      Add
+                      className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
+                      style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)", color: "#fff" }}
+                    />
+                    <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
+                      onClick={() => { if (customUrl.trim()) { setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl }); setCustomUrl(""); } }}
+                      className="px-4 py-2 rounded-lg text-sm font-semibold text-black flex-shrink-0"
+                      style={{ background: "rgba(255,255,255,0.9)" }}>
+                      Load
                     </motion.button>
                   </div>
                 </div>
