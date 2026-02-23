@@ -70,6 +70,14 @@ import { cn } from "./utils/cn";
 import profileImage from "./images/LOck screen and home.jpg";
 import aboutImage from "./images/About me.jpg";
 
+// YouTube Player Types
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 // File System Types
 interface FileSystemNode {
   type: "file" | "directory";
@@ -3197,11 +3205,17 @@ function App() {
   const [customUrl, setCustomUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [showMusicExpanded, setShowMusicExpanded] = useState(false);
+  const [urlError, setUrlError] = useState("");
   const [musicCurrentTime, setMusicCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playerVolume, setPlayerVolume] = useState(0.7);
+  const [isYouTube, setIsYouTube] = useState(false);
+  const [youtubeVideoId, setYoutubeVideoId] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
   const musicPlayerRef = useRef<HTMLDivElement>(null);
+  const youtubePlayerRef = useRef<any>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
+  const ytIntervalRef = useRef<any>(null);
   
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -3223,6 +3237,170 @@ function App() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showMusicExpanded]);
+
+  // Initialize YouTube Player
+  useEffect(() => {
+    if (!isYouTube || !youtubeVideoId) return;
+
+    const initYouTubePlayer = () => {
+      if (window.YT && window.YT.Player && playerContainerRef.current) {
+        // Destroy existing player
+        if (youtubePlayerRef.current) {
+          youtubePlayerRef.current.destroy();
+        }
+
+        youtubePlayerRef.current = new window.YT.Player(playerContainerRef.current, {
+          videoId: youtubeVideoId,
+          height: '0',
+          width: '0',
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            modestbranding: 1,
+            playsinline: 1,
+          },
+          events: {
+            onReady: (event: any) => {
+              setDuration(event.target.getDuration());
+              event.target.setVolume(playerVolume * 100);
+            },
+            onStateChange: (event: any) => {
+              if (event.data === window.YT.PlayerState.PLAYING) {
+                setIsPlaying(true);
+                // Start tracking time
+                ytIntervalRef.current = setInterval(() => {
+                  if (youtubePlayerRef.current) {
+                    setMusicCurrentTime(youtubePlayerRef.current.getCurrentTime());
+                  }
+                }, 100);
+              } else if (event.data === window.YT.PlayerState.PAUSED) {
+                setIsPlaying(false);
+                if (ytIntervalRef.current) {
+                  clearInterval(ytIntervalRef.current);
+                }
+              } else if (event.data === window.YT.PlayerState.ENDED) {
+                setIsPlaying(false);
+                if (ytIntervalRef.current) {
+                  clearInterval(ytIntervalRef.current);
+                }
+              }
+            },
+          },
+        });
+      }
+    };
+
+    if (window.YT && window.YT.Player) {
+      initYouTubePlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = initYouTubePlayer;
+    }
+
+    return () => {
+      if (ytIntervalRef.current) {
+        clearInterval(ytIntervalRef.current);
+      }
+    };
+  }, [isYouTube, youtubeVideoId]);
+
+  // Update YouTube volume when changed
+  useEffect(() => {
+    if (isYouTube && youtubePlayerRef.current && youtubePlayerRef.current.setVolume) {
+      youtubePlayerRef.current.setVolume(playerVolume * 100);
+    }
+  }, [playerVolume, isYouTube]);
+
+  // Helper function to toggle play/pause
+  const togglePlayPause = () => {
+    if (isYouTube && youtubePlayerRef.current) {
+      if (isPlaying) {
+        youtubePlayerRef.current.pauseVideo();
+      } else {
+        youtubePlayerRef.current.playVideo();
+      }
+    } else if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Helper function to seek
+  const seekTo = (time: number) => {
+    if (isYouTube && youtubePlayerRef.current) {
+      youtubePlayerRef.current.seekTo(time, true);
+      setMusicCurrentTime(time);
+    } else if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setMusicCurrentTime(time);
+    }
+  };
+
+  // Helper function to skip forward/backward
+  const skip = (seconds: number) => {
+    const newTime = Math.max(0, Math.min(duration, musicCurrentTime + seconds));
+    seekTo(newTime);
+  };
+
+  // Extract YouTube video ID from URL
+  const extractYouTubeId = (url: string): string | null => {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=)([^&]+)/,
+      /(?:youtube\.com\/embed\/)([^?]+)/,
+      /(?:youtu\.be\/)([^?]+)/,
+      /(?:youtube\.com\/v\/)([^?]+)/
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
+    }
+    return null;
+  };
+
+  // Function to validate and load custom URL
+  const loadCustomUrl = (url: string) => {
+    // Check for YouTube URLs
+    const youtubeRegex = /(youtube\.com|youtu\.be)/i;
+    
+    if (youtubeRegex.test(url)) {
+      const videoId = extractYouTubeId(url);
+      if (videoId) {
+        setIsYouTube(true);
+        setYoutubeVideoId(videoId);
+        setCurrentSong({ title: "YouTube Video", artist: "YouTube", url: url });
+        setCustomUrl("");
+        setUrlError("");
+        setIsPlaying(false);
+        return;
+      } else {
+        setUrlError("Invalid YouTube URL");
+        setTimeout(() => setUrlError(""), 5000);
+        return;
+      }
+    }
+
+    // Check for common audio file extensions
+    const audioExtensions = /\.(mp3|wav|ogg|m4a|aac|flac|webm)$/i;
+    const hasAudioExtension = audioExtensions.test(url);
+    
+    if (!hasAudioExtension && !url.includes('blob:')) {
+      setUrlError("Please use a direct audio file URL (mp3, wav, ogg, etc.) or a YouTube URL");
+      setTimeout(() => setUrlError(""), 5000);
+      return;
+    }
+
+    // Load regular audio URL
+    setIsYouTube(false);
+    setYoutubeVideoId("");
+    setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: url });
+    setCustomUrl("");
+    setUrlError("");
+    setIsPlaying(false);
+  };
 
   // Menu configurations
   const getMenuItems = (menuName: string) => {
@@ -3798,14 +3976,23 @@ function App() {
         {/* Music Widget - Above Dock */}
         <div ref={musicPlayerRef} className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
 
-          {/* Hidden Audio Element - always mounted so autoplay works */}
-          <audio
-            ref={audioRef}
-            src={currentSong.url}
-            onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
-            onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
-            onEnded={() => setIsPlaying(false)}
-          />
+          {/* Hidden Audio Element - for regular audio files */}
+          {!isYouTube && (
+            <audio
+              ref={audioRef}
+              src={currentSong.url}
+              onTimeUpdate={() => { if (audioRef.current) setMusicCurrentTime(audioRef.current.currentTime); }}
+              onLoadedMetadata={() => { if (audioRef.current) setDuration(audioRef.current.duration); }}
+              onEnded={() => setIsPlaying(false)}
+            />
+          )}
+
+          {/* Hidden YouTube Player Container */}
+          {isYouTube && (
+            <div style={{ position: 'absolute', left: '-9999px' }}>
+              <div ref={playerContainerRef} id="youtube-player"></div>
+            </div>
+          )}
 
           {/* Collapsed Mini Bar */}
           <motion.div
@@ -3871,7 +4058,7 @@ function App() {
                 aria-label="Rewind 10 seconds"
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.88 }}
-                onClick={(e) => { e.stopPropagation(); if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
+                onClick={(e) => { e.stopPropagation(); skip(-10); }}
                 className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
@@ -3885,10 +4072,7 @@ function App() {
                 whileTap={{ scale: 0.9 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (audioRef.current) {
-                    if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); }
-                    else { audioRef.current.play(); setIsPlaying(true); }
-                  }
+                  togglePlayPause();
                 }}
                 className="w-8 h-8 rounded-full flex items-center justify-center mx-0.5"
                 style={{ background: "rgba(255,255,255,0.92)", boxShadow: "0 2px 10px rgba(255,255,255,0.18)" }}
@@ -3908,7 +4092,7 @@ function App() {
                 aria-label="Skip forward 10 seconds"
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.88 }}
-                onClick={(e) => { e.stopPropagation(); if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
+                onClick={(e) => { e.stopPropagation(); skip(10); }}
                 className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
@@ -3981,7 +4165,7 @@ function App() {
                   <input
                     aria-label="Seek position"
                     type="range" min="0" max={duration || 0} value={musicCurrentTime}
-                    onChange={(e) => { const t = parseFloat(e.target.value); setMusicCurrentTime(t); if (audioRef.current) audioRef.current.currentTime = t; }}
+                    onChange={(e) => { const t = parseFloat(e.target.value); seekTo(t); }}
                     className="w-full appearance-none cursor-pointer rounded-full"
                     style={{
                       height: "3px",
@@ -4002,14 +4186,14 @@ function App() {
                 {/* Controls */}
                 <div className="flex items-center justify-center gap-4 px-6 pb-5">
                   <motion.button aria-label="Rewind 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10); }}
+                    onClick={() => skip(-10)}
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
                   </motion.button>
 
                   <motion.button aria-label={isPlaying ? "Pause" : "Play"} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                    onClick={() => { if (audioRef.current) { if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); } else { audioRef.current.play(); setIsPlaying(true); } } }}
+                    onClick={() => togglePlayPause()}
                     className="w-14 h-14 rounded-full flex items-center justify-center"
                     style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 4px 20px rgba(255,255,255,0.18)" }}>
                     {isPlaying ? (
@@ -4023,7 +4207,7 @@ function App() {
                   </motion.button>
 
                   <motion.button aria-label="Skip forward 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                    onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10); }}
+                    onClick={() => skip(10)}
                     className="w-10 h-10 rounded-full flex items-center justify-center"
                     style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
@@ -4048,26 +4232,31 @@ function App() {
                 {/* Custom URL */}
                 <div className="px-6 py-4">
                   <p className="text-[11px] font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>Custom Track</p>
+                  {urlError && (
+                    <div className="mb-2 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(255,59,48,0.15)", color: "#ff3b30", border: "1px solid rgba(255,59,48,0.3)" }}>
+                      {urlError}
+                    </div>
+                  )}
                   <div className="flex gap-2">
                     <input
                       type="text" value={customUrl} onChange={(e) => setCustomUrl(e.target.value)}
-                      placeholder="Paste audio URL..."
+                      placeholder="Paste YouTube or audio URL..."
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && customUrl.trim()) {
-                          setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl });
-                          setCustomUrl("");
+                          loadCustomUrl(customUrl.trim());
                         }
                       }}
                       className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
                       style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)", color: "#fff" }}
                     />
                     <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
-                      onClick={() => { if (customUrl.trim()) { setCurrentSong({ title: "Custom Track", artist: "Custom Audio", url: customUrl }); setCustomUrl(""); } }}
+                      onClick={() => { if (customUrl.trim()) { loadCustomUrl(customUrl.trim()); } }}
                       className="px-4 py-2 rounded-lg text-sm font-semibold text-black flex-shrink-0"
                       style={{ background: "rgba(255,255,255,0.9)" }}>
                       Load
                     </motion.button>
                   </div>
+                  <p className="text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.25)" }}>Supports YouTube URLs and direct audio files (mp3, wav, ogg, etc.)</p>
                 </div>
               </motion.div>
             )}
