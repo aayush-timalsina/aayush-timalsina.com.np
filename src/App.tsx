@@ -69,7 +69,7 @@ import { format } from "date-fns";
 import { cn } from "./utils/cn";
 import profileImage from "./images/LOck screen and home.jpg";
 import aboutImage from "./images/About me.jpg";
-import warningImage from "./images/warning/warning.jpg";
+import warningImage from "./images/warning.jpg";
 
 // YouTube Player Types
 declare global {
