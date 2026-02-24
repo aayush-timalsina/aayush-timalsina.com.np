@@ -3426,7 +3426,10 @@ function App() {
         </div>
 
 
-        <div className="fixed top-12 right-6 z-[85]">
+        <div
+          className="fixed top-12 right-6 z-[85]"
+          style={{ zIndex: activeWindow ? 0 : 85 }}
+        >
           <div
             className={cn(
               "rounded-2xl p-4 w-64 border shadow-2xl backdrop-blur-xl",
