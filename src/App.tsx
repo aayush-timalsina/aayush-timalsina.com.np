@@ -2958,6 +2958,15 @@ function App() {
     }
   }, [playerVolume, isYouTube]);
 
+  // Sync system volume to the music player volume
+  useEffect(() => {
+    const normalized = Math.max(0, Math.min(1, volume / 100));
+    setPlayerVolume(normalized);
+    if (audioRef.current) {
+      audioRef.current.volume = normalized;
+    }
+  }, [volume]);
+
   // Helper function to toggle play/pause
   const togglePlayPause = () => {
     if (isYouTube && youtubePlayerRef.current) {
@@ -3730,22 +3739,22 @@ function App() {
                       <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.55)" }}>
                         {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
                       </span>
-                      <div className="relative flex-1 h-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.18)" }}>
-                        <div
-                          className="absolute left-0 top-0 h-0.5 rounded-full"
-                          style={{
-                            width: `${duration ? (musicCurrentTime / duration) * 100 : 0}%`,
-                            background: "rgba(255,255,255,0.85)",
-                          }}
-                        />
-                        <div
-                          className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-                          style={{
-                            left: `calc(${duration ? (musicCurrentTime / duration) * 100 : 0}% - 4px)` ,
-                            background: "rgba(255,255,255,0.95)",
-                          }}
-                        />
-                      </div>
+                      <input
+                        aria-label="Seek position"
+                        type="range"
+                        min="0"
+                        max={duration || 0}
+                        step="0.01"
+                        value={musicCurrentTime}
+                        onChange={(e) => {
+                          const t = parseFloat(e.target.value);
+                          seekTo(t);
+                        }}
+                        className="flex-1 h-1 appearance-none cursor-pointer rounded-full"
+                        style={{
+                          background: `linear-gradient(to right, rgba(255,255,255,0.85) ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255,255,255,0.18) 0%)`,
+                        }}
+                      />
                       <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.55)" }}>
                         {isNaN(duration) ? "0:00" : `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, "0")}`}
                       </span>
