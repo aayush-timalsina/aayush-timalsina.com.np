@@ -3641,32 +3641,70 @@ function App() {
             </div>
           )}
 
-          {/* Music Player */}
+          {/* Music Player - Minimal Line Waveform */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="relative px-10 py-8 rounded-2xl select-none"
             style={{
-              background: "rgba(15, 18, 25, 0.95)",
-              backdropFilter: "blur(30px)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.6)",
-              width: "400px",
+              background: "rgba(10, 12, 16, 0.78)",
+              backdropFilter: "blur(26px)",
+              border: "1px solid rgba(255, 255, 255, 0.06)",
+              boxShadow: "0 14px 42px rgba(0, 0, 0, 0.5)",
+              width: "420px",
             }}
           >
+            {/* Minimal Line Waveform */}
+            <div className="mb-6">
+              <svg
+                width="100%"
+                height="40"
+                viewBox="0 0 420 40"
+                preserveAspectRatio="none"
+              >
+                <line
+                  x1="0"
+                  y1="20"
+                  x2="420"
+                  y2="20"
+                  stroke="rgba(255, 255, 255, 0.12)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <motion.polyline
+                  points="0,20 18,20 30,12 42,20 60,20 72,16 84,20 102,20 116,10 132,20 150,20 168,18 186,20 204,20 220,8 238,20 260,20 276,16 294,20 312,20 328,14 346,20 366,20 382,12 400,20 420,20"
+                  fill="none"
+                  stroke="url(#waveLine)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="8 10"
+                  animate={{ strokeDashoffset: isPlaying ? [0, -36] : 0 }}
+                  transition={{ repeat: Infinity, duration: 2.2, ease: "linear" }}
+                />
+                <defs>
+                  <linearGradient id="waveLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(34, 211, 238, 0.55)" />
+                    <stop offset="50%" stopColor="rgba(34, 211, 238, 1)" />
+                    <stop offset="100%" stopColor="rgba(34, 211, 238, 0.55)" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
             {/* Song Info */}
             <div className="text-center mb-6">
-              <h2 
-                className="text-xl font-bold truncate mb-1" 
+              <h2
+                className="text-xl font-bold truncate mb-1"
                 style={{ color: "#ffffff" }}
               >
-                {currentSong.artist}, {currentSong.title.split('-')[0].trim()}
+                {currentSong.artist}
               </h2>
-              <p 
-                className="text-sm truncate" 
+              <p
+                className="text-sm truncate"
                 style={{ color: "rgba(255, 255, 255, 0.4)" }}
               >
-                {currentSong.title.includes('-') ? currentSong.title.split('-')[1].trim() : 'Playing'}
+                {currentSong.title}
               </p>
             </div>
 
