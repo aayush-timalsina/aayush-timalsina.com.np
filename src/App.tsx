@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import ChromeBrowser from "./ChromeBrowser";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from '@emailjs/browser';
 import {
@@ -65,7 +64,6 @@ import {
   Save,
   Trash2,
   ChevronRight,
-  Globe,
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "./utils/cn";
@@ -94,7 +92,7 @@ interface FileSystemNode {
 interface WindowState {
   id: string;
   title: string;
-  type: "terminal" | "about" | "projects" | "skills" | "contact" | "settings" | "finder" | "calculator" | "calendar" | "notes" | "help" | "shortcuts" | "about-os" | "browser" ;
+  type: "terminal" | "about" | "projects" | "skills" | "contact" | "settings" | "finder" | "calculator" | "calendar" | "notes" | "help" | "shortcuts" | "about-os";
   isMinimized: boolean;
   isMaximized: boolean;
   zIndex: number;
@@ -3593,8 +3591,6 @@ function App() {
         return <ShortcutsWindow isDark={isDark} />;
       case "about-os":
         return <AboutOSWindow isDark={isDark} />;
-      case "browser":
-        return <ChromeBrowser isDark={isDark} />;
       default:
         return null;
     }
@@ -3608,7 +3604,6 @@ function App() {
     { id: "skills", icon: <Code className="w-6 h-6" />, label: "Skills" },
     { id: "contact", icon: <Mail className="w-6 h-6" />, label: "Contact" },
     { id: "settings", icon: <Settings className="w-6 h-6" />, label: "Settings" },
-    { id: "browser", label: "Browser", icon: <Globe className="w-6 h-6" /> },
   ];
 
   const launchpadItems = [
