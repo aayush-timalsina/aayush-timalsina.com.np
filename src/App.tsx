@@ -3735,8 +3735,8 @@ function App() {
 
                   {/* Progress */}
                   <div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.55)" }}>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="text-[11px] shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
                         {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
                       </span>
                       <input
@@ -3750,12 +3750,12 @@ function App() {
                           const t = parseFloat(e.target.value);
                           seekTo(t);
                         }}
-                        className="flex-1 h-1 appearance-none cursor-pointer rounded-full"
+                        className="flex-1 min-w-0 h-1 appearance-none cursor-pointer rounded-full"
                         style={{
                           background: `linear-gradient(to right, rgba(255,255,255,0.85) ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255,255,255,0.18) 0%)`,
                         }}
                       />
-                      <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.55)" }}>
+                      <span className="text-[11px] shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
                         {isNaN(duration) ? "0:00" : `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, "0")}`}
                       </span>
                     </div>
