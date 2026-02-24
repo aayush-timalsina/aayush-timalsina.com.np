@@ -3641,102 +3641,50 @@ function App() {
             </div>
           )}
 
-          {/* Waveform Music Player */}
+          {/* Music Player */}
           <motion.div
-            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative px-8 py-6 rounded-3xl select-none"
+            className="relative px-10 py-8 rounded-2xl select-none"
             style={{
-              background: "rgba(10, 10, 15, 0.75)",
-              backdropFilter: "blur(40px)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
-              minWidth: "420px",
-              maxWidth: "500px",
+              background: "rgba(15, 18, 25, 0.95)",
+              backdropFilter: "blur(30px)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.6)",
+              width: "400px",
             }}
           >
-            {/* Animated Waveform Visualization */}
-            <div className="relative h-20 mb-6 flex items-center justify-center overflow-hidden">
-              <svg
-                width="100%"
-                height="80"
-                viewBox="0 0 400 80"
-                preserveAspectRatio="none"
-                className="absolute inset-0"
-              >
-                {/* Generate waveform path */}
-                {[...Array(60)].map((_, i) => {
-                  const x = (i / 60) * 400;
-                  const baseHeight = 2;
-                  const maxHeight = isPlaying ? 35 : 5;
-                  return (
-                    <motion.line
-                      key={i}
-                      x1={x}
-                      y1={40}
-                      x2={x}
-                      y2={40}
-                      stroke="url(#waveGradient)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      animate={isPlaying ? {
-                        y1: [40 - baseHeight, 40 - (Math.random() * maxHeight + baseHeight), 40 - baseHeight],
-                        y2: [40 + baseHeight, 40 + (Math.random() * maxHeight + baseHeight), 40 + baseHeight],
-                      } : {
-                        y1: 40 - baseHeight,
-                        y2: 40 + baseHeight,
-                      }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: 0.8 + Math.random() * 0.4,
-                        ease: "easeInOut",
-                        delay: i * 0.015,
-                      }}
-                    />
-                  );
-                })}
-                <defs>
-                  <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
-                    <stop offset="50%" stopColor="#22d3ee" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#67e8f9" stopOpacity="0.8" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-
             {/* Song Info */}
-            <div className="text-center mb-4">
+            <div className="text-center mb-6">
               <h2 
-                className="text-xl font-bold mb-1 truncate" 
-                style={{ color: "#ffffff", letterSpacing: "0.3px" }}
+                className="text-xl font-bold truncate mb-1" 
+                style={{ color: "#ffffff" }}
               >
-                {currentSong.artist}
+                {currentSong.artist}, {currentSong.title.split('-')[0].trim()}
               </h2>
               <p 
                 className="text-sm truncate" 
-                style={{ color: "rgba(255, 255, 255, 0.5)" }}
+                style={{ color: "rgba(255, 255, 255, 0.4)" }}
               >
-                {currentSong.title}
+                {currentSong.title.includes('-') ? currentSong.title.split('-')[1].trim() : 'Playing'}
               </p>
             </div>
 
             {/* Playback Controls */}
-            <div className="flex items-center justify-center gap-5 mb-4">
+            <div className="flex items-center justify-center gap-6 mb-6">
               {/* Previous/Rewind */}
               <motion.button
                 aria-label="Rewind 10 seconds"
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => skip(-10)}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-colors"
                 style={{ 
-                  background: "rgba(255, 255, 255, 0.08)",
-                  color: "rgba(255, 255, 255, 0.7)"
+                  background: "rgba(50, 55, 65, 0.8)",
+                  color: "rgba(255, 255, 255, 0.8)"
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
                 </svg>
               </motion.button>
@@ -3744,29 +3692,29 @@ function App() {
               {/* Play/Pause - Main Button */}
               <motion.button
                 aria-label={isPlaying ? "Pause" : "Play"}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => togglePlayPause()}
-                className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+                className="w-16 h-16 rounded-full flex items-center justify-center"
                 style={{
-                  background: "linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)",
+                  background: "#00bcd4",
                   boxShadow: isPlaying 
-                    ? "0 0 25px rgba(34, 211, 238, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3)" 
-                    : "0 5px 15px rgba(0, 0, 0, 0.3)",
+                    ? "0 0 30px rgba(0, 188, 212, 0.6), 0 8px 20px rgba(0, 0, 0, 0.4)" 
+                    : "0 8px 20px rgba(0, 0, 0, 0.4)",
                 }}
               >
                 {isPlaying ? (
                   <div className="flex gap-1.5">
-                    <div className="w-1.5 h-6 rounded-full bg-white" />
-                    <div className="w-1.5 h-6 rounded-full bg-white" />
+                    <div className="w-1.5 h-7 rounded-sm bg-white" />
+                    <div className="w-1.5 h-7 rounded-sm bg-white" />
                   </div>
                 ) : (
                   <div 
                     className="w-0 h-0 ml-1"
                     style={{
-                      borderTop: "10px solid transparent",
-                      borderBottom: "10px solid transparent",
-                      borderLeft: "16px solid white",
+                      borderTop: "11px solid transparent",
+                      borderBottom: "11px solid transparent",
+                      borderLeft: "18px solid white",
                     }}
                   />
                 )}
@@ -3775,23 +3723,23 @@ function App() {
               {/* Next/Forward */}
               <motion.button
                 aria-label="Skip forward 10 seconds"
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => skip(10)}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-colors"
                 style={{ 
-                  background: "rgba(255, 255, 255, 0.08)",
-                  color: "rgba(255, 255, 255, 0.7)"
+                  background: "rgba(50, 55, 65, 0.8)",
+                  color: "rgba(255, 255, 255, 0.8)"
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
                 </svg>
               </motion.button>
             </div>
 
             {/* Progress Bar */}
-            <div className="mb-3">
+            <div className="mb-5">
               <input
                 aria-label="Seek position"
                 type="range"
@@ -3804,11 +3752,11 @@ function App() {
                 }}
                 className="w-full h-1 appearance-none cursor-pointer rounded-full"
                 style={{
-                  background: `linear-gradient(to right, #22d3ee ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255, 255, 255, 0.1) 0%)`,
+                  background: `linear-gradient(to right, #00bcd4 ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(100, 110, 125, 0.3) 0%)`,
                   outline: "none",
                 }}
               />
-              <div className="flex justify-between mt-1.5 text-xs font-mono" style={{ color: "rgba(255, 255, 255, 0.4)" }}>
+              <div className="flex justify-between mt-2 text-xs" style={{ color: "rgba(255, 255, 255, 0.5)" }}>
                 <span>
                   {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
                 </span>
@@ -3819,13 +3767,13 @@ function App() {
             </div>
 
             {/* Volume Control */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-6">
               {playerVolume === 0 ? (
-                <VolumeX className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+                <VolumeX className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.5)" }} />
               ) : playerVolume < 0.5 ? (
-                <Volume1 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+                <Volume1 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.5)" }} />
               ) : (
-                <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+                <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.5)" }} />
               )}
               <input
                 aria-label="Volume control"
@@ -3841,18 +3789,18 @@ function App() {
                 }}
                 className="flex-1 h-1 appearance-none cursor-pointer rounded-full"
                 style={{
-                  background: `linear-gradient(to right, #22d3ee ${playerVolume * 100}%, rgba(255, 255, 255, 0.1) 0%)`,
+                  background: `linear-gradient(to right, #00bcd4 ${playerVolume * 100}%, rgba(100, 110, 125, 0.3) 0%)`,
                 }}
               />
-              <span className="text-xs font-mono w-10 text-right" style={{ color: "rgba(255, 255, 255, 0.4)" }}>
+              <span className="text-xs w-10 text-right" style={{ color: "rgba(255, 255, 255, 0.5)" }}>
                 {Math.round(playerVolume * 100)}%
               </span>
             </div>
 
             {/* Custom URL Input */}
-            <div className="pt-3 border-t" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
+            <div>
               {urlError && (
-                <div className="mb-2 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(239, 68, 68, 0.15)", color: "#f87171", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+                <div className="mb-2 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(239, 68, 68, 0.15)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
                   {urlError}
                 </div>
               )}
@@ -3869,29 +3817,29 @@ function App() {
                   }}
                   className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
                   style={{
-                    background: "rgba(255, 255, 255, 0.06)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    color: "#fff",
+                    background: "rgba(30, 35, 45, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    color: "rgba(255, 255, 255, 0.7)",
                   }}
                 />
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     if (customUrl.trim()) {
                       loadCustomUrl(customUrl.trim());
                     }
                   }}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold flex-shrink-0"
+                  className="px-5 py-2 rounded-lg text-sm font-semibold flex-shrink-0"
                   style={{
-                    background: "linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)",
+                    background: "#00bcd4",
                     color: "#fff",
                   }}
                 >
                   Load
                 </motion.button>
               </div>
-              <p className="text-[10px] mt-2 text-center" style={{ color: "rgba(255, 255, 255, 0.25)" }}>
+              <p className="text-[10px] mt-2 text-center" style={{ color: "rgba(255, 255, 255, 0.3)" }}>
                 Supports YouTube URLs and direct audio files
               </p>
             </div>
