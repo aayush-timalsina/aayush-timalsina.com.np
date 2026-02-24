@@ -3550,7 +3550,14 @@ function App() {
         />
 
         {/* Desktop Area */}
-        <div className="pt-8 h-screen relative">
+        <div
+          className="pt-8 h-screen relative"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              setActiveWindow(null);
+            }
+          }}
+        >
           {/* Windows */}
           <AnimatePresence>
             {windows.map((win) => (
@@ -3622,7 +3629,11 @@ function App() {
         </div>
 
         {/* Music Widget - Above Dock */}
-        <div ref={musicPlayerRef} className="fixed bottom-32 left-1/2 -translate-x-1/2 z-[75]">
+        <div
+          ref={musicPlayerRef}
+          className="fixed bottom-32 left-1/2 -translate-x-1/2 z-[75]"
+          style={{ zIndex: activeWindow ? 0 : 75 }}
+        >
 
           {/* Hidden Audio Element - for regular audio files */}
           {!isYouTube && (
@@ -3798,7 +3809,10 @@ function App() {
         </div>
 
         {/* Dock */}
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]">
+        <div
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[80]"
+          style={{ zIndex: activeWindow ? 0 : 80 }}
+        >
           <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
