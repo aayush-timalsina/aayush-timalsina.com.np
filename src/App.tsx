@@ -2355,358 +2355,6 @@ const MenuDropdown = ({
   );
 };
 
-// Premium Music Player Component
-const MusicPlayer = ({
-  isPlaying,
-  setIsPlaying,
-  currentSong,
-  setCurrentSong,
-  customUrl,
-  setCustomUrl,
-  showUrlInput,
-  setShowUrlInput,
-  musicCurrentTime,
-  setMusicCurrentTime,
-  duration,
-  setDuration,
-  playerVolume,
-  setPlayerVolume,
-  audioRef,
-  isDark
-}: {
-  isPlaying: boolean;
-  setIsPlaying: (val: boolean) => void;
-  currentSong: { title: string; artist: string; url: string };
-  setCurrentSong: (song: { title: string; artist: string; url: string }) => void;
-  customUrl: string;
-  setCustomUrl: (url: string) => void;
-  showUrlInput: boolean;
-  setShowUrlInput: (val: boolean) => void;
-  musicCurrentTime: number;
-  setMusicCurrentTime: (time: number) => void;
-  duration: number;
-  setDuration: (dur: number) => void;
-  playerVolume: number;
-  setPlayerVolume: (vol: number) => void;
-  audioRef: React.RefObject<HTMLAudioElement>;
-  isDark: boolean;
-}) => {
-  const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setMusicCurrentTime(audioRef.current.currentTime);
-    }
-  };
-
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) {
-      setDuration(audioRef.current.duration);
-    }
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = parseFloat(e.target.value);
-    setMusicCurrentTime(time);
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-    }
-  };
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const vol = parseFloat(e.target.value);
-    setPlayerVolume(vol);
-    if (audioRef.current) {
-      audioRef.current.volume = vol;
-    }
-  };
-
-  const handleAddCustomUrl = () => {
-    if (customUrl.trim()) {
-      setCurrentSong({
-        title: "Custom Track",
-        artist: "Unknown Artist",
-        url: customUrl
-      });
-      setCustomUrl("");
-      setShowUrlInput(false);
-      setIsPlaying(false);
-    }
-  };
-
-  const formatTime = (seconds: number) => {
-    if (!seconds || isNaN(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  return (
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className="fixed top-20 right-6 z-[70] w-80"
-    >
-      <div className={cn(
-        "rounded-2xl backdrop-blur-2xl p-6 shadow-2xl",
-        isDark 
-          ? "bg-gradient-to-br from-gray-900/80 via-gray-800/70 to-gray-900/80 border border-cyan-500/20"
-          : "bg-gradient-to-br from-white/80 via-gray-50/70 to-white/80 border border-cyan-500/30"
-      )}>
-        {/* Glow Effect */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 blur-xl -z-10" />
-        
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500">
-              <Music className="w-4 h-4 text-white" />
-            </div>
-            <span className={cn(
-              "font-semibold text-sm",
-              isDark ? "text-white" : "text-gray-900"
-            )}>
-              Now Playing
-            </span>
-          </div>
-          <button
-            onClick={() => setShowUrlInput(!showUrlInput)}
-            className={cn(
-              "p-1.5 rounded-lg transition-all",
-              isDark 
-                ? "hover:bg-gray-700/50 text-gray-400 hover:text-cyan-400"
-                : "hover:bg-gray-200/50 text-gray-600 hover:text-cyan-600"
-            )}
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Custom URL Input */}
-        <AnimatePresence>
-          {showUrlInput && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mb-4 overflow-hidden"
-            >
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={customUrl}
-                  onChange={(e) => setCustomUrl(e.target.value)}
-                  placeholder="Enter music URL..."
-                  className={cn(
-                    "flex-1 px-3 py-2 rounded-lg text-sm outline-none transition-all",
-                    isDark
-                      ? "bg-gray-800/50 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500"
-                      : "bg-white/50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-cyan-500"
-                  )}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddCustomUrl()}
-                />
-                <button
-                  onClick={handleAddCustomUrl}
-                  className="px-3 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
-                >
-                  Add
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Album Art / Visualizer */}
-        <div className="relative mb-4 aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              animate={{
-                scale: isPlaying ? [1, 1.2, 1] : 1,
-                rotate: isPlaying ? 360 : 0
-              }}
-              transition={{
-                scale: { repeat: Infinity, duration: 2 },
-                rotate: { repeat: Infinity, duration: 10, ease: "linear" }
-              }}
-              className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 flex items-center justify-center"
-            >
-              <Music className="w-16 h-16 text-white" />
-            </motion.div>
-          </div>
-          
-          {/* Animated bars when playing */}
-          {isPlaying && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{
-                    height: ["8px", `${Math.random() * 24 + 8}px`, "8px"]
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 0.8,
-                    delay: i * 0.1
-                  }}
-                  className="w-1 bg-white/80 rounded-full"
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Song Info */}
-        <div className="text-center mb-4">
-          <h3 className={cn(
-            "font-bold text-lg mb-1 truncate",
-            isDark ? "text-white" : "text-gray-900"
-          )}>
-            {currentSong.title}
-          </h3>
-          <p className={cn(
-            "text-sm truncate",
-            isDark ? "text-gray-400" : "text-gray-600"
-          )}>
-            {currentSong.artist}
-          </p>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mb-3">
-          <input
-            type="range"
-            min="0"
-            max={duration || 0}
-            value={musicCurrentTime}
-            onChange={handleSeek}
-            className="w-full h-1 rounded-full appearance-none cursor-pointer
-              [&::-webkit-slider-track]:bg-gray-600/30
-              [&::-webkit-slider-track]:rounded-full
-              [&::-webkit-slider-thumb]:appearance-none
-              [&::-webkit-slider-thumb]:w-3
-              [&::-webkit-slider-thumb]:h-3
-              [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-gradient-to-r
-              [&::-webkit-slider-thumb]:from-cyan-500
-              [&::-webkit-slider-thumb]:to-purple-500
-              [&::-webkit-slider-thumb]:cursor-pointer"
-          />
-          <div className="flex justify-between text-xs mt-1">
-            <span className={isDark ? "text-gray-500" : "text-gray-600"}>
-              {formatTime(musicCurrentTime)}
-            </span>
-            <span className={isDark ? "text-gray-500" : "text-gray-600"}>
-              {formatTime(duration)}
-            </span>
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center justify-center gap-4 mb-4">
-          <button
-            onClick={() => {
-              if (audioRef.current) {
-                audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
-              }
-            }}
-            className={cn(
-              "p-2 rounded-full transition-all",
-              isDark 
-                ? "hover:bg-gray-700/50 text-gray-400 hover:text-white"
-                : "hover:bg-gray-200/50 text-gray-600 hover:text-gray-900"
-            )}
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-          
-          <button
-            onClick={handlePlayPause}
-            className="p-4 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
-          >
-            {isPlaying ? (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            )}
-          </button>
-          
-          <button
-            onClick={() => {
-              if (audioRef.current) {
-                audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
-              }
-            }}
-            className={cn(
-              "p-2 rounded-full transition-all",
-              isDark 
-                ? "hover:bg-gray-700/50 text-gray-400 hover:text-white"
-                : "hover:bg-gray-200/50 text-gray-600 hover:text-gray-900"
-            )}
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Volume Control */}
-        <div className="flex items-center gap-3">
-          <Volume2 className={cn(
-            "w-4 h-4",
-            isDark ? "text-gray-400" : "text-gray-600"
-          )} />
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={playerVolume}
-            onChange={handleVolumeChange}
-            className="flex-1 h-1 rounded-full appearance-none cursor-pointer
-              [&::-webkit-slider-track]:bg-gray-600/30
-              [&::-webkit-slider-track]:rounded-full
-              [&::-webkit-slider-thumb]:appearance-none
-              [&::-webkit-slider-thumb]:w-3
-              [&::-webkit-slider-thumb]:h-3
-              [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-gradient-to-r
-              [&::-webkit-slider-thumb]:from-cyan-500
-              [&::-webkit-slider-thumb]:to-purple-500
-              [&::-webkit-slider-thumb]:cursor-pointer"
-          />
-          <span className={cn(
-            "text-xs w-8 text-right",
-            isDark ? "text-gray-500" : "text-gray-600"
-          )}>
-            {Math.round(playerVolume * 100)}%
-          </span>
-        </div>
-
-        {/* Hidden Audio Element */}
-        <audio
-          ref={audioRef}
-          src={currentSong.url}
-          onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={handleLoadedMetadata}
-          onEnded={() => setIsPlaying(false)}
-        />
-      </div>
-    </motion.div>
-  );
-};
-
 // Login Screen Component - Animated Portfolio Launch
 // Login Screen Component - OS-style password login
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
@@ -3973,7 +3621,7 @@ function App() {
         </div>
 
         {/* Music Widget - Above Dock */}
-        <div ref={musicPlayerRef} className="fixed bottom-44 left-1/2 -translate-x-1/2 z-[75]">
+        <div ref={musicPlayerRef} className="fixed bottom-32 left-1/2 -translate-x-1/2 z-[75]">
 
           {/* Hidden Audio Element - for regular audio files */}
           {!isYouTube && (
@@ -3993,273 +3641,261 @@ function App() {
             </div>
           )}
 
-          {/* Collapsed Mini Bar */}
+          {/* Waveform Music Player */}
           <motion.div
+            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            onClick={() => setShowMusicExpanded((v) => !v)}
-            className="cursor-pointer flex items-center gap-3 px-5 py-2.5 rounded-full select-none"
+            className="relative px-8 py-6 rounded-3xl select-none"
             style={{
-              background: "rgba(8, 8, 12, 0.82)",
-              border: "1px solid rgba(255,255,255,0.11)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.55), 0 0 1px rgba(255,255,255,0.07)",
-              backdropFilter: "blur(24px)",
-              minWidth: "300px",
+              background: "rgba(10, 10, 15, 0.75)",
+              backdropFilter: "blur(40px)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+              minWidth: "420px",
+              maxWidth: "500px",
             }}
           >
-            {/* Spinning Vinyl */}
-            <motion.div
-              animate={{ rotate: isPlaying ? 360 : 0 }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center"
-              style={{
-                background: "conic-gradient(from 0deg, #1c1c1c 0deg, #444 45deg, #1c1c1c 90deg, #555 135deg, #1c1c1c 180deg, #444 225deg, #1c1c1c 270deg, #555 315deg, #1c1c1c 360deg)",
-                boxShadow: isPlaying ? "0 0 14px rgba(255,255,255,0.18)" : "0 2px 8px rgba(0,0,0,0.5)",
-              }}
-            >
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#f0f0f0" }} />
-            </motion.div>
+            {/* Animated Waveform Visualization */}
+            <div className="relative h-20 mb-6 flex items-center justify-center overflow-hidden">
+              <svg
+                width="100%"
+                height="80"
+                viewBox="0 0 400 80"
+                preserveAspectRatio="none"
+                className="absolute inset-0"
+              >
+                {/* Generate waveform path */}
+                {[...Array(60)].map((_, i) => {
+                  const x = (i / 60) * 400;
+                  const baseHeight = 2;
+                  const maxHeight = isPlaying ? 35 : 5;
+                  return (
+                    <motion.line
+                      key={i}
+                      x1={x}
+                      y1={40}
+                      x2={x}
+                      y2={40}
+                      stroke="url(#waveGradient)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      animate={isPlaying ? {
+                        y1: [40 - baseHeight, 40 - (Math.random() * maxHeight + baseHeight), 40 - baseHeight],
+                        y2: [40 + baseHeight, 40 + (Math.random() * maxHeight + baseHeight), 40 + baseHeight],
+                      } : {
+                        y1: 40 - baseHeight,
+                        y2: 40 + baseHeight,
+                      }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 0.8 + Math.random() * 0.4,
+                        ease: "easeInOut",
+                        delay: i * 0.015,
+                      }}
+                    />
+                  );
+                })}
+                <defs>
+                  <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#22d3ee" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#67e8f9" stopOpacity="0.8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
 
             {/* Song Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold truncate" style={{ color: "rgba(255,255,255,0.92)" }}>{currentSong.title}</p>
-              <p className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.45)" }}>{currentSong.artist}</p>
+            <div className="text-center mb-4">
+              <h2 
+                className="text-xl font-bold mb-1 truncate" 
+                style={{ color: "#ffffff", letterSpacing: "0.3px" }}
+              >
+                {currentSong.artist}
+              </h2>
+              <p 
+                className="text-sm truncate" 
+                style={{ color: "rgba(255, 255, 255, 0.5)" }}
+              >
+                {currentSong.title}
+              </p>
             </div>
 
-            {/* Waveform Bars */}
-            <div className="flex items-center gap-px flex-shrink-0" style={{ width: 40, height: 24 }}>
-              {[0.5, 0.8, 0.6, 1.0, 0.7, 0.9, 0.55].map((base, i) => (
-                <motion.div
-                  key={i}
-                  animate={isPlaying ? {
-                    scaleY: [base, base + 0.6, base - 0.2, base + 0.8, base],
-                  } : { scaleY: 0.25 }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 0.55 + i * 0.07,
-                    ease: "easeInOut",
-                    delay: i * 0.06,
-                  }}
-                  className="rounded-full origin-bottom"
-                  style={{
-                    width: "3px",
-                    height: "18px",
-                    background: isPlaying ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.25)",
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center gap-0.5 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
-              {/* Back */}
+            {/* Playback Controls */}
+            <div className="flex items-center justify-center gap-5 mb-4">
+              {/* Previous/Rewind */}
               <motion.button
                 aria-label="Rewind 10 seconds"
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.88 }}
-                onClick={(e) => { e.stopPropagation(); skip(-10); }}
-                className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
-                style={{ color: "rgba(255,255,255,0.65)" }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => skip(-10)}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                style={{ 
+                  background: "rgba(255, 255, 255, 0.08)",
+                  color: "rgba(255, 255, 255, 0.7)"
+                }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+                </svg>
               </motion.button>
 
-              {/* Play/Pause */}
+              {/* Play/Pause - Main Button */}
               <motion.button
                 aria-label={isPlaying ? "Pause" : "Play"}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  togglePlayPause();
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => togglePlayPause()}
+                className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)",
+                  boxShadow: isPlaying 
+                    ? "0 0 25px rgba(34, 211, 238, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3)" 
+                    : "0 5px 15px rgba(0, 0, 0, 0.3)",
                 }}
-                className="w-8 h-8 rounded-full flex items-center justify-center mx-0.5"
-                style={{ background: "rgba(255,255,255,0.92)", boxShadow: "0 2px 10px rgba(255,255,255,0.18)" }}
               >
                 {isPlaying ? (
-                  <div className="flex gap-1">
-                    <div className="w-1 h-3.5 rounded-full" style={{ background: "#111" }} />
-                    <div className="w-1 h-3.5 rounded-full" style={{ background: "#111" }} />
+                  <div className="flex gap-1.5">
+                    <div className="w-1.5 h-6 rounded-full bg-white" />
+                    <div className="w-1.5 h-6 rounded-full bg-white" />
                   </div>
                 ) : (
-                  <div className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[9px] ml-0.5" style={{ borderLeftColor: "#111" }} />
+                  <div 
+                    className="w-0 h-0 ml-1"
+                    style={{
+                      borderTop: "10px solid transparent",
+                      borderBottom: "10px solid transparent",
+                      borderLeft: "16px solid white",
+                    }}
+                  />
                 )}
               </motion.button>
 
-              {/* Next */}
+              {/* Next/Forward */}
               <motion.button
                 aria-label="Skip forward 10 seconds"
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.88 }}
-                onClick={(e) => { e.stopPropagation(); skip(10); }}
-                className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
-                style={{ color: "rgba(255,255,255,0.65)" }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Expanded Player Popup */}
-          <AnimatePresence>
-            {showMusicExpanded && (
-              <motion.div
-                initial={{ opacity: 0, y: 14, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 14, scale: 0.97 }}
-                transition={{ type: "spring", damping: 26, stiffness: 320 }}
-                onClick={(e) => e.stopPropagation()}
-                className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-80 rounded-2xl overflow-hidden"
-                style={{
-                  background: "#0c0c10",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  boxShadow: "0 24px 64px rgba(0,0,0,0.75), 0 0 0 0.5px rgba(255,255,255,0.04)",
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => skip(10)}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                style={{ 
+                  background: "rgba(255, 255, 255, 0.08)",
+                  color: "rgba(255, 255, 255, 0.7)"
                 }}
               >
-                {/* Album Art / Visualizer */}
-                <div
-                  className="relative w-full flex items-center justify-center overflow-hidden"
-                  style={{ height: "200px", background: "linear-gradient(160deg, #111114 0%, #1a1a1e 100%)" }}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                </svg>
+              </motion.button>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-3">
+              <input
+                aria-label="Seek position"
+                type="range"
+                min="0"
+                max={duration || 0}
+                value={musicCurrentTime}
+                onChange={(e) => {
+                  const t = parseFloat(e.target.value);
+                  seekTo(t);
+                }}
+                className="w-full h-1 appearance-none cursor-pointer rounded-full"
+                style={{
+                  background: `linear-gradient(to right, #22d3ee ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255, 255, 255, 0.1) 0%)`,
+                  outline: "none",
+                }}
+              />
+              <div className="flex justify-between mt-1.5 text-xs font-mono" style={{ color: "rgba(255, 255, 255, 0.4)" }}>
+                <span>
+                  {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
+                </span>
+                <span>
+                  {isNaN(duration) ? "0:00" : `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, "0")}`}
+                </span>
+              </div>
+            </div>
+
+            {/* Volume Control */}
+            <div className="flex items-center gap-3 mb-4">
+              {playerVolume === 0 ? (
+                <VolumeX className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+              ) : playerVolume < 0.5 ? (
+                <Volume1 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+              ) : (
+                <Volume2 className="w-4 h-4 flex-shrink-0" style={{ color: "rgba(255, 255, 255, 0.4)" }} />
+              )}
+              <input
+                aria-label="Volume control"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={playerVolume}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value);
+                  setPlayerVolume(v);
+                  if (audioRef.current) audioRef.current.volume = v;
+                }}
+                className="flex-1 h-1 appearance-none cursor-pointer rounded-full"
+                style={{
+                  background: `linear-gradient(to right, #22d3ee ${playerVolume * 100}%, rgba(255, 255, 255, 0.1) 0%)`,
+                }}
+              />
+              <span className="text-xs font-mono w-10 text-right" style={{ color: "rgba(255, 255, 255, 0.4)" }}>
+                {Math.round(playerVolume * 100)}%
+              </span>
+            </div>
+
+            {/* Custom URL Input */}
+            <div className="pt-3 border-t" style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}>
+              {urlError && (
+                <div className="mb-2 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(239, 68, 68, 0.15)", color: "#f87171", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+                  {urlError}
+                </div>
+              )}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customUrl}
+                  onChange={(e) => setCustomUrl(e.target.value)}
+                  placeholder="Paste YouTube or audio URL..."
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && customUrl.trim()) {
+                      loadCustomUrl(customUrl.trim());
+                    }
+                  }}
+                  className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.06)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    color: "#fff",
+                  }}
+                />
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => {
+                    if (customUrl.trim()) {
+                      loadCustomUrl(customUrl.trim());
+                    }
+                  }}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold flex-shrink-0"
+                  style={{
+                    background: "linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)",
+                    color: "#fff",
+                  }}
                 >
-                  {/* Background waveform */}
-                  {isPlaying && (
-                    <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center gap-px opacity-15 overflow-hidden" style={{ height: "100%" }}>
-                      {[...Array(36)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          animate={{ scaleY: [0.2, Math.random() * 0.7 + 0.3, 0.15, Math.random() * 0.9 + 0.1, 0.2] }}
-                          transition={{ repeat: Infinity, duration: 0.7 + Math.random() * 0.5, ease: "easeInOut", delay: i * 0.02 }}
-                          style={{ width: "5px", background: "white", borderRadius: "3px 3px 0 0", height: "100%", transformOrigin: "bottom" }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  {/* Vinyl Record */}
-                  <motion.div
-                    animate={{ rotate: isPlaying ? 360 : 0 }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                    className="relative z-10 rounded-full"
-                    style={{
-                      width: 120, height: 120,
-                      background: "conic-gradient(from 0deg, #141414 0deg, #2c2c2c 30deg, #141414 60deg, #383838 90deg, #141414 120deg, #2c2c2c 150deg, #141414 180deg, #383838 210deg, #141414 240deg, #2c2c2c 270deg, #141414 300deg, #383838 330deg, #141414 360deg)",
-                      boxShadow: isPlaying ? "0 0 28px rgba(255,255,255,0.13), 0 0 50px rgba(255,255,255,0.05)" : "0 4px 20px rgba(0,0,0,0.6)",
-                    }}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-11 h-11 rounded-full flex items-center justify-center" style={{ background: "#f0f0f0" }}>
-                        <Music className="w-5 h-5 text-black" />
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Song Info */}
-                <div className="px-6 pt-5 pb-2">
-                  <h2 className="text-base font-bold truncate" style={{ color: "#fff" }}>{currentSong.title}</h2>
-                  <p className="text-sm mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.45)" }}>{currentSong.artist}</p>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="px-6 py-3">
-                  <input
-                    aria-label="Seek position"
-                    type="range" min="0" max={duration || 0} value={musicCurrentTime}
-                    onChange={(e) => { const t = parseFloat(e.target.value); seekTo(t); }}
-                    className="w-full appearance-none cursor-pointer rounded-full"
-                    style={{
-                      height: "3px",
-                      background: `linear-gradient(to right, rgba(255,255,255,0.9) ${duration ? (musicCurrentTime / duration) * 100 : 0}%, rgba(255,255,255,0.13) 0%)`,
-                      accentColor: "white",
-                    }}
-                  />
-                  <div className="flex justify-between mt-1.5">
-                    <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.35)" }}>
-                      {isNaN(musicCurrentTime) ? "0:00" : `${Math.floor(musicCurrentTime / 60)}:${String(Math.floor(musicCurrentTime % 60)).padStart(2, "0")}`}
-                    </span>
-                    <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.35)" }}>
-                      {isNaN(duration) ? "0:00" : `${Math.floor(duration / 60)}:${String(Math.floor(duration % 60)).padStart(2, "0")}`}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Controls */}
-                <div className="flex items-center justify-center gap-4 px-6 pb-5">
-                  <motion.button aria-label="Rewind 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                    onClick={() => skip(-10)}
-                    className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" /></svg>
-                  </motion.button>
-
-                  <motion.button aria-label={isPlaying ? "Pause" : "Play"} whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
-                    onClick={() => togglePlayPause()}
-                    className="w-14 h-14 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 4px 20px rgba(255,255,255,0.18)" }}>
-                    {isPlaying ? (
-                      <div className="flex gap-1.5">
-                        <div className="w-1.5 h-5 rounded-full bg-black" />
-                        <div className="w-1.5 h-5 rounded-full bg-black" />
-                      </div>
-                    ) : (
-                      <div className="w-0 h-0 border-t-[9px] border-t-transparent border-b-[9px] border-b-transparent border-l-[15px] ml-1" style={{ borderLeftColor: "#000" }} />
-                    )}
-                  </motion.button>
-
-                  <motion.button aria-label="Skip forward 10 seconds" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                    onClick={() => skip(10)}
-                    className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)" }}>
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /></svg>
-                  </motion.button>
-                </div>
-
-                {/* Volume */}
-                <div className="flex items-center gap-3 px-6 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-                  {playerVolume === 0 ? <VolumeX className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} /> : playerVolume < 0.5 ? <Volume1 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} /> : <Volume2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} />}
-                  <input aria-label="Volume control" type="range" min="0" max="1" step="0.01" value={playerVolume}
-                    onChange={(e) => { const v = parseFloat(e.target.value); setPlayerVolume(v); if (audioRef.current) audioRef.current.volume = v; }}
-                    className="flex-1 appearance-none cursor-pointer rounded-full"
-                    style={{
-                      height: "3px",
-                      background: `linear-gradient(to right, rgba(255,255,255,0.88) ${playerVolume * 100}%, rgba(255,255,255,0.12) 0%)`,
-                      accentColor: "white",
-                    }}
-                  />
-                  <Volume2 className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "rgba(255,255,255,0.35)" }} />
-                </div>
-
-                {/* Custom URL */}
-                <div className="px-6 py-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>Custom Track</p>
-                  {urlError && (
-                    <div className="mb-2 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(255,59,48,0.15)", color: "#ff3b30", border: "1px solid rgba(255,59,48,0.3)" }}>
-                      {urlError}
-                    </div>
-                  )}
-                  <div className="flex gap-2">
-                    <input
-                      type="text" value={customUrl} onChange={(e) => setCustomUrl(e.target.value)}
-                      placeholder="Paste YouTube or audio URL..."
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && customUrl.trim()) {
-                          loadCustomUrl(customUrl.trim());
-                        }
-                      }}
-                      className="flex-1 px-3 py-2 rounded-lg text-sm outline-none"
-                      style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)", color: "#fff" }}
-                    />
-                    <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
-                      onClick={() => { if (customUrl.trim()) { loadCustomUrl(customUrl.trim()); } }}
-                      className="px-4 py-2 rounded-lg text-sm font-semibold text-black flex-shrink-0"
-                      style={{ background: "rgba(255,255,255,0.9)" }}>
-                      Load
-                    </motion.button>
-                  </div>
-                  <p className="text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.25)" }}>Supports YouTube URLs and direct audio files (mp3, wav, ogg, etc.)</p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  Load
+                </motion.button>
+              </div>
+              <p className="text-[10px] mt-2 text-center" style={{ color: "rgba(255, 255, 255, 0.25)" }}>
+                Supports YouTube URLs and direct audio files
+              </p>
+            </div>
+          </motion.div>
         </div>
 
         {/* Dock */}
