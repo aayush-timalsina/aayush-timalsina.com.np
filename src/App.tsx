@@ -3651,7 +3651,7 @@ function App() {
             <div className="relative flex items-center">
               {/* Album Card */}
               <div
-                className="relative z-10 w-40 h-40 rounded-xl overflow-hidden"
+                className="relative z-10 w-40 h-40 rounded-2xl overflow-hidden"
                 style={{
                   background: "linear-gradient(145deg, #1a1a1d 0%, #0f1115 100%)",
                   boxShadow: "0 12px 24px rgba(0, 0, 0, 0.6)",
@@ -3673,7 +3673,7 @@ function App() {
 
               {/* Main Card */}
               <div
-                className="relative -ml-6 flex-1 h-36 rounded-xl overflow-hidden"
+                className="relative -ml-6 flex-1 h-36 rounded-2xl overflow-hidden"
                 style={{
                   background: "linear-gradient(160deg, #1b1c20 0%, #101114 100%)",
                   border: "1px solid rgba(255, 255, 255, 0.06)",
