@@ -3696,7 +3696,12 @@ function App() {
 
               {/* Main Card */}
               <div
-                className="relative -ml-6 flex-1 h-36 rounded-2xl overflow-hidden"
+                className="relative -ml-6 flex-1 h-36 rounded-2xl overflow-hidden cursor-pointer"
+                onClick={(e) => {
+                  // Don't trigger when clicking on controls
+                  if ((e.target as HTMLElement).closest('button, input')) return;
+                  setShowUrlInput(true);
+                }}
                 style={{
                   background: "linear-gradient(160deg, #1b1c20 0%, #101114 100%)",
                   border: "1px solid rgba(255, 255, 255, 0.06)",
@@ -3819,6 +3824,109 @@ function App() {
             </div>
           </motion.div>
         </div>
+
+        {/* URL Input Dialog */}
+        <AnimatePresence>
+          {showUrlInput && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+              onClick={() => {
+                setShowUrlInput(false);
+                setCustomUrl("");
+                setUrlError("");
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-[500px] rounded-2xl p-6 shadow-2xl"
+                style={{
+                  background: "linear-gradient(160deg, #1b1c20 0%, #101114 100%)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                }}
+              >
+                <h3 className="text-xl font-semibold mb-4" style={{ color: "rgba(255,255,255,0.95)" }}>
+                  Add Custom Audio
+                </h3>
+                <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  Enter a direct audio file URL (mp3, wav, ogg, etc.) or a YouTube URL
+                </p>
+                
+                <input
+                  type="text"
+                  value={customUrl}
+                  onChange={(e) => setCustomUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && customUrl.trim()) {
+                      loadCustomUrl(customUrl.trim());
+                      setShowUrlInput(false);
+                    } else if (e.key === 'Escape') {
+                      setShowUrlInput(false);
+                      setCustomUrl("");
+                      setUrlError("");
+                    }
+                  }}
+                  placeholder="https://example.com/audio.mp3 or YouTube URL"
+                  className="w-full px-4 py-3 rounded-xl mb-3 outline-none"
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    color: "rgba(255,255,255,0.9)",
+                  }}
+                  autoFocus
+                />
+
+                {urlError && (
+                  <p className="text-sm mb-3" style={{ color: "#ff4444" }}>
+                    {urlError}
+                  </p>
+                )}
+
+                <div className="flex gap-3 justify-end">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setShowUrlInput(false);
+                      setCustomUrl("");
+                      setUrlError("");
+                    }}
+                    className="px-6 py-2 rounded-xl"
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      color: "rgba(255,255,255,0.7)",
+                    }}
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      if (customUrl.trim()) {
+                        loadCustomUrl(customUrl.trim());
+                        setShowUrlInput(false);
+                      }
+                    }}
+                    className="px-6 py-2 rounded-xl"
+                    style={{
+                      background: "linear-gradient(135deg, #ff4444 0%, #cc0000 100%)",
+                      color: "white",
+                    }}
+                    disabled={!customUrl.trim()}
+                  >
+                    Load
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Dock */}
         <div
