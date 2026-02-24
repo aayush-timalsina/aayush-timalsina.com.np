@@ -16,6 +16,7 @@ import {
   Search,
   AlertTriangle,
   Home,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "./utils/cn";
 
@@ -36,13 +37,15 @@ interface QuickLink {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const PROXY = "https://corsproxy.io/?";
+const PROXY = "https://corsproxy.io/?url=";
 
 const QUICK_LINKS: QuickLink[] = [
   { label: "Google",    url: "https://www.google.com",         gradient: "from-blue-600 to-cyan-500",    initial: "G"  },
   { label: "GitHub",    url: "https://github.com",             gradient: "from-purple-600 to-pink-600",  initial: "GH" },
+  { label: "YouTube",   url: "https://www.youtube.com",        gradient: "from-red-600 to-red-500",      initial: "YT" },
   { label: "Wikipedia", url: "https://en.wikipedia.org",       gradient: "from-gray-600 to-gray-500",    initial: "W"  },
   { label: "MDN",       url: "https://developer.mozilla.org",  gradient: "from-orange-500 to-red-500",   initial: "M"  },
+  { label: "Reddit",    url: "https://www.reddit.com",         gradient: "from-orange-600 to-orange-500",initial: "R"  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -115,6 +118,10 @@ const ChromeBrowser = ({ isDark }: { isDark: boolean }) => {
     const src = iframeSrc;
     setIframeSrc("");
     setTimeout(() => setIframeSrc(src), 50);
+  };
+
+  const openInRealTab = () => {
+    if (addressInput) window.open(addressInput, "_blank", "noopener,noreferrer");
   };
 
   // ── Tab Management ──────────────────────────────────────────────────────────
@@ -307,6 +314,26 @@ const ChromeBrowser = ({ isDark }: { isDark: boolean }) => {
             <Search className="w-3 h-3 text-white" />
           </motion.button>
         </div>
+
+        {/* Open in Real Tab */}
+        <motion.button
+          onClick={openInRealTab}
+          disabled={!addressInput}
+          whileHover={addressInput ? { scale: 1.08 } : undefined}
+          whileTap={addressInput ? { scale: 0.92 } : undefined}
+          title="Open in real browser tab"
+          className={cn(
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 shrink-0",
+            addressInput
+              ? isDark
+                ? "text-gray-300 hover:bg-white/10 hover:text-white"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              : "opacity-30 cursor-not-allowed",
+            isDark ? "text-gray-400" : "text-gray-500"
+          )}
+        >
+          <ExternalLink className="w-4 h-4" />
+        </motion.button>
       </div>
 
       {/* ── Loading Bar ── */}
@@ -432,17 +459,33 @@ const ChromeBrowser = ({ isDark }: { isDark: boolean }) => {
                 Connection Failed
               </h2>
               <p className={cn("text-sm max-w-sm", isDark ? "text-gray-400" : "text-gray-600")}>
-                This site couldn't be loaded. It may block embedding (X-Frame-Options). Try a different URL.
+                This site couldn't be loaded. It may block embedding (X-Frame-Options). Use "Open in Real Tab" to view it directly.
               </p>
             </div>
-            <motion.button
-              onClick={() => { setHasError(false); setIframeSrc(""); setAddressInput(""); }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="px-5 py-2 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white text-sm font-semibold"
-            >
-              ← Go Home
-            </motion.button>
+            <div className="flex gap-3">
+              <motion.button
+                onClick={() => { setHasError(false); setIframeSrc(""); setAddressInput(""); }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={cn(
+                  "px-5 py-2 rounded-xl text-sm font-semibold border",
+                  isDark ? "border-gray-700 text-gray-300 hover:bg-gray-800" : "border-gray-200 text-gray-700 hover:bg-gray-100"
+                )}
+              >
+                ← Go Home
+              </motion.button>
+              {addressInput && (
+                <motion.button
+                  onClick={openInRealTab}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="px-5 py-2 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white text-sm font-semibold flex items-center gap-2"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Open in Real Tab
+                </motion.button>
+              )}
+            </div>
           </motion.div>
         )}
 
@@ -453,7 +496,7 @@ const ChromeBrowser = ({ isDark }: { isDark: boolean }) => {
             src={iframeSrc}
             title="browser"
             className="w-full h-full border-none block bg-white"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"
             onLoad={() => setIsLoading(false)}
             onError={() => { setIsLoading(false); setHasError(true); }}
           />

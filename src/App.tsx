@@ -3514,10 +3514,10 @@ function App() {
         type,
         isOpen: true,
         isMinimized: false,
-        isMaximized: false,
+        isMaximized: type === "browser",
         zIndex: zIndexCounter,
         position: { x: 100 + windows.length * 30, y: 50 + windows.length * 30 },
-        size: { width: 800, height: 500 },
+        size: { width: 1100, height: 700 },
       };
       setWindows((prev) => [...prev, newWindow]);
       setZIndexCounter((prev) => prev + 1);
@@ -3622,6 +3622,7 @@ function App() {
     { id: "calculator", icon: <Calculator className="w-8 h-8" />, label: "Calculator", color: "from-orange-500 to-red-500" },
     { id: "calendar", icon: <Calendar className="w-8 h-8" />, label: "Calendar", color: "from-red-500 to-red-600" },
     { id: "notes", icon: <FileText className="w-8 h-8" />, label: "Notes", color: "from-yellow-400 to-yellow-500" },
+    { id: "browser", icon: <Globe className="w-8 h-8" />, label: "Browser", color: "from-blue-600 to-cyan-500" },
   ];
 
   return (
