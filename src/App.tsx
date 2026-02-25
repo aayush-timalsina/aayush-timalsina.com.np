@@ -1738,46 +1738,56 @@ const CalculatorWindow = ({ isDark }: { isDark: boolean }) => {
   };
 
   const buttons = [
-    { label: "C", onClick: clear, className: "bg-red-500 text-white" },
-    { label: "±", onClick: () => setDisplay(String(parseFloat(display) * -1)), className: isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-900" },
-    { label: "%", onClick: () => setDisplay(String(parseFloat(display) / 100)), className: isDark ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-900" },
-    { label: "÷", onClick: () => inputOperation("÷"), className: "bg-orange-500 text-white" },
-    { label: "7", onClick: () => inputNumber("7"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "8", onClick: () => inputNumber("8"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "9", onClick: () => inputNumber("9"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "×", onClick: () => inputOperation("×"), className: "bg-orange-500 text-white" },
-    { label: "4", onClick: () => inputNumber("4"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "5", onClick: () => inputNumber("5"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "6", onClick: () => inputNumber("6"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "-", onClick: () => inputOperation("-"), className: "bg-orange-500 text-white" },
-    { label: "1", onClick: () => inputNumber("1"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "2", onClick: () => inputNumber("2"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "3", onClick: () => inputNumber("3"), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "+", onClick: () => inputOperation("+"), className: "bg-orange-500 text-white" },
-    { label: "0", onClick: () => inputNumber("0"), className: isDark ? "bg-gray-800 text-white col-span-2" : "bg-white text-gray-900 col-span-2" },
-    { label: ".", onClick: () => inputNumber("."), className: isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900" },
-    { label: "=", onClick: performCalculation, className: "bg-orange-500 text-white" },
+    { label: "C", onClick: clear, className: "bg-gradient-to-br from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-lg shadow-red-500/30" },
+    { label: "±", onClick: () => setDisplay(String(parseFloat(display) * -1)), className: isDark ? "bg-gradient-to-br from-gray-700 to-gray-800 text-white hover:from-gray-600 hover:to-gray-700 shadow-lg shadow-gray-900/30" : "bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 hover:from-gray-400 hover:to-gray-500 shadow-lg shadow-gray-400/30" },
+    { label: "%", onClick: () => setDisplay(String(parseFloat(display) / 100)), className: isDark ? "bg-gradient-to-br from-gray-700 to-gray-800 text-white hover:from-gray-600 hover:to-gray-700 shadow-lg shadow-gray-900/30" : "bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900 hover:from-gray-400 hover:to-gray-500 shadow-lg shadow-gray-400/30" },
+    { label: "÷", onClick: () => inputOperation("÷"), className: "bg-gradient-to-br from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30" },
+    { label: "7", onClick: () => inputNumber("7"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "8", onClick: () => inputNumber("8"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "9", onClick: () => inputNumber("9"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "×", onClick: () => inputOperation("×"), className: "bg-gradient-to-br from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30" },
+    { label: "4", onClick: () => inputNumber("4"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "5", onClick: () => inputNumber("5"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "6", onClick: () => inputNumber("6"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "-", onClick: () => inputOperation("-"), className: "bg-gradient-to-br from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30" },
+    { label: "1", onClick: () => inputNumber("1"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "2", onClick: () => inputNumber("2"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "3", onClick: () => inputNumber("3"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "+", onClick: () => inputOperation("+"), className: "bg-gradient-to-br from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30" },
+    { label: "0", onClick: () => inputNumber("0"), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30 col-span-2" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30 col-span-2" },
+    { label: ".", onClick: () => inputNumber("."), className: isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white hover:from-gray-700 hover:to-gray-800 shadow-lg shadow-gray-950/30" : "bg-gradient-to-br from-white to-gray-100 text-gray-900 hover:from-gray-50 hover:to-gray-200 shadow-lg shadow-gray-300/30" },
+    { label: "=", onClick: performCalculation, className: "bg-gradient-to-br from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30" },
   ];
 
   return (
     <div className={cn("h-full flex items-center justify-center p-6", isDark ? "bg-gray-900" : "bg-gray-100")}>
-      <div className={cn("w-72 rounded-2xl overflow-hidden shadow-2xl", isDark ? "bg-gray-800" : "bg-gray-200")}>
-        <div className={cn("p-4 text-right text-4xl font-light", isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900")}>
-          {display}
+      <div className={cn("w-80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl border", isDark ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/50")}>
+        {/* Display */}
+        <div className={cn("p-6 text-right", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950 border-b border-gray-700/50" : "bg-gradient-to-br from-gray-50 to-white border-b border-gray-200/50")}>
+          <div className={cn("text-5xl font-light tracking-tight", isDark ? "text-white" : "text-gray-900")}>
+            {display}
+          </div>
+          <div className={cn("text-sm mt-2", isDark ? "text-gray-400" : "text-gray-500")}>
+            {operation && `${previousValue} ${operation}`}
+          </div>
         </div>
-        <div className="grid grid-cols-4 gap-px">
+        
+        {/* Buttons */}
+        <div className="p-3 grid grid-cols-4 gap-2">
           {buttons.map((btn) => (
-            <button
+            <motion.button
               key={btn.label}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0,0,0,0.2)" }}
+              whileTap={{ scale: 0.95 }}
               onClick={btn.onClick}
               className={cn(
-                "h-16 text-xl font-medium transition-all hover:opacity-80 active:scale-95",
+                "h-16 text-lg font-semibold rounded-xl transition-all active:scale-95",
                 btn.className,
                 btn.label === "0" ? "col-span-2" : ""
               )}
             >
               {btn.label}
-            </button>
+            </motion.button>
           ))}
         </div>
       </div>
@@ -1786,30 +1796,105 @@ const CalculatorWindow = ({ isDark }: { isDark: boolean }) => {
 };
 
 const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
-  const [currentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+  const goToPreviousMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
+  };
+
   return (
-    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
-      <div className="max-w-md mx-auto">
-        <div className={cn("rounded-2xl overflow-hidden shadow-lg", isDark ? "bg-gray-800" : "bg-white")}>
-          <div className={cn("p-6 text-center", isDark ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-gradient-to-r from-blue-500 to-purple-500")}>
-            <h2 className="text-white text-2xl font-bold">
-              {format(currentDate, "MMMM yyyy")}
-            </h2>
+    <div className={cn("h-full p-6 overflow-auto flex items-center justify-center", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
+      <div className="w-full max-w-md">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className={cn("rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl border", isDark ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/50")}
+        >
+          {/* Header */}
+          <div className={cn("p-6", isDark ? "bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-b border-gray-700/50" : "bg-gradient-to-r from-blue-400/20 to-purple-400/20 border-b border-gray-200/50")}>
+            <div className="flex items-center justify-between mb-4">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={goToPreviousMonth}
+                className={cn(
+                  "p-2 rounded-lg transition-all",
+                  isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
+                )}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </motion.button>
+              
+              <div className="text-center">
+                <h2 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>
+                  {format(currentDate, "MMMM")}
+                </h2>
+                <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                  {format(currentDate, "yyyy")}
+                </p>
+              </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={goToNextMonth}
+                className={cn(
+                  "p-2 rounded-lg transition-all",
+                  isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
+                )}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.button>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={goToToday}
+              className={cn(
+                "w-full py-2 rounded-lg text-sm font-medium transition-all",
+                isDark ? "bg-blue-600/50 hover:bg-blue-600/70 text-white" : "bg-blue-500/20 hover:bg-blue-500/30 text-blue-700"
+              )}
+            >
+              Today
+            </motion.button>
           </div>
-          <div className="p-4">
-            <div className="grid grid-cols-7 gap-1 mb-2">
+
+          {/* Calendar */}
+          <div className="p-6">
+            {/* Week Days Header */}
+            <div className="grid grid-cols-7 gap-2 mb-4">
               {weekDays.map((day) => (
-                <div key={day} className={cn("text-center text-sm font-medium py-2", isDark ? "text-gray-400" : "text-gray-600")}>
+                <div
+                  key={day}
+                  className={cn(
+                    "text-center text-sm font-semibold py-3 rounded-lg",
+                    isDark ? "text-blue-400 bg-gray-700/30" : "text-blue-600 bg-blue-100/30"
+                  )}
+                >
                   {day}
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-1">
+
+            {/* Days Grid */}
+            <div className="grid grid-cols-7 gap-2">
               {Array.from({ length: firstDayOfMonth }).map((_, i) => (
                 <div key={`empty-${i}`} />
               ))}
@@ -1817,25 +1902,33 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
                 const isToday = day === new Date().getDate() && 
                   currentDate.getMonth() === new Date().getMonth() &&
                   currentDate.getFullYear() === new Date().getFullYear();
+                
                 return (
-                  <div
+                  <motion.div
                     key={day}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     className={cn(
-                      "aspect-square flex items-center justify-center rounded-lg text-sm cursor-pointer transition-all",
+                      "aspect-square flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer transition-all",
                       isToday
-                        ? "bg-blue-500 text-white font-bold"
+                        ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30"
                         : isDark
-                        ? "text-gray-300 hover:bg-gray-700"
-                        : "text-gray-700 hover:bg-gray-100"
+                        ? "text-gray-300 hover:bg-gray-700/50 border border-gray-700/30"
+                        : "text-gray-700 hover:bg-gray-200/50 border border-gray-200/50"
                     )}
                   >
                     {day}
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           </div>
-        </div>
+
+          {/* Footer Info */}
+          <div className={cn("px-6 py-4 border-t text-center text-xs", isDark ? "border-gray-700/50 text-gray-400" : "border-gray-200/50 text-gray-500")}>
+            {isToday ? "Today is selected" : "Click today to highlight current date"}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
