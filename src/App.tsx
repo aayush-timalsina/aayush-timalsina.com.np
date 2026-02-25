@@ -2865,6 +2865,11 @@ function App() {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const ytIntervalRef = useRef<any>(null);
   
+  // Music Player drag state
+  const [musicPlayerPosition, setMusicPlayerPosition] = useState({ x: 0, y: 0 });
+  const isDraggingMusicRef = useRef(false);
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+  
   // Menu bar state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 32 });
@@ -2885,6 +2890,56 @@ function App() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showMusicExpanded]);
+
+  // Music Player drag handlers
+  useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      // Only drag from the album art area
+      if (!musicPlayerRef.current?.contains(e.target as Node)) return;
+      const albumArt = (e.target as HTMLElement).closest('.album-art-container');
+      if (!albumArt) return;
+
+      isDraggingMusicRef.current = true;
+      const rect = musicPlayerRef.current.getBoundingClientRect();
+      dragOffsetRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDraggingMusicRef.current || !musicPlayerRef.current) return;
+
+      const parentRect = musicPlayerRef.current.parentElement?.getBoundingClientRect();
+      if (!parentRect) return;
+
+      const newX = e.clientX - parentRect.left - dragOffsetRef.current.x;
+      const newY = e.clientY - parentRect.top - dragOffsetRef.current.y;
+
+      // Constrain to viewport
+      const maxX = window.innerWidth - 400; // Approx width of player
+      const maxY = window.innerHeight - 200; // Approx height of player
+      
+      const constrainedX = Math.max(0, Math.min(newX, maxX));
+      const constrainedY = Math.max(0, Math.min(newY, maxY));
+
+      setMusicPlayerPosition({ x: constrainedX, y: constrainedY });
+    };
+
+    const handleMouseUp = () => {
+      isDraggingMusicRef.current = false;
+    };
+
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
 
   // Initialize YouTube Player
   useEffect(() => {
@@ -3643,8 +3698,14 @@ function App() {
         {/* Music Widget - Above Dock */}
         <div
           ref={musicPlayerRef}
-          className="fixed bottom-32 left-1/2 -translate-x-1/2 z-[75]"
-          style={{ zIndex: activeWindow ? 0 : 75 }}
+          className="fixed z-[75]"
+          style={{ 
+            left: musicPlayerPosition.x === 0 && musicPlayerPosition.y === 0 ? "50%" : `${musicPlayerPosition.x}px`,
+            top: musicPlayerPosition.y === 0 ? "auto" : `${musicPlayerPosition.y}px`,
+            bottom: musicPlayerPosition.x === 0 && musicPlayerPosition.y === 0 ? "8rem" : "auto",
+            transform: musicPlayerPosition.x === 0 && musicPlayerPosition.y === 0 ? "translateX(-50%)" : "none",
+            zIndex: activeWindow ? 0 : 75,
+          }}
         >
 
           {/* Hidden Audio Element - for regular audio files */}
@@ -3674,7 +3735,7 @@ function App() {
             <div className="relative flex items-center">
               {/* Album Card */}
               <div
-                className="relative z-10 w-40 h-40 rounded-2xl overflow-hidden"
+                className="album-art-container relative z-10 w-40 h-40 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing transition-cursor group"
                 style={{
                   background: "linear-gradient(145deg, #1a1a1d 0%, #0f1115 100%)",
                   boxShadow: "0 12px 24px rgba(0, 0, 0, 0.6)",
@@ -3690,6 +3751,16 @@ function App() {
                   className="absolute inset-0"
                   style={{
                     background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%)",
+                  }}
+                />
+                {/* Drag Handle Indicator */}
+                <div
+                  className="absolute top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{
+                    width: "24px",
+                    height: "3px",
+                    background: "rgba(255, 255, 255, 0.6)",
+                    borderRadius: "2px",
                   }}
                 />
               </div>
