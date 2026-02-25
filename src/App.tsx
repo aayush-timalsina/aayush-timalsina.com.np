@@ -3027,7 +3027,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-[50] overflow-hidden flex items-center justify-center"
+            className="absolute inset-0 z-[50] overflow-hidden flex items-center justify-center p-8"
             style={{ background: '#000000' }}
           >
             {/* Background sound */}
@@ -3051,115 +3051,89 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               }}
             />
 
-            {/* Code rain - falling kernel logs - FASTER, WHITE */}
-            <div className="absolute inset-0 overflow-hidden opacity-60">
+            {/* Terminal output - Lines appearing sequentially */}
+            <motion.div
+              className="relative z-20 w-full max-w-4xl max-h-[80vh] overflow-auto"
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                color: '#FFFFFF',
+                textShadow: '0 0 4px rgba(255,255,255,0.8)',
+                letterSpacing: '0.5px',
+                lineHeight: '1.6',
+                fontSize: '14px'
+              }}
+            >
               {[
-                'Welcome back to TYPE-C\'s portfolio',
-                'vm_page_bootstrap: 987323 free pages and 53061 wired pages',
-                'System started: 2025-02-25 09:18:27 GMT-0545 (Local kernel)',
-                'CPU ACPI: Table is not defined',
-                'ACPI: Core AML execution [0xb4 a8 b5 d3]',
-                'Core ARMv7 VFP registers detected',
-                'CONFIG_DMA_API_DEBUG enabled',
-                'Standard time-slicing quantum is 10000 us',
-                'TSC: Core 1: 2.9 GHz',
-                'Debian Deadline Timer supported and enabled',
-                'eDIREACTICPU: Processor=1 LocalApicId=0 Enabled',
-                'eDIREACTICPU: Processor=2 LocalApicId=2 Enabled',
-                'eDIREACTICPU: Processor=3 LocalApicId=4 Enabled',
-                'eDIREACTICPU: Processor=4 LocalApicId=3 Enabled',
-                'eDIREACTICPU: Processor=5 LocalApicId=255 Disabled',
-                'eDIREACTICPU: Processor=6 LocalApicId=255 Disabled',
-                'Calling mpo_policy_init for TMSafetyNet',
-                'Security policy loaded: Safety net for Rollback (TMSafetyNet)',
-                'Calling mpo_policy_init for Sandbox',
-                'Security policy loaded: Destruct sandbox policy (Sandbox)',
-                'Calling mpo_policy_init for Quarantine',
-                'Security policy loaded: Quarantine policy (Quarantine)',
-                'Copyright (c) 1982, 1986, 1989, 1991, 1993, 2015',
-                'The Regents of the University of Adelaide. All rights reserved.',
-                'HN: framework successfully initialized',
-                'Using 16384 buffer headers and 10240 cluster IO buffer headers',
-                'IOAPIC: Version 0x20 Versions 64:97',
-                'ACPI: System State [S0 S3 S4 S5] (S3)',
-                'BPMG 0xf10F0000, 0xf00D0000',
-                'UEFI Configuration begin',
-                'eDEXInitCTFUSPowerManagement: Turbo Ratios 0046',
-                'eDEXInitCTFUSPowerManagement: (built 13:08:12 Jun 18 2011) initialization complete',
-                'Console relocated to address 0x8cfcd00000',
-                'PCI configuration changed (ridge=16 device#4 cardbus=0)',
-                'PCI continuation end, bridges 12 devices 16',
-                'submit: done [64 MB total pool size, (42/31) split]'
+                'C:\\Users\\Aayush\\Documents\\Portfolio> dir /s',
+                '',
+                'Volume in drive C is Windows',
+                'Volume Serial Number is 1A2B-3C4D',
+                '',
+                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio',
+                '',
+                '02/25/2026  09:18:27 AM    <DIR>          .',
+                '02/25/2026  09:18:27 AM    <DIR>          ..',
+                '02/24/2026  08:45:12 PM    <DIR>          projects',
+                '02/24/2026  07:22:01 PM    <DIR>          .secure',
+                '02/25/2026  09:15:43 AM           542,288  portfolio.min.js',
+                '02/24/2026  06:30:22 PM            12,447  index.html',
+                '02/25/2026  08:52:15 AM           128,956  styles.css',
+                '',
+                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio\\projects',
+                '',
+                '02/25/2026  09:18:27 AM    <DIR>          .',
+                '02/25/2026  09:18:27 AM    <DIR>          ..',
+                '02/23/2026  11:34:56 PM           856,324  music-player.exe',
+                '02/24/2026  02:18:33 AM           654,192  calculator-app.exe',
+                '02/25/2026  04:42:19 AM           923,847  cybersecurity-suite.exe',
+                '',
+                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio\\.secure',
+                '',
+                '02/25/2026  09:18:27 AM    <DIR>          .',
+                '02/25/2026  09:18:27 AM    <DIR>          ..',
+                '02/24/2026  01:05:47 AM         1,245,893  identity.encrypted',
+                '02/23/2026  10:22:15 PM           487,234  credentials.vault',
+                '02/25/2026  07:33:58 AM           356,789  kernel.boot',
+                '',
+                '        Total Files Listed: 14',
+                '        Total Directories: 6',
+                '        Total Size: 7,240,321 bytes',
+                '',
+                'C:\\Users\\Aayush\\Documents\\Portfolio> ',
               ].map((line, i) => (
                 <motion.div
                   key={i}
-                  initial={{ y: -100, opacity: 0 }}
-                  animate={{ y: '120vh', opacity: [0, 0.9, 0.9, 0] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{
-                    duration: 3 + Math.random() * 2,
-                    delay: i * 0.08,
-                    ease: 'linear'
+                    delay: i * 0.06,
+                    duration: 0.3,
                   }}
-                  className="absolute text-xs whitespace-nowrap"
-                  style={{
-                    left: '0',
-                    right: '0',
-                    color: '#FFFFFF',
-                    fontFamily: 'JetBrains Mono, monospace',
-                    textShadow: '0 0 4px rgba(255,255,255,0.8)',
-                    paddingLeft: '20px',
-                    letterSpacing: '0.5px'
-                  }}
+                  className="whitespace-pre-wrap break-words"
                 >
                   {line}
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
 
-            {/* Welcome message - appears after codes finish */}
+            {/* Welcome message - appears at the end */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 2.5 }}
-              className="relative z-20 text-center"
+              transition={{ duration: 0.8, delay: 2.2 }}
+              className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center z-30"
             >
               <motion.div
                 animate={{ opacity: [0.8, 1, 0.8] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-5xl font-bold tracking-wider"
+                className="text-3xl font-bold tracking-wider"
                 style={{
                   color: '#FFFFFF',
                   fontFamily: 'JetBrains Mono, monospace',
                   textShadow: '0 0 20px rgba(255,255,255,0.6)'
                 }}
               >
-                Welcome back to
-              </motion.div>
-              <motion.div
-                animate={{ opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                className="text-6xl font-black tracking-wider mt-4"
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: 'JetBrains Mono, monospace',
-                  textShadow: '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(0,255,255,0.3)',
-                  letterSpacing: '2px'
-                }}
-              >
-                TYPE-C's Portfolio
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 3.5 }}
-                className="text-xs mt-8 tracking-[3px]"
-                style={{ 
-                  color: '#FFFFFF', 
-                  fontFamily: 'JetBrains Mono, monospace',
-                  textShadow: '0 0 10px rgba(255,255,255,0.6)'
-                }}
-              >
-                [ SYSTEM READY ]
+                Welcome back to TYPE-C's Portfolio
               </motion.div>
             </motion.div>
           </motion.div>
