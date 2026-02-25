@@ -1836,6 +1836,7 @@ const CalculatorWindow = ({ isDark }: { isDark: boolean }) => {
 
 const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -1856,8 +1857,17 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
   const isTodayInCurrentMonth = new Date().getMonth() === currentDate.getMonth() && 
     new Date().getFullYear() === currentDate.getFullYear();
 
+  const handleDateClick = (day: number) => {
+    setSelectedDate(day);
+    setTimeout(() => setSelectedDate(null), 4000);
+  };
+
+  const selectedDateObj = selectedDate ? new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDate) : null;
+  const dayName = selectedDateObj ? format(selectedDateObj, "EEEE") : "";
+  const dateString = selectedDateObj ? format(selectedDateObj, "MMMM d, yyyy") : "";
+
   return (
-    <div className={cn("h-full w-full p-8 flex items-center justify-center", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
+    <div className={cn("h-full w-full p-8 flex items-center justify-center relative", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
       <div className={cn("w-full max-w-md rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl border", isDark ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/50")}>
         {/* Header */}
         <div className={cn("p-6", isDark ? "bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-b border-gray-700/50" : "bg-gradient-to-r from-blue-400/20 to-purple-400/20 border-b border-gray-200/50")}>
@@ -1934,12 +1944,17 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
                 currentDate.getMonth() === new Date().getMonth() &&
                 currentDate.getFullYear() === new Date().getFullYear();
               
+              const isSelected = selectedDate === day;
+              
               return (
-                <div
+                <button
                   key={day}
+                  onClick={() => handleDateClick(day)}
                   className={cn(
                     "aspect-square flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer transition-all hover:scale-110",
-                    isToday
+                    isSelected
+                      ? "bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30 scale-110"
+                      : isToday
                       ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30"
                       : isDark
                       ? "text-gray-300 hover:bg-gray-700/50 border border-gray-700/30"
@@ -1947,7 +1962,7 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
                   )}
                 >
                   {day}
-                </div>
+                </button>
               );
             })}
           </div>
@@ -1955,9 +1970,80 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
 
         {/* Footer Info */}
         <div className={cn("px-6 py-4 border-t text-center text-xs", isDark ? "border-gray-700/50 text-gray-400" : "border-gray-200/50 text-gray-500")}>
-          {isTodayInCurrentMonth ? "Today is in this month" : "Navigate to current month"}
+          {selectedDate ? "Click to select another date" : isTodayInCurrentMonth ? "Click a date to see details" : "Navigate to current month"}
         </div>
       </div>
+
+      {/* Date Popup */}
+      <AnimatePresence>
+        {selectedDate && selectedDateObj && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -10 }}
+            className={cn(
+              "fixed top-32 right-8 w-72 rounded-3xl shadow-2xl backdrop-blur-xl border p-6 z-[9999]",
+              isDark 
+                ? "bg-gradient-to-br from-gray-800/95 to-gray-900/95 border-gray-700/50" 
+                : "bg-gradient-to-br from-white/95 to-gray-50/95 border-white/50"
+            )}
+          >
+            {/* Header */}
+            <div className="mb-4">
+              <p className={cn("text-sm font-medium opacity-70", isDark ? "text-gray-400" : "text-gray-500")}>
+                Selected Date
+              </p>
+              <h3 className={cn("text-2xl font-bold mt-2", isDark ? "text-white" : "text-gray-900")}>
+                {dayName}
+              </h3>
+              <p className={cn("text-sm mt-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                {dateString}
+              </p>
+            </div>
+
+            {/* Date Details Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className={cn("p-3 rounded-xl", isDark ? "bg-gray-700/30" : "bg-gray-100/50")}>
+                <p className={cn("text-xs opacity-70 mb-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                  Week Day
+                </p>
+                <p className={cn("text-sm font-semibold", isDark ? "text-blue-400" : "text-blue-600")}>
+                  {format(selectedDateObj, "EEEE")}
+                </p>
+              </div>
+              <div className={cn("p-3 rounded-xl", isDark ? "bg-gray-700/30" : "bg-gray-100/50")}>
+                <p className={cn("text-xs opacity-70 mb-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                  Date Number
+                </p>
+                <p className={cn("text-sm font-semibold", isDark ? "text-purple-400" : "text-purple-600")}>
+                  {selectedDate}
+                </p>
+              </div>
+              <div className={cn("p-3 rounded-xl", isDark ? "bg-gray-700/30" : "bg-gray-100/50")}>
+                <p className={cn("text-xs opacity-70 mb-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                  Month
+                </p>
+                <p className={cn("text-sm font-semibold", isDark ? "text-green-400" : "text-green-600")}>
+                  {format(selectedDateObj, "MMMM")}
+                </p>
+              </div>
+              <div className={cn("p-3 rounded-xl", isDark ? "bg-gray-700/30" : "bg-gray-100/50")}>
+                <p className={cn("text-xs opacity-70 mb-1", isDark ? "text-gray-400" : "text-gray-500")}>
+                  Year
+                </p>
+                <p className={cn("text-sm font-semibold", isDark ? "text-red-400" : "text-red-600")}>
+                  {currentDate.getFullYear()}
+                </p>
+              </div>
+            </div>
+
+            {/* Info Text */}
+            <div className={cn("p-3 rounded-xl text-center text-xs", isDark ? "bg-blue-500/10 text-blue-300" : "bg-blue-100/50 text-blue-700")}>
+              💡 Click another date or wait to close
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -2481,7 +2567,7 @@ const MenuDropdown = ({
 // Login Screen Component - Animated Portfolio Launch
 // Login Screen Component - OS-style password login
 const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean }) => {
-  const [phase, setPhase] = useState<'boot' | 'lock'>('boot');
+  const [phase, setPhase] = useState<'boot' | 'lock' | 'login'>('boot');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -2511,7 +2597,8 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     e.preventDefault();
     if (password === 'TYPE-C') {
       setUnlocking(true);
-      setTimeout(() => onLogin(), 1000);
+      setPhase('login');
+      setTimeout(() => onLogin(), 3500);
     } else {
       setError(true);
       setPassword('');
@@ -2927,6 +3014,141 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               <span className="text-[10px] text-slate-600 tracking-[2px]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                 © 2026 CyberOS — aayush-timalsina.com.np
               </span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── EDEX-UI LOGIN PHASE ── */}
+      <AnimatePresence>
+        {phase === 'login' && (
+          <motion.div
+            key="login"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 z-[50] flex items-center justify-center overflow-hidden"
+          >
+            {/* Animated code rain background */}
+            <div className="absolute inset-0 opacity-40">
+              {[...Array(80)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ y: -100, opacity: 0 }}
+                  animate={{ y: '150vh', opacity: [0, 1, 1, 0] }}
+                  transition={{
+                    duration: 3 + Math.random() * 2,
+                    delay: Math.random() * 1.5,
+                    repeat: Infinity,
+                  }}
+                  className="absolute text-green-500/40 text-xs font-mono"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    fontFamily: 'JetBrains Mono, monospace',
+                  }}
+                >
+                  {Math.random() > 0.5 ? '>' : Math.random() > 0.5 ? '01' : '//'}
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Central content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="relative z-10 text-center"
+            >
+              {/* Scanning lines effect */}
+              <motion.div
+                animate={{ bottom: ['0%', '100%'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg"
+                style={{
+                  background: 'linear-gradient(180deg, transparent 0%, rgba(34,197,94,0.3) 50%, transparent 100%)',
+                  height: '40px',
+                }}
+              />
+
+              {/* Main text */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mb-6"
+              >
+                <div className="text-4xl font-bold mb-2" style={{ color: '#22c55e' }}>
+                  ▶ AUTHENTICATION SUCCESSFUL
+                </div>
+                <motion.div
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="text-sm"
+                  style={{ color: '#22c55e', fontFamily: 'JetBrains Mono, monospace' }}
+                >
+                  > Loading secure environment...
+                </motion.div>
+              </motion.div>
+
+              {/* File tree visualization */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+                className="text-left inline-block mb-8 text-xs"
+                style={{ color: '#10b981', fontFamily: 'JetBrains Mono, monospace' }}
+              >
+                {[
+                  '📁 /home/aayush',
+                  '  📁 .secure/',
+                  '    📄 identity.encrypted [████████░░] 80%',
+                  '    📄 credentials.vault [██████████] 100%',
+                  '  📁 projects/',
+                  '    📄 portfolio.min.js [██████████] 100%',
+                  '    📄 kernel.boot [██████████] 100%',
+                  '  ✓ System initialization complete',
+                ].map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + i * 0.1 }}
+                  >
+                    {line}
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* Loading bar */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+                className="w-64 h-1 rounded-full overflow-hidden mx-auto"
+                style={{ background: 'rgba(34,197,94,0.2)' }}
+              >
+                <motion.div
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 2, delay: 1.3 }}
+                  className="h-full rounded-full"
+                  style={{
+                    background: 'linear-gradient(90deg, #10b981, #22c55e)',
+                    boxShadow: '0 0 12px #22c55e',
+                  }}
+                />
+              </motion.div>
+
+              {/* Status text */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2.5 }}
+                className="text-xs mt-4"
+                style={{ color: 'rgba(34, 197, 94, 0.7)', fontFamily: 'JetBrains Mono, monospace' }}
+              >
+                > Initializing desktop environment... [DONE]
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
