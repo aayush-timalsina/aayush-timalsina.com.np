@@ -1814,6 +1814,9 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
     setCurrentDate(new Date());
   };
 
+  const isTodayInCurrentMonth = new Date().getMonth() === currentDate.getMonth() && 
+    new Date().getFullYear() === currentDate.getFullYear();
+
   return (
     <div className={cn("h-full p-6 overflow-auto flex items-center justify-center", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
       <div className="w-full max-w-md">
@@ -1926,7 +1929,7 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
 
           {/* Footer Info */}
           <div className={cn("px-6 py-4 border-t text-center text-xs", isDark ? "border-gray-700/50 text-gray-400" : "border-gray-200/50 text-gray-500")}>
-            {isToday ? "Today is selected" : "Click today to highlight current date"}
+            {isTodayInCurrentMonth ? "Today is in this month" : "Navigate to current month"}
           </div>
         </motion.div>
       </div>
