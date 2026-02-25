@@ -1818,120 +1818,106 @@ const CalendarWindow = ({ isDark }: { isDark: boolean }) => {
     new Date().getFullYear() === currentDate.getFullYear();
 
   return (
-    <div className={cn("h-full p-6 overflow-auto flex items-center justify-center", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
-      <div className="w-full max-w-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className={cn("rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl border", isDark ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/50")}
-        >
-          {/* Header */}
-          <div className={cn("p-6", isDark ? "bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-b border-gray-700/50" : "bg-gradient-to-r from-blue-400/20 to-purple-400/20 border-b border-gray-200/50")}>
-            <div className="flex items-center justify-between mb-4">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={goToPreviousMonth}
-                className={cn(
-                  "p-2 rounded-lg transition-all",
-                  isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
-                )}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </motion.button>
-              
-              <div className="text-center">
-                <h2 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>
-                  {format(currentDate, "MMMM")}
-                </h2>
-                <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
-                  {format(currentDate, "yyyy")}
-                </p>
-              </div>
-              
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={goToNextMonth}
-                className={cn(
-                  "p-2 rounded-lg transition-all",
-                  isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
-                )}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </motion.button>
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={goToToday}
+    <div className={cn("h-full w-full p-8 flex items-center justify-center", isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-gray-50 to-white")}>
+      <div className={cn("w-full max-w-md rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl border", isDark ? "bg-gray-800/80 border-gray-700/50" : "bg-white/80 border-white/50")}>
+        {/* Header */}
+        <div className={cn("p-6", isDark ? "bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-b border-gray-700/50" : "bg-gradient-to-r from-blue-400/20 to-purple-400/20 border-b border-gray-200/50")}>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={goToPreviousMonth}
               className={cn(
-                "w-full py-2 rounded-lg text-sm font-medium transition-all",
-                isDark ? "bg-blue-600/50 hover:bg-blue-600/70 text-white" : "bg-blue-500/20 hover:bg-blue-500/30 text-blue-700"
+                "p-2 rounded-lg transition-all hover:scale-110",
+                isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
               )}
             >
-              Today
-            </motion.button>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            
+            <div className="text-center">
+              <h2 className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>
+                {format(currentDate, "MMMM")}
+              </h2>
+              <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+                {format(currentDate, "yyyy")}
+              </p>
+            </div>
+            
+            <button
+              onClick={goToNextMonth}
+              className={cn(
+                "p-2 rounded-lg transition-all hover:scale-110",
+                isDark ? "hover:bg-gray-700/50 text-blue-400" : "hover:bg-gray-200/50 text-blue-600"
+              )}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          {/* Calendar */}
-          <div className="p-6">
-            {/* Week Days Header */}
-            <div className="grid grid-cols-7 gap-2 mb-4">
-              {weekDays.map((day) => (
+          <button
+            onClick={goToToday}
+            className={cn(
+              "w-full py-2 rounded-lg text-sm font-medium transition-all hover:scale-105",
+              isDark ? "bg-blue-600/50 hover:bg-blue-600/70 text-white" : "bg-blue-500/20 hover:bg-blue-500/30 text-blue-700"
+            )}
+          >
+            Today
+          </button>
+        </div>
+
+        {/* Calendar */}
+        <div className="p-6">
+          {/* Week Days Header */}
+          <div className="grid grid-cols-7 gap-2 mb-4">
+            {weekDays.map((day) => (
+              <div
+                key={day}
+                className={cn(
+                  "text-center text-sm font-semibold py-3 rounded-lg",
+                  isDark ? "text-blue-400 bg-gray-700/30" : "text-blue-600 bg-blue-100/30"
+                )}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Days Grid */}
+          <div className="grid grid-cols-7 gap-2">
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+              <div key={`empty-${i}`} />
+            ))}
+            {days.map((day) => {
+              const isToday = day === new Date().getDate() && 
+                currentDate.getMonth() === new Date().getMonth() &&
+                currentDate.getFullYear() === new Date().getFullYear();
+              
+              return (
                 <div
                   key={day}
                   className={cn(
-                    "text-center text-sm font-semibold py-3 rounded-lg",
-                    isDark ? "text-blue-400 bg-gray-700/30" : "text-blue-600 bg-blue-100/30"
+                    "aspect-square flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer transition-all hover:scale-110",
+                    isToday
+                      ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30"
+                      : isDark
+                      ? "text-gray-300 hover:bg-gray-700/50 border border-gray-700/30"
+                      : "text-gray-700 hover:bg-gray-200/50 border border-gray-200/50"
                   )}
                 >
                   {day}
                 </div>
-              ))}
-            </div>
-
-            {/* Days Grid */}
-            <div className="grid grid-cols-7 gap-2">
-              {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                <div key={`empty-${i}`} />
-              ))}
-              {days.map((day) => {
-                const isToday = day === new Date().getDate() && 
-                  currentDate.getMonth() === new Date().getMonth() &&
-                  currentDate.getFullYear() === new Date().getFullYear();
-                
-                return (
-                  <motion.div
-                    key={day}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={cn(
-                      "aspect-square flex items-center justify-center rounded-lg text-sm font-semibold cursor-pointer transition-all",
-                      isToday
-                        ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30"
-                        : isDark
-                        ? "text-gray-300 hover:bg-gray-700/50 border border-gray-700/30"
-                        : "text-gray-700 hover:bg-gray-200/50 border border-gray-200/50"
-                    )}
-                  >
-                    {day}
-                  </motion.div>
-                );
-              })}
-            </div>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Footer Info */}
-          <div className={cn("px-6 py-4 border-t text-center text-xs", isDark ? "border-gray-700/50 text-gray-400" : "border-gray-200/50 text-gray-500")}>
-            {isTodayInCurrentMonth ? "Today is in this month" : "Navigate to current month"}
-          </div>
-        </motion.div>
+        {/* Footer Info */}
+        <div className={cn("px-6 py-4 border-t text-center text-xs", isDark ? "border-gray-700/50 text-gray-400" : "border-gray-200/50 text-gray-500")}>
+          {isTodayInCurrentMonth ? "Today is in this month" : "Navigate to current month"}
+        </div>
       </div>
     </div>
   );
