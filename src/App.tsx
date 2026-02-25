@@ -3030,10 +3030,15 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             className="absolute inset-0 z-[50] overflow-hidden flex items-center justify-center"
             style={{ background: '#000000' }}
           >
+            {/* Background sound */}
+            <audio autoPlay loop style={{ display: 'none' }}>
+              <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg" />
+            </audio>
+
             {/* Grid background pattern */}
-            <div className="absolute inset-0 opacity-5 pointer-events-none"
+            <div className="absolute inset-0 opacity-10 pointer-events-none"
               style={{
-                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0,255,255,.05) 25%, rgba(0,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(0,255,255,.05) 75%, rgba(0,255,255,.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,255,255,.05) 25%, rgba(0,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(0,255,255,.05) 75%, rgba(0,255,255,.05) 76%, transparent 77%, transparent)',
+                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(255,255,255,.1) 25%, rgba(255,255,255,.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.1) 75%, rgba(255,255,255,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255,255,255,.1) 25%, rgba(255,255,255,.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.1) 75%, rgba(255,255,255,.1) 76%, transparent 77%, transparent)',
                 backgroundSize: '50px 50px'
               }}
             />
@@ -3046,8 +3051,8 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               }}
             />
 
-            {/* Code rain - falling kernel logs */}
-            <div className="absolute inset-0 overflow-hidden opacity-40">
+            {/* Code rain - falling kernel logs - FASTER, WHITE */}
+            <div className="absolute inset-0 overflow-hidden opacity-60">
               {[
                 'Welcome back to TYPE-C\'s portfolio',
                 'vm_page_bootstrap: 987323 free pages and 53061 wired pages',
@@ -3089,20 +3094,21 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                 <motion.div
                   key={i}
                   initial={{ y: -100, opacity: 0 }}
-                  animate={{ y: '120vh', opacity: [0, 1, 1, 0] }}
+                  animate={{ y: '120vh', opacity: [0, 0.9, 0.9, 0] }}
                   transition={{
-                    duration: 8 + Math.random() * 4,
-                    delay: i * 0.15,
+                    duration: 3 + Math.random() * 2,
+                    delay: i * 0.08,
                     ease: 'linear'
                   }}
                   className="absolute text-xs whitespace-nowrap"
                   style={{
                     left: '0',
                     right: '0',
-                    color: '#00FF00',
+                    color: '#FFFFFF',
                     fontFamily: 'JetBrains Mono, monospace',
-                    textShadow: '0 0 8px #00FF00',
-                    paddingLeft: '20px'
+                    textShadow: '0 0 4px rgba(255,255,255,0.8)',
+                    paddingLeft: '20px',
+                    letterSpacing: '0.5px'
                   }}
                 >
                   {line}
@@ -3114,32 +3120,30 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 3 }}
+              transition={{ duration: 0.8, delay: 2.5 }}
               className="relative z-20 text-center"
             >
               <motion.div
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                animate={{ opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
                 className="text-5xl font-bold tracking-wider"
                 style={{
-                  color: '#00FFFF',
+                  color: '#FFFFFF',
                   fontFamily: 'JetBrains Mono, monospace',
-                  textShadow: '0 0 30px #00FFFF, 0 0 60px #00FFFF'
+                  textShadow: '0 0 20px rgba(255,255,255,0.6)'
                 }}
               >
                 Welcome back to
               </motion.div>
               <motion.div
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                animate={{ opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
                 className="text-6xl font-black tracking-wider mt-4"
                 style={{
-                  background: 'linear-gradient(90deg, #00FFFF, #FF0080, #00FFFF)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  color: '#FFFFFF',
                   fontFamily: 'JetBrains Mono, monospace',
-                  filter: 'drop-shadow(0 0 20px #FF0080)',
+                  textShadow: '0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(0,255,255,0.3)',
+                  letterSpacing: '2px'
                 }}
               >
                 TYPE-C's Portfolio
@@ -3147,11 +3151,15 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 4 }}
-                className="text-xs mt-6 tracking-widest"
-                style={{ color: '#00FF00', fontFamily: 'JetBrains Mono, monospace' }}
+                transition={{ delay: 3.5 }}
+                className="text-xs mt-8 tracking-[3px]"
+                style={{ 
+                  color: '#FFFFFF', 
+                  fontFamily: 'JetBrains Mono, monospace',
+                  textShadow: '0 0 10px rgba(255,255,255,0.6)'
+                }}
               >
-                [ACCESS GRANTED]
+                [ SYSTEM READY ]
               </motion.div>
             </motion.div>
           </motion.div>
