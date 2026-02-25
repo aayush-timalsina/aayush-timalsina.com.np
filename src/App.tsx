@@ -408,18 +408,19 @@ const Window = ({
   brightness: number;
 }) => {
   const windowRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const headerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!win.isMaximized && (e.target as HTMLElement).closest(".window-header")) {
-      setIsDragging(true);
+      isDraggingRef.current = true;
       const rect = windowRef.current?.getBoundingClientRect();
       if (rect) {
-        setDragOffset({
+        dragOffsetRef.current = {
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
-        });
+        };
       }
     }
     onClick();
@@ -427,26 +428,26 @@ const Window = ({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && windowRef.current) {
-        const newX = e.clientX - dragOffset.x;
-        const newY = e.clientY - dragOffset.y;
+      if (isDraggingRef.current && windowRef.current) {
+        const newX = e.clientX - dragOffsetRef.current.x;
+        const newY = e.clientY - dragOffsetRef.current.y;
         windowRef.current.style.left = `${Math.max(0, newX)}px`;
         windowRef.current.style.top = `${Math.max(32, newY)}px`;
       }
     };
 
-    const handleMouseUp = () => setIsDragging(false);
+    const handleMouseUp = () => {
+      isDraggingRef.current = false;
+    };
 
-    if (isDragging) {
-      globalThis.window.addEventListener("mousemove", handleMouseMove);
-      globalThis.window.addEventListener("mouseup", handleMouseUp);
-    }
+    globalThis.window.addEventListener("mousemove", handleMouseMove);
+    globalThis.window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       globalThis.window.removeEventListener("mousemove", handleMouseMove);
       globalThis.window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, dragOffset]);
+  }, []);
 
   return (
     <motion.div
