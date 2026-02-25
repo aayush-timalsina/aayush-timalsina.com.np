@@ -38,3 +38,13 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* EDEX-UI Scanlines Animation */
+@keyframes scan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100px;
+  }
+}

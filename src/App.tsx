@@ -3027,128 +3027,171 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-[50] flex items-center justify-center overflow-hidden"
+            className="absolute inset-0 z-[50] overflow-hidden"
+            style={{ background: '#000000' }}
           >
-            {/* Animated code rain background */}
-            <div className="absolute inset-0 opacity-40">
-              {[...Array(80)].map((_, i) => (
+            {/* Grid background pattern */}
+            <div className="absolute inset-0 opacity-5 pointer-events-none"
+              style={{
+                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0,255,255,.05) 25%, rgba(0,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(0,255,255,.05) 75%, rgba(0,255,255,.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,255,255,.05) 25%, rgba(0,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(0,255,255,.05) 75%, rgba(0,255,255,.05) 76%, transparent 77%, transparent)',
+                backgroundSize: '50px 50px'
+              }}
+            />
+
+            {/* Floating particles */}
+            <div className="absolute inset-0 opacity-10">
+              {[...Array(30)].map((_, i) => (
                 <motion.div
                   key={i}
-                  initial={{ y: -100, opacity: 0 }}
-                  animate={{ y: '150vh', opacity: [0, 1, 1, 0] }}
+                  initial={{ x: Math.random() * 100 + '%', y: Math.random() * 100 + '%', opacity: 0 }}
+                  animate={{ 
+                    x: [Math.random() * 100 + '%', Math.random() * 100 + '%'],
+                    y: [Math.random() * 100 + '%', Math.random() * 100 + '%'],
+                    opacity: [0, 1, 0]
+                  }}
                   transition={{
-                    duration: 3 + Math.random() * 2,
-                    delay: Math.random() * 1.5,
+                    duration: 8 + Math.random() * 6,
                     repeat: Infinity,
+                    ease: 'linear'
                   }}
-                  className="absolute text-green-500/40 text-xs font-mono"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    fontFamily: 'JetBrains Mono, monospace',
-                  }}
-                >
-                  {Math.random() > 0.5 ? '>' : Math.random() > 0.5 ? '01' : '//'}
-                </motion.div>
+                  className="absolute w-1 h-1 rounded-full"
+                  style={{ background: '#00FFFF' }}
+                />
               ))}
             </div>
 
+            {/* Scanlines */}
+            <div className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) 1px, transparent 1px, transparent 2px)',
+                animation: 'scan 8s linear infinite'
+              }}
+            />
+
             {/* Central content */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 1.1 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="relative z-10 text-center"
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 z-10 flex items-center justify-center"
             >
-              {/* Scanning lines effect */}
-              <motion.div
-                animate={{ bottom: ['0%', '100%'] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg"
-                style={{
-                  background: 'linear-gradient(180deg, transparent 0%, rgba(34,197,94,0.3) 50%, transparent 100%)',
-                  height: '40px',
-                }}
-              />
-
-              {/* Main text */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mb-6"
-              >
-                <div className="text-4xl font-bold mb-2" style={{ color: '#22c55e' }}>
-                  ▶ AUTHENTICATION SUCCESSFUL
-                </div>
+              <div className="text-center">
+                {/* Top label */}
                 <motion.div
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="text-sm"
-                  style={{ color: '#22c55e', fontFamily: 'JetBrains Mono, monospace' }}
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="mb-8 text-xs tracking-widest"
+                  style={{ color: '#00FFFF', fontFamily: 'JetBrains Mono, monospace', textShadow: '0 0 10px #00FFFF' }}
                 >
-                  &gt; Loading secure environment...
+                  [SECURE_AUTH_PROTOCOL]
                 </motion.div>
-              </motion.div>
 
-              {/* File tree visualization */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.5 }}
-                className="text-left inline-block mb-8 text-xs"
-                style={{ color: '#10b981', fontFamily: 'JetBrains Mono, monospace' }}
-              >
-                {[
-                  '📁 /home/aayush',
-                  '  📁 .secure/',
-                  '    📄 identity.encrypted [████████░░] 80%',
-                  '    📄 credentials.vault [██████████] 100%',
-                  '  📁 projects/',
-                  '    📄 portfolio.min.js [██████████] 100%',
-                  '    📄 kernel.boot [██████████] 100%',
-                  '  ✓ System initialization complete',
-                ].map((line, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1 }}
-                  >
-                    {line}
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Loading bar */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-                className="w-64 h-1 rounded-full overflow-hidden mx-auto"
-                style={{ background: 'rgba(34,197,94,0.2)' }}
-              >
+                {/* Main title */}
                 <motion.div
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 2, delay: 1.3 }}
-                  className="h-full rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, #10b981, #22c55e)',
-                    boxShadow: '0 0 12px #22c55e',
-                  }}
-                />
-              </motion.div>
+                  initial={{ opacity: 0, y: -40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="mb-4"
+                >
+                  <div className="text-5xl font-bold tracking-wider"
+                    style={{ color: '#00FFFF', fontFamily: 'JetBrains Mono, monospace', textShadow: '0 0 20px #00FFFF' }}
+                  >
+                    EDEX-OS
+                  </div>
+                  <div className="text-sm mt-2 tracking-[3px]"
+                    style={{ color: '#FF0080', fontFamily: 'JetBrains Mono, monospace', textShadow: '0 0 10px #FF0080' }}
+                  >
+                    INITIALIZATION SEQUENCE
+                  </div>
+                </motion.div>
 
-              {/* Status text */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.5 }}
-                className="text-xs mt-4"
-                style={{ color: 'rgba(34, 197, 94, 0.7)', fontFamily: 'JetBrains Mono, monospace' }}
-              >
-                &gt; Initializing desktop environment... [DONE]
-              </motion.div>
+                {/* Main content box */}
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="my-12 px-12 py-8 border-2"
+                  style={{
+                    borderColor: '#00FFFF',
+                    boxShadow: '0 0 20px #00FFFF, inset 0 0 20px rgba(0,255,255,0.1)',
+                  }}
+                >
+                  <div className="text-xs tracking-wider mb-6" style={{ color: '#00FFFF', fontFamily: 'JetBrains Mono, monospace' }}>
+                    USER_AUTHENTICATION_VERIFIED
+                  </div>
+                  
+                  {/* Data visualization */}
+                  <div className="space-y-3 mb-6 text-xs" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                    {[
+                      { label: 'SYSTEM_STATUS', value: '100%', color: '#00FF00' },
+                      { label: 'SECURITY_LEVEL', value: 'MAXIMUM', color: '#00FFFF' },
+                      { label: 'ENCRYPTION', value: 'AES-256', color: '#FFFF00' },
+                      { label: 'KERNEL_LOAD', value: 'OK', color: '#00FF00' },
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 + i * 0.1 }}
+                        className="flex justify-between"
+                      >
+                        <span style={{ color: '#00FFFF' }}>{item.label}</span>
+                        <span style={{ color: item.color, textShadow: `0 0 10px ${item.color}` }}>[ {item.value} ]</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Loading bar */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="bg-black h-2 border border-cyan-500 overflow-hidden"
+                  >
+                    <motion.div
+                      initial={{ width: '0%' }}
+                      animate={{ width: '100%' }}
+                      transition={{ duration: 2.5, delay: 1, ease: 'easeInOut' }}
+                      className="h-full"
+                      style={{
+                        background: 'linear-gradient(90deg, #00FFFF, #FF0080, #00FFFF)',
+                        boxShadow: '0 0 20px #00FFFF',
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* Bottom text lines */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5 }}
+                  className="space-y-2 text-xs"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', color: '#00FF00' }}
+                >
+                  <div>&gt; SYSTEM_INITIALIZATION</div>
+                  <motion.div
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    &gt; Establishing secure tunnel...
+                  </motion.div>
+                  <motion.div
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                  >
+                    &gt; Loading environment...
+                  </motion.div>
+                </motion.div>
+
+                {/* Corner decorations */}
+                <div className="absolute top-4 left-4 text-xs" style={{ color: '#FF0080', fontFamily: 'JetBrains Mono, monospace' }}>
+                  <div>█ █ █</div>
+                </div>
+                <div className="absolute bottom-4 right-4 text-xs" style={{ color: '#00FFFF', fontFamily: 'JetBrains Mono, monospace' }}>
+                  <div>█ █ █</div>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
