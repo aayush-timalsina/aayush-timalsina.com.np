@@ -1125,6 +1125,7 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1160,8 +1161,14 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
     }
   };
 
+  const handleLinkedInClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowComingSoon(true);
+    setTimeout(() => setShowComingSoon(false), 3500);
+  };
+
   return (
-    <div className={cn("h-full p-6 overflow-auto", isDark ? "bg-gray-900" : "bg-gray-50")}>
+    <div className={cn("h-full p-6 overflow-auto relative", isDark ? "bg-gray-900" : "bg-gray-50")}>
       <div className="max-w-2xl mx-auto">
         <h1 className={cn("text-2xl font-bold mb-6", isDark ? "text-white" : "text-gray-900")}>
           Get In Touch
@@ -1295,27 +1302,59 @@ const ContactWindow = ({ isDark }: { isDark: boolean }) => {
         {/* Social Links */}
         <div className="flex justify-center gap-4 mt-8">
           {[
-            { icon: <Github className="w-5 h-5" />, href: "https://github.com/", label: "GitHub" },
-            { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn" },
+            { icon: <Github className="w-5 h-5" />, href: "https://github.com/aayush-timalsina/", label: "GitHub" },
+            { icon: <Linkedin className="w-5 h-5" />, href: "#", label: "LinkedIn", isComingSoon: true },
             { icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/t_y_p_e_c", label: "Instagram" },
             { icon: <Facebook className="w-5 h-5" />, href: "https://www.facebook.com/aayush.timalsina.891052", label: "Facebook" },
           ].map((social) => (
-            <a
+            <button
               key={social.label}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={social.isComingSoon ? handleLinkedInClick : undefined}
+              onClickCapture={!social.isComingSoon ? undefined : (e) => e.preventDefault()}
+              {...(social.isComingSoon ? {} : { 
+                onMouseDown: (e) => {
+                  if (social.href && social.href !== "#") {
+                    window.open(social.href, "_blank");
+                  }
+                }
+              })}
               className={cn(
-                "p-3 rounded-xl transition-all hover:scale-110",
-                isDark ? "bg-gray-800 text-gray-400 hover:text-white" : "bg-white text-gray-600 hover:text-gray-900 shadow-sm"
+                "p-3 rounded-xl transition-all hover:scale-110 cursor-pointer",
+                isDark ? "bg-gray-800 text-gray-400 hover:text-white" : "bg-white text-gray-600 hover:text-gray-900 shadow-sm",
+                social.isComingSoon && (isDark ? "hover:bg-blue-900/30" : "hover:bg-blue-50")
               )}
               title={social.label}
             >
               {social.icon}
-            </a>
+            </button>
           ))}
         </div>
       </div>
+
+      {/* Coming Soon Notification */}
+      <AnimatePresence>
+        {showComingSoon && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            className={cn(
+              "fixed top-20 left-1/2 -translate-x-1/2 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border z-[9999]",
+              isDark 
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 border-blue-400/30 text-white" 
+                : "bg-gradient-to-r from-blue-500 to-purple-500 border-blue-300/50 text-white"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <Zap className="w-5 h-5 animate-pulse" />
+              <div>
+                <p className="font-bold text-sm">Coming Soon! 🚀</p>
+                <p className="text-xs opacity-90">LinkedIn profile coming very soon</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
