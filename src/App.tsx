@@ -2597,8 +2597,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
     e.preventDefault();
     if (password === 'TYPE-C') {
       setUnlocking(true);
-      setPhase('login');
-      setTimeout(() => onLogin(), 3500);
+      onLogin();
     } else {
       setError(true);
       setPassword('');
@@ -3022,10 +3021,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
       {/* Phase timeout - automatically proceeds to next phase */}
       {useEffect(() => {
         if (phase === 'lock' && unlocking) {
-          const timeout = setTimeout(() => {
-            onLogin();
-          }, 1000);
-          return () => clearTimeout(timeout);
+          onLogin();
         }
       }, [phase, unlocking, onLogin])}
     </motion.div>
