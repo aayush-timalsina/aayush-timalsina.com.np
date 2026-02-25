@@ -3086,7 +3086,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                   className="text-sm"
                   style={{ color: '#22c55e', fontFamily: 'JetBrains Mono, monospace' }}
                 >
-                  > Loading secure environment...
+                  &gt; Loading secure environment...
                 </motion.div>
               </motion.div>
 
@@ -3147,7 +3147,7 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
                 className="text-xs mt-4"
                 style={{ color: 'rgba(34, 197, 94, 0.7)', fontFamily: 'JetBrains Mono, monospace' }}
               >
-                > Initializing desktop environment... [DONE]
+                &gt; Initializing desktop environment... [DONE]
               </motion.div>
             </motion.div>
           </motion.div>
