@@ -3019,126 +3019,15 @@ const LoginScreen = ({ onLogin, isDark }: { onLogin: () => void; isDark: boolean
         )}
       </AnimatePresence>
 
-      {/* ── EDEX-UI LOGIN PHASE ── */}
-      <AnimatePresence>
-        {phase === 'login' && (
-          <motion.div
-            key="login"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-[50] overflow-hidden flex items-center justify-center p-8"
-            style={{ background: '#000000' }}
-          >
-            {/* Background sound */}
-            <audio autoPlay loop style={{ display: 'none' }}>
-              <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg" />
-            </audio>
-
-            {/* Grid background pattern */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none"
-              style={{
-                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(255,255,255,.1) 25%, rgba(255,255,255,.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.1) 75%, rgba(255,255,255,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255,255,255,.1) 25%, rgba(255,255,255,.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.1) 75%, rgba(255,255,255,.1) 76%, transparent 77%, transparent)',
-                backgroundSize: '50px 50px'
-              }}
-            />
-
-            {/* Scanlines */}
-            <div className="absolute inset-0 pointer-events-none opacity-20"
-              style={{
-                background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) 1px, transparent 1px, transparent 2px)',
-                animation: 'scan 8s linear infinite'
-              }}
-            />
-
-            {/* Terminal output - Lines appearing sequentially */}
-            <motion.div
-              className="relative z-20 w-full max-w-4xl max-h-[80vh] overflow-auto"
-              style={{
-                fontFamily: 'JetBrains Mono, monospace',
-                color: '#FFFFFF',
-                textShadow: '0 0 4px rgba(255,255,255,0.8)',
-                letterSpacing: '0.5px',
-                lineHeight: '1.6',
-                fontSize: '14px'
-              }}
-            >
-              {[
-                'C:\\Users\\Aayush\\Documents\\Portfolio> dir /s',
-                '',
-                'Volume in drive C is Windows',
-                'Volume Serial Number is 1A2B-3C4D',
-                '',
-                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio',
-                '',
-                '02/25/2026  09:18:27 AM    <DIR>          .',
-                '02/25/2026  09:18:27 AM    <DIR>          ..',
-                '02/24/2026  08:45:12 PM    <DIR>          projects',
-                '02/24/2026  07:22:01 PM    <DIR>          .secure',
-                '02/25/2026  09:15:43 AM           542,288  portfolio.min.js',
-                '02/24/2026  06:30:22 PM            12,447  index.html',
-                '02/25/2026  08:52:15 AM           128,956  styles.css',
-                '',
-                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio\\projects',
-                '',
-                '02/25/2026  09:18:27 AM    <DIR>          .',
-                '02/25/2026  09:18:27 AM    <DIR>          ..',
-                '02/23/2026  11:34:56 PM           856,324  music-player.exe',
-                '02/24/2026  02:18:33 AM           654,192  calculator-app.exe',
-                '02/25/2026  04:42:19 AM           923,847  cybersecurity-suite.exe',
-                '',
-                'Directory of C:\\Users\\Aayush\\Documents\\Portfolio\\.secure',
-                '',
-                '02/25/2026  09:18:27 AM    <DIR>          .',
-                '02/25/2026  09:18:27 AM    <DIR>          ..',
-                '02/24/2026  01:05:47 AM         1,245,893  identity.encrypted',
-                '02/23/2026  10:22:15 PM           487,234  credentials.vault',
-                '02/25/2026  07:33:58 AM           356,789  kernel.boot',
-                '',
-                '        Total Files Listed: 14',
-                '        Total Directories: 6',
-                '        Total Size: 7,240,321 bytes',
-                '',
-                'C:\\Users\\Aayush\\Documents\\Portfolio> ',
-              ].map((line, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{
-                    delay: i * 0.06,
-                    duration: 0.3,
-                  }}
-                  className="whitespace-pre-wrap break-words"
-                >
-                  {line}
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Welcome message - appears at the end */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 2.2 }}
-              className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center z-30"
-            >
-              <motion.div
-                animate={{ opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-3xl font-bold tracking-wider"
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: 'JetBrains Mono, monospace',
-                  textShadow: '0 0 20px rgba(255,255,255,0.6)'
-                }}
-              >
-                Welcome back to TYPE-C's Portfolio
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Phase timeout - automatically proceeds to next phase */}
+      {useEffect(() => {
+        if (phase === 'lock' && unlocking) {
+          const timeout = setTimeout(() => {
+            onLogin();
+          }, 1000);
+          return () => clearTimeout(timeout);
+        }
+      }, [phase, unlocking, onLogin])}
     </motion.div>
   );
 };
